@@ -27,6 +27,7 @@ class UserService
     public function update($request, $id): JsonResponse
     {
         $user = User::find($id);
+
         if (!$user) {
             return ResponseHelper::error(404, 'User not found');
         }
