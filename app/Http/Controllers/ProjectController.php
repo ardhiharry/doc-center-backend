@@ -31,13 +31,21 @@ class ProjectController extends Controller
 
     public function getAll()
     {
-        $projects = Project::all();
+        $projects = Project::withoutTrashed()->get();
 
-        if (!$projects) {
-            return ResponseHelper::error(400, 'Failed to retrieve projects', ['There are no projects yet.']);
+        if ($projects->isEmpty()) {
+            return ResponseHelper::error(
+                400,
+                'Failed to retrieve projects',
+                ['There are no projects yet.']
+            );
         }
 
-        return ResponseHelper::success(200, 'Projects retrieved successfully', $projects);
+        return ResponseHelper::success(
+            200,
+            'Projects retrieved successfully',
+            $projects
+        );
     }
 
     public function getById($id)
@@ -45,10 +53,18 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if (!$project) {
-            return ResponseHelper::error(400, 'Failed to retrieve project', ['Project not found.']);
+            return ResponseHelper::error(
+                400,
+                'Failed to retrieve project',
+                ['Project not found.']
+            );
         }
 
-        return ResponseHelper::success(200, 'Project retrieved successfully', $project);
+        return ResponseHelper::success(
+            200,
+            'Project retrieved successfully',
+            $project
+        );
     }
 
     public function update(Request $request, $id)
@@ -56,7 +72,11 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if (!$project) {
-            return ResponseHelper::error(400, 'Failed to update project', ['Project not found.']);
+            return ResponseHelper::error(
+                400,
+                'Failed to update project',
+                ['Project not found.']
+            );
         }
 
         $project->update($request->only([
@@ -69,7 +89,11 @@ class ProjectController extends Controller
             'end_date'
         ]));
 
-        return ResponseHelper::success(200, 'Project updated successfully', $project);
+        return ResponseHelper::success(
+            200,
+            'Project updated successfully',
+            $project
+        );
     }
 
     public function softDelete($id)
@@ -77,11 +101,18 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if (!$project) {
-            return ResponseHelper::error(400, 'Failed to delete project', ['Project not found.']);
+            return ResponseHelper::error(
+                400,
+                'Failed to delete project',
+                ['Project not found.']
+            );
         }
 
         $project->delete();
 
-        return ResponseHelper::success(200, 'Project deleted successfully');
+        return ResponseHelper::success(
+            200,
+            'Project deleted successfully'
+        );
     }
 }
