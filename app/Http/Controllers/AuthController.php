@@ -50,6 +50,7 @@ class AuthController extends Controller
 
         $accessToken = auth('api')
             ->claims(['type' => 'access'])
+            ->setTTL((int) config('jwt.ttl'))
             ->fromUser($user);
 
         $refreshToken = auth('api')
