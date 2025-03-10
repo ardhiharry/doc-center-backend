@@ -11,16 +11,27 @@ class UserService
 {
     public function getAllUsers(): JsonResponse
     {
-        $users = User::all();
+        $users = User::withoutTrashed()->get();
+
+        if ($users->isEmpty()) {
+            return ResponseHelper::error(
+                400,
+                'Failed to retrieve users',
+                ['There are no users yet.']
+            );
+        }
+
         return ResponseHelper::success(200, 'Users retrieved successfully', $users);
     }
 
     public function getUserById($id): JsonResponse
     {
         $user = User::find($id);
+
         if (!$user) {
             return ResponseHelper::error(404, 'User not found');
         }
+
         return ResponseHelper::success(200, 'User retrieved successfully', $user);
     }
 
