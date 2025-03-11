@@ -13,7 +13,7 @@ class AdminDocCategoryController extends Controller
 {
     public function create(AdminDocCategoryCreateRequest $request)
     {
-        $adminDocCategory = AdminDocCategory::where('name', $request->name)->first();
+        $adminDocCategory = AdminDocCategory::where('name', $request->name)->exists();
 
         if ($adminDocCategory) {
             return ResponseHelper::error(

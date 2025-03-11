@@ -5,23 +5,21 @@ namespace App\Http\Controllers;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\AdminDocRequest;
 use App\Http\Resources\AdminDocResource;
-use App\Http\Resources\UserResource;
 use App\Models\AdminDoc;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class AdminDocController extends Controller
 {
     public function create(AdminDocRequest $request)
     {
-        $adminDoc = AdminDoc::where('id', $request->id)->first();
+        $adminDoc = AdminDoc::where('title', $request->title)->exists();
 
         if ($adminDoc) {
             return ResponseHelper::error(
                 400,
                 'Failed to create admin doc',
-                ['Admin doc not found.']
+                ['Admin doc title already exists.']
             );
         }
 
