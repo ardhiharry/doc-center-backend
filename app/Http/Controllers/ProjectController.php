@@ -12,7 +12,8 @@ class ProjectController extends Controller
 {
     public function create(ProjectCreateRequest $request)
     {
-        $project = Project::where('project_name', $request->project_name)->first();
+        $project = Project::where('project_name', $request->project_name)->exists();
+
         if ($project) {
             return ResponseHelper::error(
                 400,
@@ -22,6 +23,7 @@ class ProjectController extends Controller
         }
 
         $project = Project::create($request->all());
+
         return ResponseHelper::success(
             201,
             'Project created successfully',

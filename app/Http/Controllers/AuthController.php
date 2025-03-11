@@ -14,8 +14,9 @@ class AuthController extends Controller
 {
     public function register(UserRegisterRequest $request)
     {
-        $isUserExists = User::where('username', $request->username)->exists();
-        if ($isUserExists) {
+        $user = User::where('username', $request->username)->exists();
+
+        if ($user) {
             return ResponseHelper::error(
                 400,
                 'Failed to register',

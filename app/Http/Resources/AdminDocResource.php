@@ -18,7 +18,7 @@ class AdminDocResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'file' => asset($this->file),
-            'prject_id' => $this->project_id,
+            'project_id' => $this->project_id,
             'admin_doc_category_id' => $this->admin_doc_category_id
         ];
     }
