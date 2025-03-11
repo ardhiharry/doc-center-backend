@@ -4,38 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Activity extends Model
+class ActivityDocCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'activities';
+    protected $table = 'activity_doc_categories';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = true;
 
     protected $fillable = [
-        'title',
-        'start_date',
-        'end_date',
-        'project_id',
+        'name',
     ];
 
     protected $hidden = [
         'deleted_at',
     ];
 
-    public function project(): BelongsTo
-    {
-        return $this->belongsTo(Project::class, 'project_id', 'id');
-    }
-
     public function activityDoc(): HasMany
     {
-        return $this->hasMany(ActivityDoc::class, 'activity_id', 'id');
+        return $this->hasMany(ActivityDoc::class, 'activity_doc_category_id', 'id');
     }
 }
