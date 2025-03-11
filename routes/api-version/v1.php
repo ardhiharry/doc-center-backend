@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminDocCategoryController;
 use App\Http\Controllers\AdminDocController;
 use App\Http\Controllers\AuthController;
@@ -40,3 +41,10 @@ Route::post('/admin-docs', [AdminDocController::class, 'create']);
 Route::get('/admin-docs', [AdminDocController::class, 'getAll']);
 Route::get('/admin-docs/{id}', [AdminDocController::class, 'getById']);
 Route::delete('/admin-docs/{id}', [AdminDocController::class, 'softDelete']);
+
+// Activity
+Route::post('/activities', [ActivityController::class, 'create']);
+Route::get('/activities', [ActivityController::class, 'getAll']);
+Route::get('/activities/{id}', [ActivityController::class, 'getById']);
+Route::patch('/activities/{id}', [ActivityController::class, 'update']);
+Route::delete('/activities/{id}', [ActivityController::class, 'softDelete']);
