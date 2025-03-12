@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 
 class ResponseHelper
 {
-    public static function success($statusCode = 200, $message, $data = []): JsonResponse
+    public static function success($statusCode = 200, $message = '', $data = []): JsonResponse
     {
         return response()->json([
             'statusCode' => $statusCode,
@@ -15,7 +15,7 @@ class ResponseHelper
         ], $statusCode);
     }
 
-    public static function error($statusCode = 400, $message, $errors = []): JsonResponse
+    public static function error($statusCode = 400, $message = '', $errors = []): JsonResponse
     {
         return response()->json([
             'statusCode' => $statusCode,
