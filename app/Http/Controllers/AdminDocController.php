@@ -50,8 +50,7 @@ class AdminDocController extends Controller
 
         if ($adminDocs->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Admin docs retrieved successfully',
+                204
             );
         }
 

@@ -38,8 +38,7 @@ class ActivityDocCategoryController extends Controller
 
         if ($activityDocCategories->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Activity doc categories retrieved successfully',
+                204
             );
         }
 

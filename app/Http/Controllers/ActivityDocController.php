@@ -62,8 +62,7 @@ class ActivityDocController extends Controller
 
         if ($activityDocs->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Activity docs retrieved successfully',
+                204
             );
         }
 

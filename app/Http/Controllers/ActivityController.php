@@ -38,8 +38,7 @@ class ActivityController extends Controller
 
         if ($activities->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Activities retrieved successfully',
+                204
             );
         }
 

@@ -37,8 +37,7 @@ class ProjectController extends Controller
 
         if ($projects->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Projects retrieved successfully',
+                204
             );
         }
 

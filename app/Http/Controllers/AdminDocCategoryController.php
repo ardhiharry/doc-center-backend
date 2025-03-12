@@ -38,8 +38,7 @@ class AdminDocCategoryController extends Controller
 
         if ($adminDocCategories->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Admin doc categories retrieved successfully',
+                204
             );
         }
 

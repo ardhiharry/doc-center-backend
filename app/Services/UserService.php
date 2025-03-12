@@ -16,8 +16,7 @@ class UserService
 
         if ($users->isEmpty()) {
             return ResponseHelper::success(
-                204,
-                'Users retrieved successfully',
+                204
             );
         }
 
