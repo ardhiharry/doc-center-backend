@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class UserController extends Controller
         return $this->userService->getUserById($id);
     }
 
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
         return $this->userService->update($request, $id);
     }

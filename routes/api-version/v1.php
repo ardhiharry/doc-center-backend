@@ -16,13 +16,13 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     // Auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
-
-    // Users
-    Route::get('/users', [UserController::class, 'getAll']);
-    Route::get('/users/{id}', [UserController::class, 'getById']);
-    Route::patch('/users/{id}', [UserController::class, 'update']);
-    Route::delete('/users/{id}', [UserController::class, 'softDelete']);
 });
+
+// Users
+Route::get('/users', [UserController::class, 'getAll']);
+Route::get('/users/{id}', [UserController::class, 'getById']);
+Route::patch('/users/{id}', [UserController::class, 'update']);
+Route::delete('/users/{id}', [UserController::class, 'softDelete']);
 
 // Projects
 Route::post('/projects', [ProjectController::class, 'create']);
