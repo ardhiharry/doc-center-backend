@@ -37,10 +37,9 @@ class AdminDocCategoryController extends Controller
         $adminDocCategories = AdminDocCategory::withoutTrashed()->get();
 
         if ($adminDocCategories->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve admin doc categories',
-                ['There are no admin doc categories yet.']
+            return ResponseHelper::success(
+                204,
+                'Admin doc categories retrieved successfully',
             );
         }
 

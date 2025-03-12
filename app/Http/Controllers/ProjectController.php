@@ -36,10 +36,9 @@ class ProjectController extends Controller
         $projects = Project::withoutTrashed()->get();
 
         if ($projects->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve projects',
-                ['There are no projects yet.']
+            return ResponseHelper::success(
+                204,
+                'Projects retrieved successfully',
             );
         }
 

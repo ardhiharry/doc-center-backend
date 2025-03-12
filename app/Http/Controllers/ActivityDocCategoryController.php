@@ -37,10 +37,9 @@ class ActivityDocCategoryController extends Controller
         $activityDocCategories = ActivityDocCategory::withoutTrashed()->get();
 
         if ($activityDocCategories->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve activity doc categories',
-                ['There are no activity doc categories yet.']
+            return ResponseHelper::success(
+                204,
+                'Activity doc categories retrieved successfully',
             );
         }
 

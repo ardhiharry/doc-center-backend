@@ -49,10 +49,9 @@ class AdminDocController extends Controller
         $adminDocs = AdminDoc::withoutTrashed()->get();
 
         if ($adminDocs->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve admin docs',
-                ['There are no admin docs yet.']
+            return ResponseHelper::success(
+                204,
+                'Admin docs retrieved successfully',
             );
         }
 

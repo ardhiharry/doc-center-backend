@@ -37,10 +37,9 @@ class ActivityController extends Controller
         $activities = Activity::withoutTrashed()->get();
 
         if ($activities->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve activities',
-                ['There are no activities yet.']
+            return ResponseHelper::success(
+                204,
+                'Activities retrieved successfully',
             );
         }
 

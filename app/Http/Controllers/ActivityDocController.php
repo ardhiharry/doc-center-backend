@@ -61,10 +61,9 @@ class ActivityDocController extends Controller
         $activityDocs = ActivityDoc::withoutTrashed()->get();
 
         if ($activityDocs->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve activity docs',
-                ['There are no activity docs yet.']
+            return ResponseHelper::success(
+                204,
+                'Activity docs retrieved successfully',
             );
         }
 

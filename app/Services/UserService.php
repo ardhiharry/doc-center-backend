@@ -15,10 +15,9 @@ class UserService
         $users = User::withoutTrashed()->get();
 
         if ($users->isEmpty()) {
-            return ResponseHelper::error(
-                400,
-                'Failed to retrieve users',
-                ['There are no users yet.']
+            return ResponseHelper::success(
+                204,
+                'Users retrieved successfully',
             );
         }
 
