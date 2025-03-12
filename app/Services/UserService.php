@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Helpers\ResponseHelper;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class UserService

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRefreshRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
@@ -61,27 +63,56 @@ class AuthController extends Controller
 
         $user->update(['token' => $refreshToken]);
 
-        cookie()->queue(cookie(
-            'refresh_token',
-            $refreshToken,
-            config('jwt.refresh_ttl'),
-            '/',
-            null,
-            true,
-            true,
-            false,
-            'Strict'
-        ));
-
         return ResponseHelper::success(
             200,
             'Login successful',
             [
                 'username' => $user->username,
                 'name' => $user->name,
+                'refresh_token' => $user->token,
                 'access_token' => $accessToken
             ]
         );
+    }
+
+    public function refreshToken(UserRefreshRequest $request)
+    {
+        try {
+            $refreshToken = $request->input('refresh_token');
+
+            if (!$refreshToken) {
+                return ResponseHelper::error(401, 'Refresh token not provided');
+            }
+
+            try {
+                $payload = auth('api')->setToken($refreshToken)->getPayload();
+            } catch (\Exception $e) {
+                return ResponseHelper::error(401, 'Invalid or expired refresh token');
+            }
+
+            if ($payload['type'] !== 'refresh') {
+                return ResponseHelper::error(401, 'Invalid refresh token');
+            }
+
+            $user = User::find($payload['sub']);
+
+            if (!$user) {
+                return ResponseHelper::error(401, 'User not found');
+            }
+
+            $newAccessToken = auth('api')
+                ->claims(['type' => 'access'])
+                ->setTTL(config('jwt.ttl'))
+                ->fromUser($user);
+
+            return ResponseHelper::success(
+                200,
+                'Access token refreshed successfully',
+                ['access_token' => $newAccessToken]
+            );
+        } catch (\Exception $e) {
+            return ResponseHelper::error(500, 'Failed to refresh access token', [$e->getMessage()]);
+        }
     }
 
     public function logout()
