@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use App\Http\Requests\ProjectCreateRequest;
 use App\Http\Requests\ProjectUpdateRequest;
 use App\Http\Resources\ProjectResource;
@@ -15,16 +15,17 @@ class ProjectController extends Controller
         $project = Project::where('project_name', $request->project_name)->exists();
 
         if ($project) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to create project',
-                ['Project name already exists.']
+                [],
+                ['project_name' => ['Project name already exists.']]
             );
         }
 
         $project = Project::create($request->all());
 
-        return ResponseHelper::success(
+        return Response::handler(
             201,
             'Project created successfully',
             ProjectResource::make($project)
@@ -36,12 +37,13 @@ class ProjectController extends Controller
         $projects = Project::withoutTrashed()->get();
 
         if ($projects->isEmpty()) {
-            return ResponseHelper::success(
-                204
+            return Response::handler(
+                200,
+                'Projects retrieved successfully',
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Projects retrieved successfully',
             $projects
@@ -53,14 +55,15 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if (!$project) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to retrieve project',
-                ['Project not found.']
+                [],
+                ['project' => ['Project not found.']]
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Project retrieved successfully',
             $project
@@ -72,10 +75,11 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if (!$project) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to update project',
-                ['Project not found.']
+                [],
+                ['project' => ['Project not found.']]
             );
         }
 
@@ -89,7 +93,7 @@ class ProjectController extends Controller
             'end_date'
         ]));
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Project updated successfully',
             $project
@@ -101,16 +105,17 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if (!$project) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to delete project',
-                ['Project not found.']
+                [],
+                ['project' => ['Project not found.']]
             );
         }
 
         $project->delete();
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Project deleted successfully'
         );

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use App\Http\Requests\AdminDocCategoryCreateRequest;
 use App\Http\Requests\AdminDocCategoryUpdateRequest;
 use App\Http\Resources\AdminDocCategoryResource;
@@ -16,16 +16,17 @@ class AdminDocCategoryController extends Controller
         $adminDocCategory = AdminDocCategory::where('name', $request->name)->exists();
 
         if ($adminDocCategory) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to create admin doc category',
-                ['Admin doc category name already exists.']
+                [],
+                ['name' => ['Admin doc category name already exists.']]
             );
         }
 
         $adminDocCategory = AdminDocCategory::create($request->all());
 
-        return ResponseHelper::success(
+        return Response::handler(
             201,
             'Admin doc category created successfully',
             AdminDocCategoryResource::make($adminDocCategory)
@@ -37,12 +38,13 @@ class AdminDocCategoryController extends Controller
         $adminDocCategories = AdminDocCategory::withoutTrashed()->get();
 
         if ($adminDocCategories->isEmpty()) {
-            return ResponseHelper::success(
-                204
+            return Response::handler(
+                200,
+                'Admin doc categories retrieved successfully'
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc categories retrieved successfully',
             $adminDocCategories
@@ -54,14 +56,15 @@ class AdminDocCategoryController extends Controller
         $adminDocCategory = AdminDocCategory::find($id);
 
         if (!$adminDocCategory) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to retrieve admin doc category',
-                ['Admin doc category not found.']
+                [],
+                ['admin_doc_category' => ['Admin doc category not found.']]
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc category retrieved successfully',
             $adminDocCategory
@@ -73,10 +76,11 @@ class AdminDocCategoryController extends Controller
         $adminDocCategory = AdminDocCategory::find($id);
 
         if (!$adminDocCategory) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to update admin doc category',
-                ['Admin doc category not found.']
+                [],
+                ['admin_doc_category' => ['Admin doc category not found.']]
             );
         }
 
@@ -84,7 +88,7 @@ class AdminDocCategoryController extends Controller
             'name',
         ]));
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc category updated successfully',
             $adminDocCategory
@@ -96,16 +100,17 @@ class AdminDocCategoryController extends Controller
         $adminDocCategory = AdminDocCategory::find($id);
 
         if (!$adminDocCategory) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to delete admin doc category',
-                ['Admin doc category not found.']
+                [],
+                ['admin_doc_category' => ['Admin doc category not found.']]
             );
         }
 
         $adminDocCategory->delete();
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc category deleted successfully'
         );

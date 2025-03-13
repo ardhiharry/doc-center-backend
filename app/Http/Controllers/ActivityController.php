@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use App\Http\Requests\ActivityCreateRequest;
 use App\Http\Requests\ActivityUpdateRequest;
 use App\Http\Resources\ActivityResource;
@@ -13,19 +13,20 @@ class ActivityController extends Controller
 {
     public function create(ActivityCreateRequest $request)
     {
-        $activity = Activity::where('id', $request->id)->exists();
+        $activity = Activity::where('title', $request->title)->exists();
 
         if ($activity) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to create activity',
-                ['Activity not found.']
+                [],
+                ['activity' => ['Activity title already exists.']]
             );
         }
 
         $activity = Activity::create($request->all());
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity created successfully',
             ActivityResource::make($activity)
@@ -37,12 +38,13 @@ class ActivityController extends Controller
         $activities = Activity::withoutTrashed()->get();
 
         if ($activities->isEmpty()) {
-            return ResponseHelper::success(
-                204
+            return Response::handler(
+                200,
+                'Activities retrieved successfully'
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activities retrieved successfully',
             ActivityResource::collection($activities)
@@ -54,14 +56,15 @@ class ActivityController extends Controller
         $activity = Activity::find($id);
 
         if (!$activity) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to retrieve activity',
-                ['Activity not found.']
+                [],
+                ['activity' => ['Activity not found.']]
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity retrieved successfully',
             ActivityResource::make($activity)
@@ -73,10 +76,11 @@ class ActivityController extends Controller
         $activity = Activity::find($id);
 
         if (!$activity) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to update activity',
-                ['Activity not found.']
+                [],
+                ['activity' => ['Activity not found.']]
             );
         }
 
@@ -87,7 +91,7 @@ class ActivityController extends Controller
             'project_id'
         ]));
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity updated successfully',
             ActivityResource::make($activity)
@@ -99,16 +103,17 @@ class ActivityController extends Controller
         $activity = Activity::find($id);
 
         if (!$activity) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to delete activity',
-                ['Activity not found.']
+                [],
+                ['activity' => ['Activity not found.']]
             );
         }
 
         $activity->delete();
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity deleted successfully'
         );

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use App\Http\Requests\ActivityDocRequest;
 use App\Http\Resources\ActivityDocResource;
 use App\Models\ActivityDoc;
@@ -19,10 +19,11 @@ class ActivityDocController extends Controller
             $activityDoc = ActivityDoc::where('title', $request->title)->exists();
 
             if ($activityDoc) {
-                return ResponseHelper::error(
+                return Response::handler(
                     400,
                     'Failed to create activity doc',
-                    ['Activity doc title already exists.']
+                    [],
+                    ['title' => ['Activity doc title already exists.']]
                 );
             }
 
@@ -42,16 +43,17 @@ class ActivityDocController extends Controller
                 'activity_id' => $request->activity_id
             ]);
 
-            return ResponseHelper::success(
+            return Response::handler(
                 200,
                 'Activity doc created successfully',
                 ActivityDocResource::make($activityDoc)
             );
         } catch (PostTooLargeException $err) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to create activity document',
-                ['Uploaded file exceeds the size limit.']
+                [],
+                ['file' => ['Uploaded file exceeds the size limit.']]
             );
         }
     }
@@ -61,12 +63,13 @@ class ActivityDocController extends Controller
         $activityDocs = ActivityDoc::withoutTrashed()->get();
 
         if ($activityDocs->isEmpty()) {
-            return ResponseHelper::success(
-                204
+            return Response::handler(
+                200,
+                'Activity docs retrieved successfully'
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity docs retrieved successfully',
             ActivityDocResource::collection($activityDocs)
@@ -78,14 +81,15 @@ class ActivityDocController extends Controller
         $activityDoc = ActivityDoc::find($id);
 
         if (!$activityDoc) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to retrieve activity doc',
-                ['Activity doc not found.']
+                [],
+                ['activity_doc' => ['Activity doc not found.']]
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity doc retrieved successfully',
             ActivityDocResource::make($activityDoc)
@@ -97,16 +101,17 @@ class ActivityDocController extends Controller
         $activityDoc = ActivityDoc::find($id);
 
         if (!$activityDoc) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to delete activity doc',
-                ['Activity doc not found.']
+                [],
+                ['activity_doc' => ['Activity doc not found.']]
             );
         }
 
         $activityDoc->delete();
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Activity doc deleted successfully'
         );

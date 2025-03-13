@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
@@ -38,9 +38,10 @@ class AdminDocCategoryUpdateRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new ValidationException($validator, ResponseHelper::error(
+        throw new ValidationException($validator, Response::handler(
             400,
             'Failed to update admin document category',
+            [],
             $validator->errors()
         ));
     }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use App\Http\Requests\AdminDocRequest;
 use App\Http\Resources\AdminDocResource;
 use App\Models\AdminDoc;
@@ -16,10 +16,11 @@ class AdminDocController extends Controller
         $adminDoc = AdminDoc::where('title', $request->title)->exists();
 
         if ($adminDoc) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to create admin doc',
-                ['Admin doc title already exists.']
+                [],
+                ['title' => ['Admin doc title already exists.']]
             );
         }
 
@@ -37,7 +38,7 @@ class AdminDocController extends Controller
             'admin_doc_category_id' => $request->admin_doc_category_id
         ]);
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc created successfully',
             AdminDocResource::make($adminDoc)
@@ -49,12 +50,13 @@ class AdminDocController extends Controller
         $adminDocs = AdminDoc::withoutTrashed()->get();
 
         if ($adminDocs->isEmpty()) {
-            return ResponseHelper::success(
-                204
+            return Response::handler(
+                200,
+                'Admin docs retrieved successfully'
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin docs retrieved successfully',
             AdminDocResource::collection($adminDocs)
@@ -66,14 +68,15 @@ class AdminDocController extends Controller
         $adminDoc = AdminDoc::find($id);
 
         if (!$adminDoc) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to retrieve admin doc',
-                ['Admin doc not found.']
+                [],
+                ['admin_doc' => ['Admin doc not found.']]
             );
         }
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc retrieved successfully',
             AdminDocResource::make($adminDoc)
@@ -85,16 +88,17 @@ class AdminDocController extends Controller
         $adminDoc = AdminDoc::find($id);
 
         if (!$adminDoc) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to delete admin doc',
-                ['Admin doc not found.']
+                [],
+                ['admin_doc' => ['Admin doc not found.']]
             );
         }
 
         $adminDoc->delete();
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Admin doc deleted successfully'
         );

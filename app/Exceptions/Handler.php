@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -14,17 +14,20 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($e instanceof TokenInvalidException || $e instanceof TokenExpiredException || $e->getMessage() === 'Route [login] not defined.') {
-            return ResponseHelper::error(
+            return Response::handler(
                 401,
                 'Unauthorized',
-                ['Token is invalid or expired']
+                [],
+                ['token' => ['Token is invalid or expired']]
             );
         }
 
         if ($e instanceof UnauthorizedHttpException) {
-            return ResponseHelper::error(
+            return Response::handler(
                 401,
                 'Unauthorized',
+                [],
+                ['token' => ['Token is invalid or expired']]
             );
         }
 

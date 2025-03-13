@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Response;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRefreshRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Request;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
@@ -19,9 +18,10 @@ class AuthController extends Controller
         $user = User::where('username', $request->username)->exists();
 
         if ($user) {
-            return ResponseHelper::error(
+            return Response::handler(
                 400,
                 'Failed to register',
+                [],
                 ['username' => ['The username has already been taken.']]
             );
         }
@@ -32,7 +32,7 @@ class AuthController extends Controller
             'name' => $request->name,
         ]);
 
-        return ResponseHelper::success(
+        return Response::handler(
             201,
             'Registration successful',
             UserResource::make($user)
@@ -44,10 +44,11 @@ class AuthController extends Controller
         $user = User::where('username', $request->username)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return ResponseHelper::error(
+            return Response::handler(
                 401,
                 'Failed to login',
-                ['Username or password is invalid.']
+                [],
+                ['user' => ['Username or password is invalid.']]
             );
         }
 
@@ -63,7 +64,7 @@ class AuthController extends Controller
 
         $user->update(['token' => $refreshToken]);
 
-        return ResponseHelper::success(
+        return Response::handler(
             200,
             'Login successful',
             [
@@ -81,23 +82,43 @@ class AuthController extends Controller
             $refreshToken = $request->input('refresh_token');
 
             if (!$refreshToken) {
-                return ResponseHelper::error(401, 'Refresh token not provided');
+                return Response::handler(
+                    401,
+                    'Failed to refresh access token',
+                    [],
+                    ['refresh_token' => ['Refresh token is required']]
+                );
             }
 
             try {
                 $payload = auth('api')->setToken($refreshToken)->getPayload();
             } catch (\Exception $e) {
-                return ResponseHelper::error(401, 'Invalid or expired refresh token');
+                return Response::handler(
+                    401,
+                    'Failed to refresh access token',
+                    [],
+                    ['refresh_token' => ['Invalid or expired refresh token']]
+                );
             }
 
             if ($payload['type'] !== 'refresh') {
-                return ResponseHelper::error(401, 'Invalid refresh token');
+                return Response::handler(
+                    401,
+                    'Failed to refresh access token',
+                    [],
+                    ['refresh_token' => ['Invalid or expired refresh token']]
+                );
             }
 
             $user = User::find($payload['sub']);
 
             if (!$user) {
-                return ResponseHelper::error(401, 'User not found');
+                return Response::handler(
+                    401,
+                    'Failed to refresh access token',
+                    [],
+                    ['user' => ['User not found']]
+                );
             }
 
             $newAccessToken = auth('api')
@@ -105,13 +126,18 @@ class AuthController extends Controller
                 ->setTTL(config('jwt.ttl'))
                 ->fromUser($user);
 
-            return ResponseHelper::success(
+            return Response::handler(
                 200,
                 'Access token refreshed successfully',
                 ['access_token' => $newAccessToken]
             );
         } catch (\Exception $e) {
-            return ResponseHelper::error(500, 'Failed to refresh access token', [$e->getMessage()]);
+            return Response::handler(
+                500,
+                'Failed to refresh access token',
+                [],
+                [$e->getMessage()]
+            );
         }
     }
 
@@ -121,10 +147,11 @@ class AuthController extends Controller
             $user = auth()->user();
 
             if (!$user) {
-                return ResponseHelper::error(
+                return Response::handler(
                     401,
                     'Unauthorized',
-                    ['You must be logged in to perform this action']
+                    [],
+                    ['user' => 'You must be logged in to perform this action']
                 );
             }
 
@@ -132,21 +159,23 @@ class AuthController extends Controller
 
             auth()->logout();
 
-            return ResponseHelper::success(
+            return Response::handler(
                 200,
                 'Logout successful'
             );
         } catch (TokenInvalidException $err) {
-            return ResponseHelper::error(
+            return Response::handler(
                 401,
                 'Unauthorized',
-                ['Token is invalid or expired']
+                [],
+                ['token' => ['Token is invalid or expired']]
             );
         } catch (\Exception $err) {
-            return ResponseHelper::error(
+            return Response::handler(
                 500,
                 'Internal Server Error',
-                ['Something went wrong']
+                [],
+                ['server' => 'Something went wrong']
             );
         }
     }
