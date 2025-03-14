@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
-class ProjectCreateRequest extends FormRequest
+class CompanyUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,28 +26,42 @@ class ProjectCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:100',
-            'company_id' => 'required|exists:companies,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'name' => 'sometimes|required|string|max:100',
+            'address' => 'sometimes|required|string',
+            'director_name' => 'sometimes|required|string|max:100',
+            'director_phone' => 'sometimes|required|string|max:20',
+            'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge([
-            'name' => strip_tags($this->name),
-            'company_id' => strip_tags($this->company_id),
-            'start_date' => strip_tags($this->start_date),
-            'end_date' => strip_tags($this->end_date),
-        ]);
+        $data = [];
+
+        if ($this->has('name')) {
+            $data['name'] = strip_tags($this->name);
+        }
+
+        if ($this->has('address')) {
+            $data['address'] = strip_tags($this->address);
+        }
+
+        if ($this->has('director_name')) {
+            $data['director_name'] = strip_tags($this->director_name);
+        }
+
+        if ($this->has('director_phone')) {
+            $data['director_phone'] = strip_tags($this->director_phone);
+        }
+
+        $this->merge($data);
     }
 
     protected function failedValidation(Validator $validator)
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create project',
+            'Failed to update company',
             [],
             Arr::flatten(array_values($validator->errors()->toArray()))
         ));

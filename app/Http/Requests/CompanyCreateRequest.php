@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
-class ProjectCreateRequest extends FormRequest
+class CompanyCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,10 @@ class ProjectCreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
-            'company_id' => 'required|exists:companies,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'address' => 'required|string',
+            'director_name' => 'required|string|max:100',
+            'director_phone' => 'required|string|max:20',
+            'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 
@@ -37,9 +38,9 @@ class ProjectCreateRequest extends FormRequest
     {
         $this->merge([
             'name' => strip_tags($this->name),
-            'company_id' => strip_tags($this->company_id),
-            'start_date' => strip_tags($this->start_date),
-            'end_date' => strip_tags($this->end_date),
+            'address' => strip_tags($this->address),
+            'director_name' => strip_tags($this->director_name),
+            'director_phone' => strip_tags($this->director_phone),
         ]);
     }
 
@@ -47,7 +48,7 @@ class ProjectCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create project',
+            'Failed to create company',
             [],
             Arr::flatten(array_values($validator->errors()->toArray()))
         ));

@@ -6,6 +6,7 @@ use App\Http\Controllers\ActivityDocController;
 use App\Http\Controllers\AdminDocCategoryController;
 use App\Http\Controllers\AdminDocController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,13 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'softDelete']);
 });
+
+// Companies
+Route::post('/companies', [CompanyController::class, 'create']);
+Route::get('/companies', [CompanyController::class, 'getAll']);
+Route::get('/companies/{id}', [CompanyController::class, 'getById']);
+Route::post('/companies/{id}', [CompanyController::class, 'update']);
+Route::delete('/companies/{id}', [CompanyController::class, 'softDelete']);
 
 // Projects
 Route::post('/projects', [ProjectController::class, 'create']);

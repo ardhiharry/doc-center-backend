@@ -26,11 +26,8 @@ class ProjectUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_name' => 'sometimes|required|string|max:100',
-            'company_name' => 'sometimes|required|string|max:100',
-            'company_address' => 'sometimes|required|string',
-            'director_name' => 'sometimes|required|string|max:100',
-            'director_phone' => 'sometimes|required|string|max:20',
+            'name' => 'sometimes|required|string|max:100',
+            'company_id' => 'sometimes|required|exists:companies,id',
             'start_date' => 'sometimes|required|date',
             'end_date' => 'sometimes|required|date',
         ];
@@ -40,24 +37,12 @@ class ProjectUpdateRequest extends FormRequest
     {
         $data = [];
 
-        if ($this->has('project_name')) {
-            $data['project_name'] = strip_tags($this->project_name);
+        if ($this->has('name')) {
+            $data['name'] = strip_tags($this->name);
         }
 
-        if ($this->has('company_name')) {
-            $data['company_name'] = strip_tags($this->company_name);
-        }
-
-        if ($this->has('company_address')) {
-            $data['company_address'] = strip_tags($this->company_address);
-        }
-
-        if ($this->has('director_name')) {
-            $data['director_name'] = strip_tags($this->director_name);
-        }
-
-        if ($this->has('director_phone')) {
-            $data['director_phone'] = strip_tags($this->director_phone);
+        if ($this->has('company_id')) {
+            $data['company_id'] = strip_tags($this->company_id);
         }
 
         if ($this->has('start_date')) {

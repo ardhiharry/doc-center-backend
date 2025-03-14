@@ -84,11 +84,8 @@ class ProjectController extends Controller
         }
 
         $project->update($request->only([
-            'project_name',
-            'company_name',
-            'company_address',
-            'director_name',
-            'director_phone',
+            'name',
+            'company_id',
             'start_date',
             'end_date'
         ]));
