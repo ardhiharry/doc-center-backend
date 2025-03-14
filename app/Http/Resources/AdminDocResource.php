@@ -17,7 +17,7 @@ class AdminDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'file' => asset($this->file),
+            'file' => $this->file,
             'project_id' => $this->project_id,
             'admin_doc_category_id' => $this->admin_doc_category_id
         ];

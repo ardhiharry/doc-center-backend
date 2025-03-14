@@ -17,7 +17,7 @@ class ActivityDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'file' => asset($this->file),
+            'file' => $this->file,
             'description' => $this->description,
             'tags' => $this->tags,
             'activity_doc_category_id' => $this->activity_doc_category_id,
