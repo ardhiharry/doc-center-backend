@@ -20,7 +20,7 @@ class ActivityController extends Controller
                 400,
                 'Failed to create activity',
                 [],
-                ['activity' => ['Activity title already exists.']]
+                'Activity title already exists.'
             );
         }
 
@@ -60,14 +60,14 @@ class ActivityController extends Controller
                 400,
                 'Failed to retrieve activity',
                 [],
-                ['activity' => ['Activity not found.']]
+                'Activity not found.'
             );
         }
 
         return Response::handler(
             200,
             'Activity retrieved successfully',
-            ActivityResource::make($activity)
+            [$activity]
         );
     }
 
@@ -80,7 +80,7 @@ class ActivityController extends Controller
                 400,
                 'Failed to update activity',
                 [],
-                ['activity' => ['Activity not found.']]
+                'Activity not found.'
             );
         }
 
@@ -107,7 +107,7 @@ class ActivityController extends Controller
                 400,
                 'Failed to delete activity',
                 [],
-                ['activity' => ['Activity not found.']]
+                'Activity not found.'
             );
         }
 

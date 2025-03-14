@@ -20,7 +20,7 @@ class AdminDocController extends Controller
                 400,
                 'Failed to create admin doc',
                 [],
-                ['title' => ['Admin doc title already exists.']]
+                'Admin doc title already exists.'
             );
         }
 
@@ -72,14 +72,14 @@ class AdminDocController extends Controller
                 400,
                 'Failed to retrieve admin doc',
                 [],
-                ['admin_doc' => ['Admin doc not found.']]
+                'Admin doc not found.'
             );
         }
 
         return Response::handler(
             200,
             'Admin doc retrieved successfully',
-            AdminDocResource::make($adminDoc)
+            [$adminDoc]
         );
     }
 
@@ -92,7 +92,7 @@ class AdminDocController extends Controller
                 400,
                 'Failed to delete admin doc',
                 [],
-                ['admin_doc' => ['Admin doc not found.']]
+                'Admin doc not found.'
             );
         }
 

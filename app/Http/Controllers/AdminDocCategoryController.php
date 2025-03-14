@@ -20,7 +20,7 @@ class AdminDocCategoryController extends Controller
                 400,
                 'Failed to create admin doc category',
                 [],
-                ['name' => ['Admin doc category name already exists.']]
+                'Admin doc category name already exists.'
             );
         }
 
@@ -60,14 +60,14 @@ class AdminDocCategoryController extends Controller
                 400,
                 'Failed to retrieve admin doc category',
                 [],
-                ['admin_doc_category' => ['Admin doc category not found.']]
+                'Admin doc category not found.'
             );
         }
 
         return Response::handler(
             200,
             'Admin doc category retrieved successfully',
-            $adminDocCategory
+            [$adminDocCategory]
         );
     }
 
@@ -80,7 +80,7 @@ class AdminDocCategoryController extends Controller
                 400,
                 'Failed to update admin doc category',
                 [],
-                ['admin_doc_category' => ['Admin doc category not found.']]
+                'Admin doc category not found.'
             );
         }
 
@@ -104,7 +104,7 @@ class AdminDocCategoryController extends Controller
                 400,
                 'Failed to delete admin doc category',
                 [],
-                ['admin_doc_category' => ['Admin doc category not found.']]
+                'Admin doc category not found.'
             );
         }
 

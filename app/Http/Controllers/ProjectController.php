@@ -19,7 +19,7 @@ class ProjectController extends Controller
                 400,
                 'Failed to create project',
                 [],
-                ['project_name' => ['Project name already exists.']]
+                'Project name already exists.'
             );
         }
 
@@ -59,14 +59,14 @@ class ProjectController extends Controller
                 400,
                 'Failed to retrieve project',
                 [],
-                ['project' => ['Project not found.']]
+                'Project not found.'
             );
         }
 
         return Response::handler(
             200,
             'Project retrieved successfully',
-            $project
+            [$project]
         );
     }
 
@@ -79,7 +79,7 @@ class ProjectController extends Controller
                 400,
                 'Failed to update project',
                 [],
-                ['project' => ['Project not found.']]
+                'Project not found.'
             );
         }
 
@@ -109,7 +109,7 @@ class ProjectController extends Controller
                 400,
                 'Failed to delete project',
                 [],
-                ['project' => ['Project not found.']]
+                'Project not found.'
             );
         }
 

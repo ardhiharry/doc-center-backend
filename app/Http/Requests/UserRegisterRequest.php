@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class UserRegisterRequest extends FormRequest
@@ -45,7 +46,7 @@ class UserRegisterRequest extends FormRequest
             400,
             'Failed to register',
             [],
-            $validator->errors()
+            Arr::flatten(array_values($validator->errors()->toArray()))
         ));
     }
 }

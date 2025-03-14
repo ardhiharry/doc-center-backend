@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class AdminDocRequest extends FormRequest
@@ -48,7 +49,7 @@ class AdminDocRequest extends FormRequest
             400,
             'Failed to create admin document',
             [],
-            $validator->errors()
+            Arr::flatten(array_values($validator->errors()->toArray()))
         ));
     }
 }

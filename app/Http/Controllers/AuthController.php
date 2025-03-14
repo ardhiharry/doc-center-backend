@@ -22,7 +22,7 @@ class AuthController extends Controller
                 400,
                 'Failed to register',
                 [],
-                ['username' => ['The username has already been taken.']]
+                'The username has already been taken.'
             );
         }
 
@@ -48,7 +48,7 @@ class AuthController extends Controller
                 401,
                 'Failed to login',
                 [],
-                ['user' => ['Username or password is invalid.']]
+                'Username or password is invalid.'
             );
         }
 
@@ -86,7 +86,7 @@ class AuthController extends Controller
                     401,
                     'Failed to refresh access token',
                     [],
-                    ['refresh_token' => ['Refresh token is required']]
+                    'Refresh token is required'
                 );
             }
 
@@ -97,7 +97,7 @@ class AuthController extends Controller
                     401,
                     'Failed to refresh access token',
                     [],
-                    ['refresh_token' => ['Invalid or expired refresh token']]
+                    'Invalid or expired refresh token'
                 );
             }
 
@@ -106,7 +106,7 @@ class AuthController extends Controller
                     401,
                     'Failed to refresh access token',
                     [],
-                    ['refresh_token' => ['Invalid or expired refresh token']]
+                    'Invalid or expired refresh token'
                 );
             }
 
@@ -117,7 +117,7 @@ class AuthController extends Controller
                     401,
                     'Failed to refresh access token',
                     [],
-                    ['user' => ['User not found']]
+                    'User not found'
                 );
             }
 
@@ -151,7 +151,7 @@ class AuthController extends Controller
                     401,
                     'Unauthorized',
                     [],
-                    ['user' => 'You must be logged in to perform this action']
+                    'You must be logged in to perform this action'
                 );
             }
 
@@ -168,14 +168,14 @@ class AuthController extends Controller
                 401,
                 'Unauthorized',
                 [],
-                ['token' => ['Token is invalid or expired']]
+                'Token is invalid or expired'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Internal Server Error',
                 [],
-                ['server' => 'Something went wrong']
+                'Something went wrong'
             );
         }
     }

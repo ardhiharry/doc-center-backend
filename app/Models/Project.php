@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,11 +23,8 @@ class Project extends Model
     ];
 
     protected $fillable = [
-        'project_name',
-        'company_name',
-        'company_address',
-        'director_name',
-        'director_phone',
+        'name',
+        'company_id',
         'start_date',
         'end_date'
     ];
@@ -39,5 +37,10 @@ class Project extends Model
     public function activities(): HasMany
     {
         return $this->hasMany(Activity::class, 'project_id', 'id');
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 }

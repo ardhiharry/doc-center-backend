@@ -20,7 +20,7 @@ class ActivityDocCategoryController extends Controller
                 400,
                 'Failed to create activity doc category',
                 [],
-                ['name' => ['Activity doc category name already exists.']]
+                'Activity doc category name already exists.'
             );
         }
 
@@ -60,14 +60,14 @@ class ActivityDocCategoryController extends Controller
                 400,
                 'Failed to retrieve activity doc category',
                 [],
-                ['activity_doc_category' => ['Activity doc category not found.']]
+                'Activity doc category not found.'
             );
         }
 
         return Response::handler(
             200,
             'Activity doc category retrieved successfully',
-            $activityDocCategory
+            [$activityDocCategory]
         );
     }
 
@@ -80,7 +80,7 @@ class ActivityDocCategoryController extends Controller
                 400,
                 'Failed to update activity doc category',
                 [],
-                ['activity_doc_category' => ['Activity doc category not found.']]
+                'Activity doc category not found.'
             );
         }
 
@@ -104,7 +104,7 @@ class ActivityDocCategoryController extends Controller
                 400,
                 'Failed to delete activity doc category',
                 [],
-                ['activity_doc_category' => ['Activity doc category not found.']]
+                'Activity doc category not found.'
             );
         }
 

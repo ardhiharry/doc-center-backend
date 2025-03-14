@@ -23,7 +23,7 @@ class ActivityDocController extends Controller
                     400,
                     'Failed to create activity doc',
                     [],
-                    ['title' => ['Activity doc title already exists.']]
+                    'Activity doc title already exists.'
                 );
             }
 
@@ -53,7 +53,7 @@ class ActivityDocController extends Controller
                 400,
                 'Failed to create activity document',
                 [],
-                ['file' => ['Uploaded file exceeds the size limit.']]
+                'Uploaded file exceeds the size limit.'
             );
         }
     }
@@ -85,14 +85,14 @@ class ActivityDocController extends Controller
                 400,
                 'Failed to retrieve activity doc',
                 [],
-                ['activity_doc' => ['Activity doc not found.']]
+                'Activity doc not found.'
             );
         }
 
         return Response::handler(
             200,
             'Activity doc retrieved successfully',
-            ActivityDocResource::make($activityDoc)
+            [$activityDoc]
         );
     }
 
@@ -105,7 +105,7 @@ class ActivityDocController extends Controller
                 400,
                 'Failed to delete activity doc',
                 [],
-                ['activity_doc' => ['Activity doc not found.']]
+                'Activity doc not found.'
             );
         }
 

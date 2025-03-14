@@ -32,13 +32,11 @@ class UserController extends Controller
                 400,
                 'Failed to retrieve project',
                 [],
-                [
-                    'user' => ['User not found']
-                ]
+                'User not found'
             );
         }
 
-        return Response::handler(200, 'User retrieved successfully', $user);
+        return Response::handler(200, 'User retrieved successfully', [$user]);
     }
 
     public function update(UserUpdateRequest $request, $id)
@@ -50,9 +48,7 @@ class UserController extends Controller
                 400,
                 'Failed to retrieve project',
                 [],
-                [
-                    'user' => ['User not found']
-                ]
+                'User not found'
             );
         }
 
@@ -64,9 +60,7 @@ class UserController extends Controller
                     400,
                     'Failed to update user',
                     [],
-                    [
-                        'password' => ['All password fields are required']
-                    ]
+                    'All password fields are required'
                 );
             }
 
@@ -75,9 +69,7 @@ class UserController extends Controller
                     400,
                     'Failed to update user',
                     [],
-                    [
-                        'password' => ['Old password is incorrect']
-                    ]
+                    'Old password is incorrect'
                 );
             }
 
@@ -86,9 +78,7 @@ class UserController extends Controller
                     400,
                     'Failed to update user',
                     [],
-                    [
-                        'password' => ['New password confirmation does not match']
-                    ]
+                    'New password confirmation does not match'
                 );
             }
 
@@ -109,9 +99,7 @@ class UserController extends Controller
                 400,
                 'Failed to retrieve project'
                 [],
-                [
-                    'user' => ['User not found']
-                ]
+                'User not found'
             );
         }
 
