@@ -28,7 +28,7 @@ class ActivityDocRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:100',
-            'file' => 'required|file|mimes:pdf|max:2048',
+            'file' => 'sometimes|file|mimes:pdf|max:2048',
             'description' => 'nullable|string',
             'tags' => 'required|array',
             'tags.*' => 'string',

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('admin_docs', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable(false);
-            $table->string('file', 100)->nullable(false);
+            $table->string('file', 100)->nullable();
             $table->foreignId('project_id')->nullable(false)->constrained('projects')->onDelete('cascade');
             $table->foreignId('admin_doc_category_id')->nullable(false)->constrained('admin_doc_categories')->onDelete('cascade');
             $table->timestamp('created_at')->useCurrent();

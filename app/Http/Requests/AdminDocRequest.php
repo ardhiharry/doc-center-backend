@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class AdminDocRequest extends FormRequest
@@ -27,9 +28,12 @@ class AdminDocRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:100',
-            'file' => 'required|file|mimes:pdf|max:2048',
+            'file' => 'sometimes|file|mimes:pdf|max:2048',
             'project_id' => 'required|exists:projects,id',
-            'admin_doc_category_id' => 'required|exists:admin_doc_categories,id',
+            'admin_doc_category_id' => [
+                'required',
+                Rule::exists('admin_doc_categories', 'id')->whereNull('deleted_at'),
+            ],
         ];
     }
 
@@ -37,7 +41,6 @@ class AdminDocRequest extends FormRequest
     {
         $this->merge([
             'title' => strip_tags($this->title),
-            'file_path' => strip_tags($this->file_path),
             'project_id' => strip_tags($this->project_id),
             'admin_doc_category_id' => strip_tags($this->admin_doc_category_id),
         ]);

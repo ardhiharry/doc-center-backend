@@ -27,12 +27,16 @@ class ActivityDocController extends Controller
                 );
             }
 
-            $date = Carbon::now()->format('Ymd');
-            $uuid = Str::uuid()->toString();
-            $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-            $fileName = "{$date}-{$randomStr}.pdf";
+            $filePath = null;
 
-            $filePath = $request->file('file')->storeAs('activity_docs', $fileName, 'public');
+            if ($request->hasFile('file')) {
+                $date = Carbon::now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
+                $fileName = "{$date}-{$randomStr}.{$request->file('file')->extension()}";
+
+                $filePath = $request->file('file')->storeAs('activity_docs', $fileName, 'public');
+            }
 
             $activityDoc = ActivityDoc::create([
                 'title' => $request->title,

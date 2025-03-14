@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ProjectCreateRequest extends FormRequest
@@ -27,7 +28,10 @@ class ProjectCreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
-            'company_id' => 'required|exists:companies,id',
+            'company_id' => [
+                'required',
+                Rule::exists('companies', 'id')->whereNull('deleted_at'),
+            ],
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ];

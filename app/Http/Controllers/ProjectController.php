@@ -12,7 +12,7 @@ class ProjectController extends Controller
 {
     public function create(ProjectCreateRequest $request)
     {
-        $project = Project::where('project_name', $request->project_name)->exists();
+        $project = Project::where('name', $request->name)->exists();
 
         if ($project) {
             return Response::handler(
