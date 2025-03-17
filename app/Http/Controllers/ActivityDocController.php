@@ -8,12 +8,13 @@ use App\Http\Resources\ActivityDocResource;
 use App\Models\ActivityDoc;
 use Carbon\Carbon;
 use Illuminate\Http\Exceptions\PostTooLargeException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ActivityDocController extends Controller
 {
-    public function create(ActivityDocRequest $request)
+    public function create(ActivityDocRequest $request): JsonResponse
     {
         try {
             $activityDoc = ActivityDoc::where('title', $request->title)->exists();
@@ -62,7 +63,7 @@ class ActivityDocController extends Controller
         }
     }
 
-    public function getAll()
+    public function getAll(): JsonResponse
     {
         $activityDocs = ActivityDoc::withoutTrashed()->get();
 
@@ -80,7 +81,41 @@ class ActivityDocController extends Controller
         );
     }
 
-    public function getById($id)
+    public function search(Request $request): JsonResponse
+    {
+        $query = ActivityDoc::query();
+
+        foreach ($request->all() as $key => $value) {
+            if (in_array($key, ['title', 'description', 'activity_doc_category_id', 'activity_id'])) {
+                $query->where($key, 'LIKE', "%{$value}%");
+            }
+
+            if ($key === 'tags') {
+                $tags = is_array($value) ? $value : explode(',', $value);
+
+                foreach ($tags as $tag) {
+                    $query->orWhereJsonContains('tags', $tag);
+                }
+            }
+        }
+
+        $activityDocs = $query->withoutTrashed()->get();
+
+        if ($activityDocs->isEmpty()) {
+            return Response::handler(
+                200,
+                'Activity docs retrieved successfully'
+            );
+        }
+
+        return Response::handler(
+            200,
+            'Activity docs retrieved successfully',
+            ActivityDocResource::collection($activityDocs)
+        );
+    }
+
+    public function getById($id): JsonResponse
     {
         $activityDoc = ActivityDoc::find($id);
 
@@ -100,7 +135,7 @@ class ActivityDocController extends Controller
         );
     }
 
-    public function softDelete($id)
+    public function softDelete($id): JsonResponse
     {
         $activityDoc = ActivityDoc::find($id);
 

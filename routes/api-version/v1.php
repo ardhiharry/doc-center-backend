@@ -29,6 +29,7 @@ Route::middleware('auth:api')->group(function () {
 // Companies
 Route::post('/companies', [CompanyController::class, 'create']);
 Route::get('/companies', [CompanyController::class, 'getAll']);
+Route::get('/companies/search', [CompanyController::class, 'search']);
 Route::get('/companies/{id}', [CompanyController::class, 'getById']);
 Route::post('/companies/{id}', [CompanyController::class, 'update']);
 Route::delete('/companies/{id}', [CompanyController::class, 'softDelete']);
@@ -36,6 +37,7 @@ Route::delete('/companies/{id}', [CompanyController::class, 'softDelete']);
 // Projects
 Route::post('/projects', [ProjectController::class, 'create']);
 Route::get('/projects', [ProjectController::class, 'getAll']);
+Route::get('/projects/search', [ProjectController::class, 'search']);
 Route::get('/projects/{id}', [ProjectController::class, 'getById']);
 Route::patch('/projects/{id}', [ProjectController::class, 'update']);
 Route::delete('/projects/{id}', [ProjectController::class, 'softDelete']);
@@ -50,12 +52,14 @@ Route::delete('/admin-doc-categories/{id}', [AdminDocCategoryController::class, 
 // Admin Docs
 Route::post('/admin-docs', [AdminDocController::class, 'create']);
 Route::get('/admin-docs', [AdminDocController::class, 'getAll']);
+Route::get('/admin-docs/search', [AdminDocController::class, 'search']);
 Route::get('/admin-docs/{id}', [AdminDocController::class, 'getById']);
 Route::delete('/admin-docs/{id}', [AdminDocController::class, 'softDelete']);
 
 // Activity
 Route::post('/activities', [ActivityController::class, 'create']);
 Route::get('/activities', [ActivityController::class, 'getAll']);
+Route::get('/activities/search', [ActivityController::class, 'search']);
 Route::get('/activities/{id}', [ActivityController::class, 'getById']);
 Route::patch('/activities/{id}', [ActivityController::class, 'update']);
 Route::delete('/activities/{id}', [ActivityController::class, 'softDelete']);
@@ -70,5 +74,6 @@ Route::delete('/activity-doc-categories/{id}', [ActivityDocCategoryController::c
 // Activity Docs
 Route::post('/activity-docs', [ActivityDocController::class, 'create']);
 Route::get('/activity-docs', [ActivityDocController::class, 'getAll']);
+Route::get('/activity-docs/search', [ActivityDocController::class, 'search']);
 Route::get('/activity-docs/{id}', [ActivityDocController::class, 'getById']);
 Route::delete('/activity-docs/{id}', [ActivityDocController::class, 'softDelete']);

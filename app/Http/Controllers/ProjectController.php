@@ -7,10 +7,12 @@ use App\Http\Requests\ProjectCreateRequest;
 use App\Http\Requests\ProjectUpdateRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function create(ProjectCreateRequest $request)
+    public function create(ProjectCreateRequest $request): JsonResponse
     {
         $project = Project::where('name', $request->name)->exists();
 
@@ -32,7 +34,7 @@ class ProjectController extends Controller
         );
     }
 
-    public function getAll()
+    public function getAll(): JsonResponse
     {
         $projects = Project::withoutTrashed()->get();
 
@@ -50,7 +52,33 @@ class ProjectController extends Controller
         );
     }
 
-    public function getById($id)
+    public function search(Request $request): JsonResponse
+    {
+        $query = Project::query();
+
+        foreach ($request->all() as $key => $value) {
+            if (in_array($key, ['name', 'company_id', 'start_date', 'end_date'])) {
+                $query->where($key, 'LIKE', "%{$value}%");
+            }
+        }
+
+        $projects = $query->withoutTrashed()->get();
+
+        if ($projects->isEmpty()) {
+            return Response::handler(
+                200,
+                'Projects retrieved successfully'
+            );
+        }
+
+        return Response::handler(
+            200,
+            'Projects retrieved successfully',
+            $projects
+        );
+    }
+
+    public function getById($id): JsonResponse
     {
         $project = Project::find($id);
 
@@ -70,7 +98,7 @@ class ProjectController extends Controller
         );
     }
 
-    public function update(ProjectUpdateRequest $request, $id)
+    public function update(ProjectUpdateRequest $request, $id): JsonResponse
     {
         $project = Project::find($id);
 
@@ -93,11 +121,11 @@ class ProjectController extends Controller
         return Response::handler(
             200,
             'Project updated successfully',
-            $project
+            ProjectResource::make($project)
         );
     }
 
-    public function softDelete($id)
+    public function softDelete($id): JsonResponse
     {
         $project = Project::find($id);
 

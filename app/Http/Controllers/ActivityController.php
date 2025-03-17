@@ -7,11 +7,12 @@ use App\Http\Requests\ActivityCreateRequest;
 use App\Http\Requests\ActivityUpdateRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
-    public function create(ActivityCreateRequest $request)
+    public function create(ActivityCreateRequest $request): JsonResponse
     {
         $activity = Activity::where('title', $request->title)->exists();
 
@@ -33,7 +34,7 @@ class ActivityController extends Controller
         );
     }
 
-    public function getAll()
+    public function getAll(): JsonResponse
     {
         $activities = Activity::withoutTrashed()->get();
 
@@ -47,11 +48,37 @@ class ActivityController extends Controller
         return Response::handler(
             200,
             'Activities retrieved successfully',
-            ActivityResource::collection($activities)
+            $activities
         );
     }
 
-    public function getById($id)
+    public function search(Request $request): JsonResponse
+    {
+        $query = Activity::query();
+
+        foreach ($request->all() as $key => $value) {
+            if (in_array($key, ['title', 'project_id', 'start_date', 'end_date'])) {
+                $query->where($key, 'LIKE', "%{$value}%");
+            }
+        }
+
+        $activities = $query->withoutTrashed()->get();
+
+        if ($activities->isEmpty()) {
+            return Response::handler(
+                200,
+                'Activities retrieved successfully'
+            );
+        }
+
+        return Response::handler(
+            200,
+            'Activities retrieved successfully',
+            $activities
+        );
+    }
+
+    public function getById($id): JsonResponse
     {
         $activity = Activity::find($id);
 
@@ -71,7 +98,7 @@ class ActivityController extends Controller
         );
     }
 
-    public function update(ActivityUpdateRequest $request, $id)
+    public function update(ActivityUpdateRequest $request, $id): JsonResponse
     {
         $activity = Activity::find($id);
 
@@ -81,6 +108,15 @@ class ActivityController extends Controller
                 'Failed to update activity',
                 [],
                 'Activity not found.'
+            );
+        }
+
+        if (Activity::where('title', $request->title)->exists()) {
+            return Response::handler(
+                400,
+                'Failed to update activity',
+                [],
+                'Activity title already exists.'
             );
         }
 
@@ -98,7 +134,7 @@ class ActivityController extends Controller
         );
     }
 
-    public function softDelete($id)
+    public function softDelete($id): JsonResponse
     {
         $activity = Activity::find($id);
 

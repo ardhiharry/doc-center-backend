@@ -8,12 +8,13 @@ use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
-    public function create(CompanyCreateRequest $request)
+    public function create(CompanyCreateRequest $request): JsonResponse
     {
         $company = Company::where('name', $request->name)->exists();
 
@@ -52,7 +53,7 @@ class CompanyController extends Controller
         );
     }
 
-    public function getAll()
+    public function getAll(): JsonResponse
     {
         $companies = Company::withoutTrashed()->get();
 
@@ -70,7 +71,33 @@ class CompanyController extends Controller
         );
     }
 
-    public function getById($id)
+    public function search(Request $request): JsonResponse
+    {
+        $query = Company::query();
+
+        foreach ($request->all() as $key => $value) {
+            if (in_array($key, ['name', 'address', 'director_name', 'director_phone'])) {
+                $query->where($key, 'LIKE', "%{$value}%");
+            }
+        }
+
+        $companies = $query->withoutTrashed()->get();
+
+        if ($companies->isEmpty()) {
+            return Response::handler(
+                200,
+                'Companies retrieved successfully'
+            );
+        }
+
+        return Response::handler(
+            200,
+            'Companies retrieved successfully',
+            $companies
+        );
+    }
+
+    public function getById($id): JsonResponse
     {
         $company = Company::withoutTrashed()->find($id);
 
@@ -90,7 +117,7 @@ class CompanyController extends Controller
         );
     }
 
-    public function update(CompanyUpdateRequest $request, $id)
+    public function update(CompanyUpdateRequest $request, $id): JsonResponse
     {
         $company = Company::withoutTrashed()->find($id);
 
@@ -124,11 +151,11 @@ class CompanyController extends Controller
         return Response::handler(
             200,
             'Company updated successfully',
-            $company
+            CompanyResource::make($company)
         );
     }
 
-    public function softDelete($id)
+    public function softDelete($id): JsonResponse
     {
         $company = Company::withoutTrashed()->find($id);
 

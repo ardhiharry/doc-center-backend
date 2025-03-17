@@ -7,11 +7,13 @@ use App\Http\Requests\AdminDocRequest;
 use App\Http\Resources\AdminDocResource;
 use App\Models\AdminDoc;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class AdminDocController extends Controller
 {
-    public function create(AdminDocRequest $request)
+    public function create(AdminDocRequest $request): JsonResponse
     {
         $adminDoc = AdminDoc::where('title', $request->title)->exists();
 
@@ -49,7 +51,7 @@ class AdminDocController extends Controller
         );
     }
 
-    public function getAll()
+    public function getAll(): JsonResponse
     {
         $adminDocs = AdminDoc::withoutTrashed()->get();
 
@@ -63,11 +65,37 @@ class AdminDocController extends Controller
         return Response::handler(
             200,
             'Admin docs retrieved successfully',
-            AdminDocResource::collection($adminDocs)
+            $adminDocs
         );
     }
 
-    public function getById($id)
+    public function search(Request $request): JsonResponse
+    {
+        $query = AdminDoc::query();
+
+        foreach ($request->all() as $key => $value) {
+            if (in_array($key, ['title', 'project_id', 'admin_doc_category_id'])) {
+                $query->where($key, 'LIKE', "%{$value}%");
+            }
+        }
+
+        $adminDocs = $query->withoutTrashed()->get();
+
+        if ($adminDocs->isEmpty()) {
+            return Response::handler(
+                200,
+                'Admin docs retrieved successfully'
+            );
+        }
+
+        return Response::handler(
+            200,
+            'Admin docs retrieved successfully',
+            $adminDocs
+        );
+    }
+
+    public function getById($id): JsonResponse
     {
         $adminDoc = AdminDoc::find($id);
 
@@ -87,7 +115,7 @@ class AdminDocController extends Controller
         );
     }
 
-    public function softDelete($id)
+    public function softDelete($id): JsonResponse
     {
         $adminDoc = AdminDoc::find($id);
 
