@@ -86,7 +86,7 @@ class ActivityDocController extends Controller
         $query = ActivityDoc::query();
 
         foreach ($request->all() as $key => $value) {
-            if (in_array($key, ['title', 'description', 'activity_doc_category_id', 'activity_id'])) {
+            if (in_array($key, ['id', 'title', 'description', 'activity_doc_category_id', 'activity_id'])) {
                 $query->where($key, 'LIKE', "%{$value}%");
             }
 
