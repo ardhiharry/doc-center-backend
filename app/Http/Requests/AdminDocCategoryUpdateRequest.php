@@ -43,7 +43,7 @@ class AdminDocCategoryUpdateRequest extends FormRequest
             400,
             'Failed to update admin document category',
             [],
-            Arr::flatten(array_values($validator->errors()->toArray()))
+            $validator->errors()
         ));
     }
 }

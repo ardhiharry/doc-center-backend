@@ -53,7 +53,7 @@ class ProjectCreateRequest extends FormRequest
             400,
             'Failed to create project',
             [],
-            Arr::flatten(array_values($validator->errors()->toArray()))
+            $validator->errors()
         ));
     }
 }

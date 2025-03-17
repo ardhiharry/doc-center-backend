@@ -53,7 +53,7 @@ class ActivityCreateRequest extends FormRequest
             400,
             'Failed to create activity',
             [],
-            Arr::flatten(array_values($validator->errors()->toArray()))
+            $validator->errors()
         ));
     }
 }

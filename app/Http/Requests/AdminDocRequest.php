@@ -52,7 +52,7 @@ class AdminDocRequest extends FormRequest
             400,
             'Failed to create admin document',
             [],
-            Arr::flatten(array_values($validator->errors()->toArray()))
+            $validator->errors()
         ));
     }
 }

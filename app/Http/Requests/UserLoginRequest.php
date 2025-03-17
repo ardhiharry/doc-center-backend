@@ -45,7 +45,7 @@ class UserLoginRequest extends FormRequest
             400,
             'Failed to login',
             [],
-            Arr::flatten(array_values($validator->errors()->toArray()))
+            $validator->errors()
         ));
     }
 }

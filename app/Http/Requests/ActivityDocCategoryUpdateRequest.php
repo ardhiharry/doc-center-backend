@@ -43,7 +43,7 @@ class ActivityDocCategoryUpdateRequest extends FormRequest
             400,
             'Failed to update activity doc category',
             [],
-            Arr::flatten(array_values($validator->errors()->toArray()))
+            $validator->errors()
         ));
     }
 }
