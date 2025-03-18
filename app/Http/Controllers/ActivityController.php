@@ -27,6 +27,8 @@ class ActivityController extends Controller
 
         $activity = Activity::create($request->all());
 
+        $activity->load('project.company');
+
         return Response::handler(
             200,
             'Activity created successfully',
@@ -36,7 +38,7 @@ class ActivityController extends Controller
 
     public function getAll(): JsonResponse
     {
-        $activities = Activity::withoutTrashed()->get();
+        $activities = Activity::with('project.company')->withoutTrashed()->get();
 
         if ($activities->isEmpty()) {
             return Response::handler(
@@ -48,13 +50,13 @@ class ActivityController extends Controller
         return Response::handler(
             200,
             'Activities retrieved successfully',
-            $activities
+            ActivityResource::collection($activities)
         );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = Activity::query();
+        $query = Activity::with('project.company');
 
         foreach ($request->all() as $key => $value) {
             if (in_array($key, ['title', 'project_id', 'start_date', 'end_date'])) {
@@ -74,13 +76,13 @@ class ActivityController extends Controller
         return Response::handler(
             200,
             'Activities retrieved successfully',
-            $activities
+            ActivityResource::collection($activities)
         );
     }
 
     public function getById($id): JsonResponse
     {
-        $activity = Activity::find($id);
+        $activity = Activity::with('project.company')->find($id);
 
         if (!$activity) {
             return Response::handler(
@@ -94,7 +96,7 @@ class ActivityController extends Controller
         return Response::handler(
             200,
             'Activity retrieved successfully',
-            [$activity]
+            [ActivityResource::make($activity)]
         );
     }
 
@@ -126,6 +128,8 @@ class ActivityController extends Controller
             'end_date',
             'project_id'
         ]));
+
+        $activity->load('project.company');
 
         return Response::handler(
             200,

@@ -18,8 +18,9 @@ class AdminDocResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'file' => $this->file,
-            'project_id' => $this->project_id,
-            'admin_doc_category_id' => $this->admin_doc_category_id
+            'project' => new ProjectResource($this->whenLoaded('project')),
+            'admin_doc_category' => new AdminDocCategoryResource($this->whenLoaded('adminDocCategory')),
+            'created_at' => $this->created_at
         ];
     }
 }

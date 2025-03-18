@@ -47,7 +47,7 @@ class AdminDocCategoryController extends Controller
         return Response::handler(
             200,
             'Admin doc categories retrieved successfully',
-            $adminDocCategories
+            AdminDocCategoryResource::collection($adminDocCategories)
         );
     }
 
@@ -67,7 +67,7 @@ class AdminDocCategoryController extends Controller
         return Response::handler(
             200,
             'Admin doc category retrieved successfully',
-            [$adminDocCategory]
+            [AdminDocCategoryResource::make($adminDocCategory)]
         );
     }
 
@@ -91,7 +91,7 @@ class AdminDocCategoryController extends Controller
         return Response::handler(
             200,
             'Admin doc category updated successfully',
-            $adminDocCategory
+            AdminDocCategoryResource::make($adminDocCategory)
         );
     }
 

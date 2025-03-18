@@ -44,6 +44,8 @@ class AdminDocController extends Controller
             'admin_doc_category_id' => $request->admin_doc_category_id
         ]);
 
+        $adminDoc->load('project.company', 'adminDocCategory');
+
         return Response::handler(
             200,
             'Admin doc created successfully',
@@ -53,7 +55,7 @@ class AdminDocController extends Controller
 
     public function getAll(): JsonResponse
     {
-        $adminDocs = AdminDoc::withoutTrashed()->get();
+        $adminDocs = AdminDoc::with(['project.company', 'adminDocCategory'])->withoutTrashed()->get();
 
         if ($adminDocs->isEmpty()) {
             return Response::handler(
@@ -65,13 +67,13 @@ class AdminDocController extends Controller
         return Response::handler(
             200,
             'Admin docs retrieved successfully',
-            $adminDocs
+            AdminDocResource::collection($adminDocs)
         );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = AdminDoc::query();
+        $query = AdminDoc::with(['project.company', 'adminDocCategory']);
 
         foreach ($request->all() as $key => $value) {
             if (in_array($key, ['title', 'project_id', 'admin_doc_category_id'])) {
@@ -91,13 +93,13 @@ class AdminDocController extends Controller
         return Response::handler(
             200,
             'Admin docs retrieved successfully',
-            $adminDocs
+            AdminDocResource::collection($adminDocs)
         );
     }
 
     public function getById($id): JsonResponse
     {
-        $adminDoc = AdminDoc::find($id);
+        $adminDoc = AdminDoc::with(['project.company', 'adminDocCategory'])->find($id);
 
         if (!$adminDoc) {
             return Response::handler(
@@ -111,7 +113,7 @@ class AdminDocController extends Controller
         return Response::handler(
             200,
             'Admin doc retrieved successfully',
-            [$adminDoc]
+            [AdminDocResource::make($adminDoc)]
         );
     }
 

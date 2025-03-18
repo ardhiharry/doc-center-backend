@@ -48,6 +48,8 @@ class ActivityDocController extends Controller
                 'activity_id' => $request->activity_id
             ]);
 
+            $activityDoc->load('activityDocCategory', 'activity.project.company');
+
             return Response::handler(
                 200,
                 'Activity doc created successfully',
@@ -65,7 +67,7 @@ class ActivityDocController extends Controller
 
     public function getAll(): JsonResponse
     {
-        $activityDocs = ActivityDoc::withoutTrashed()->get();
+        $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->withoutTrashed()->get();
 
         if ($activityDocs->isEmpty()) {
             return Response::handler(
@@ -83,7 +85,7 @@ class ActivityDocController extends Controller
 
     public function search(Request $request): JsonResponse
     {
-        $query = ActivityDoc::query();
+        $query = ActivityDoc::with(['activityDocCategory', 'activity.project.company']);
 
         foreach ($request->all() as $key => $value) {
             if (in_array($key, ['id', 'title', 'description', 'activity_doc_category_id', 'activity_id'])) {
@@ -117,7 +119,7 @@ class ActivityDocController extends Controller
 
     public function getById($id): JsonResponse
     {
-        $activityDoc = ActivityDoc::find($id);
+        $activityDoc = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->find($id);
 
         if (!$activityDoc) {
             return Response::handler(
@@ -131,7 +133,7 @@ class ActivityDocController extends Controller
         return Response::handler(
             200,
             'Activity doc retrieved successfully',
-            [$activityDoc]
+            [ActivityDocResource::make($activityDoc)]
         );
     }
 

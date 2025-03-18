@@ -47,7 +47,7 @@ class ActivityDocCategoryController extends Controller
         return Response::handler(
             200,
             'Activity doc categories retrieved successfully',
-            $activityDocCategories
+            ActivityDocCategoryResource::collection($activityDocCategories)
         );
     }
 
@@ -67,7 +67,7 @@ class ActivityDocCategoryController extends Controller
         return Response::handler(
             200,
             'Activity doc category retrieved successfully',
-            [$activityDocCategory]
+            [ActivityDocCategoryResource::make($activityDocCategory)]
         );
     }
 
@@ -91,7 +91,7 @@ class ActivityDocCategoryController extends Controller
         return Response::handler(
             200,
             'Activity doc category updated successfully',
-            $activityDocCategory
+            ActivityDocCategoryResource::make($activityDocCategory)
         );
     }
 

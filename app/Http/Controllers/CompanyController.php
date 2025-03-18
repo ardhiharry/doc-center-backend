@@ -67,7 +67,7 @@ class CompanyController extends Controller
         return Response::handler(
             200,
             'Companies retrieved successfully',
-            $companies
+            CompanyResource::collection($companies)
         );
     }
 
@@ -93,7 +93,7 @@ class CompanyController extends Controller
         return Response::handler(
             200,
             'Companies retrieved successfully',
-            $companies
+            CompanyResource::collection($companies)
         );
     }
 
@@ -113,7 +113,7 @@ class CompanyController extends Controller
         return Response::handler(
             200,
             'Company retrieved successfully',
-            [$company]
+            [CompanyResource::make($company)]
         );
     }
 

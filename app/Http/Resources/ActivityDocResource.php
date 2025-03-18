@@ -20,8 +20,9 @@ class ActivityDocResource extends JsonResource
             'file' => $this->file,
             'description' => $this->description,
             'tags' => $this->tags,
-            'activity_doc_category_id' => $this->activity_doc_category_id,
-            'activity_id' => $this->activity_id
+            'activity_doc_category' => new ActivityDocCategoryResource($this->whenLoaded('activityDocCategory')),
+            'activity' => new ActivityResource($this->whenLoaded('activity')),
+            'created_at' => $this->created_at
         ];
     }
 }

@@ -27,6 +27,8 @@ class ProjectController extends Controller
 
         $project = Project::create($request->all());
 
+        $project->load('company');
+
         return Response::handler(
             201,
             'Project created successfully',
@@ -36,7 +38,7 @@ class ProjectController extends Controller
 
     public function getAll(): JsonResponse
     {
-        $projects = Project::withoutTrashed()->get();
+        $projects = Project::with('company')->withoutTrashed()->get();
 
         if ($projects->isEmpty()) {
             return Response::handler(
@@ -48,13 +50,13 @@ class ProjectController extends Controller
         return Response::handler(
             200,
             'Projects retrieved successfully',
-            $projects
+            ProjectResource::collection($projects)
         );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = Project::query();
+        $query = Project::with('company');
 
         foreach ($request->all() as $key => $value) {
             if (in_array($key, ['name', 'company_id', 'start_date', 'end_date'])) {
@@ -74,13 +76,13 @@ class ProjectController extends Controller
         return Response::handler(
             200,
             'Projects retrieved successfully',
-            $projects
+            ProjectResource::collection($projects)
         );
     }
 
     public function getById($id): JsonResponse
     {
-        $project = Project::find($id);
+        $project = Project::with('company')->find($id);
 
         if (!$project) {
             return Response::handler(
@@ -94,7 +96,7 @@ class ProjectController extends Controller
         return Response::handler(
             200,
             'Project retrieved successfully',
-            [$project]
+            [ProjectResource::make($project)]
         );
     }
 
@@ -117,6 +119,8 @@ class ProjectController extends Controller
             'start_date',
             'end_date'
         ]));
+
+        $project->load('company');
 
         return Response::handler(
             200,
