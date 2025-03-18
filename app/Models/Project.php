@@ -29,6 +29,16 @@ class Project extends Model
         'end_date'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($project) {
+            $project->adminDocs()->delete();
+            $project->activities->each->delete();
+        });
+    }
+
     public function adminDocs(): HasMany
     {
         return $this->hasMany(AdminDoc::class, 'project_id', 'id');

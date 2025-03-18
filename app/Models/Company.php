@@ -29,7 +29,16 @@ class Company extends Model
         'director_signature'
     ];
 
-    public function project(): HasMany
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($company) {
+            $company->projects->each->delete();
+        });
+    }
+
+    public function projects(): HasMany
     {
         return $this->hasMany(Project::class, 'company_id', 'id');
     }

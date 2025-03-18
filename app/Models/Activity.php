@@ -29,12 +29,21 @@ class Activity extends Model
         'deleted_at',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($activity) {
+            $activity->activityDocs()->delete();
+        });
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
-    public function activityDoc(): HasMany
+    public function activityDocs(): HasMany
     {
         return $this->hasMany(ActivityDoc::class, 'activity_id', 'id');
     }
