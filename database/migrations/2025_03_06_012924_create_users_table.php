@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('username', 50)->nullable(false)->unique('users_username_unique');
             $table->string('password', 255)->nullable(false);
             $table->string('name', 100)->nullable(false);
+            $table->enum('role', ['SUPERADMIN', 'ADMIN', 'USER'])->default('USER');
             $table->text('token')->nullable();
             $table->timestamps();
             $table->softDeletes();
