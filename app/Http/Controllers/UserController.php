@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +21,11 @@ class UserController extends Controller
             );
         }
 
-        return Response::handler(200, 'Users retrieved successfully', $users);
+        return Response::handler(
+            200,
+            'Users retrieved successfully',
+            UserResource::collection($users)
+        );
     }
 
     public function getById($id)
@@ -36,7 +41,11 @@ class UserController extends Controller
             );
         }
 
-        return Response::handler(200, 'User retrieved successfully', [$user]);
+        return Response::handler(
+            200,
+            'User retrieved successfully',
+            [UserResource::make($user)]
+        );
     }
 
     public function update(UserUpdateRequest $request, $id)
@@ -87,7 +96,11 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return Response::handler(200, 'User updated successfully', $user);
+        return Response::handler(
+            200,
+            'User updated successfully',
+            UserResource::make($user)
+        );
     }
 
     public function softDelete($id)
