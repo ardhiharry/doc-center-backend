@@ -15,66 +15,84 @@ class AuthController extends Controller
 {
     public function register(UserRegisterRequest $request)
     {
-        $user = User::where('username', $request->username)->exists();
+        try {
+            $user = User::where('username', $request->username)->exists();
 
-        if ($user) {
+            if ($user) {
+                return Response::handler(
+                    400,
+                    'Failed to register',
+                    [],
+                    'The username has already been taken.'
+                );
+            }
+
+            $user = User::create([
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'name' => $request->name,
+            ]);
+
             return Response::handler(
-                400,
+                201,
+                'Registration successful',
+                UserResource::make($user)
+            );
+        } catch (\Exception $e) {
+            return Response::handler(
+                500,
                 'Failed to register',
                 [],
-                'The username has already been taken.'
+                $e->getMessage()
             );
         }
-
-        $user = User::create([
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'name' => $request->name,
-        ]);
-
-        return Response::handler(
-            201,
-            'Registration successful',
-            UserResource::make($user)
-        );
     }
 
     public function login(UserLoginRequest $request)
     {
-        $user = User::where('username', $request->username)->first();
+        try {
+            $user = User::where('username', $request->username)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return Response::handler(
+                    401,
+                    'Failed to login',
+                    [],
+                    'Username or password is invalid.'
+                );
+            }
+
+            $accessToken = auth('api')
+                ->claims(['type' => 'access'])
+                ->setTTL((int) config('jwt.ttl'))
+                ->fromUser($user);
+
+            $refreshToken = auth('api')
+                ->claims(['type' => 'refresh'])
+                ->setTTL((int) config('jwt.refresh_ttl'))
+                ->fromUser($user);
+
+            $user->update(['token' => $refreshToken]);
+
             return Response::handler(
-                401,
+                200,
+                'Login successful',
+                [
+                    'username' => $user->username,
+                    'name' => $user->name,
+                    'role' => $user->role,
+                    'refresh_token' => $user->token,
+                    'access_token' => $accessToken
+                ]
+            );
+        } catch (\Exception $e) {
+            return Response::handler(
+                500,
                 'Failed to login',
                 [],
-                'Username or password is invalid.'
+                $e->getMessage()
             );
         }
-
-        $accessToken = auth('api')
-            ->claims(['type' => 'access'])
-            ->setTTL((int) config('jwt.ttl'))
-            ->fromUser($user);
-
-        $refreshToken = auth('api')
-            ->claims(['type' => 'refresh'])
-            ->setTTL((int) config('jwt.refresh_ttl'))
-            ->fromUser($user);
-
-        $user->update(['token' => $refreshToken]);
-
-        return Response::handler(
-            200,
-            'Login successful',
-            [
-                'username' => $user->username,
-                'name' => $user->name,
-                'role' => $user->role,
-                'refresh_token' => $user->token,
-                'access_token' => $accessToken
-            ]
-        );
     }
 
     public function refreshToken(UserRefreshRequest $request)

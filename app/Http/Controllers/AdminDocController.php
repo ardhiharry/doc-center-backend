@@ -15,126 +15,171 @@ class AdminDocController extends Controller
 {
     public function create(AdminDocRequest $request): JsonResponse
     {
-        $adminDoc = AdminDoc::where('title', $request->title)->exists();
+        try {
+            $adminDoc = AdminDoc::where('title', $request->title)->exists();
 
-        if ($adminDoc) {
+            if ($adminDoc) {
+                return Response::handler(
+                    400,
+                    'Failed to create admin doc',
+                    [],
+                    'Admin doc title already exists.'
+                );
+            }
+
+            $filePath = null;
+
+            if ($request->hasFile('file')) {
+                $date = Carbon::now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
+                $fileName = "{$date}-{$randomStr}.{$request->file('file')->extension()}";
+
+                $filePath = $request->file('file')->storeAs('admin_docs', $fileName, 'public');
+            }
+
+            $adminDoc = AdminDoc::create([
+                'title' => $request->title,
+                'file' => $filePath,
+                'project_id' => $request->project_id,
+                'admin_doc_category_id' => $request->admin_doc_category_id
+            ]);
+
+            $adminDoc->load('project.company', 'adminDocCategory');
+
             return Response::handler(
-                400,
+                200,
+                'Admin doc created successfully',
+                AdminDocResource::make($adminDoc)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to create admin doc',
                 [],
-                'Admin doc title already exists.'
+                $err->getMessage()
             );
         }
-
-        $filePath = null;
-
-        if ($request->hasFile('file')) {
-            $date = Carbon::now()->format('Ymd');
-            $uuid = Str::uuid()->toString();
-            $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-            $fileName = "{$date}-{$randomStr}.{$request->file('file')->extension()}";
-
-            $filePath = $request->file('file')->storeAs('admin_docs', $fileName, 'public');
-        }
-
-        $adminDoc = AdminDoc::create([
-            'title' => $request->title,
-            'file' => $filePath,
-            'project_id' => $request->project_id,
-            'admin_doc_category_id' => $request->admin_doc_category_id
-        ]);
-
-        $adminDoc->load('project.company', 'adminDocCategory');
-
-        return Response::handler(
-            200,
-            'Admin doc created successfully',
-            AdminDocResource::make($adminDoc)
-        );
     }
 
     public function getAll(): JsonResponse
     {
-        $adminDocs = AdminDoc::with(['project.company', 'adminDocCategory'])->withoutTrashed()->get();
+        try {
+            $adminDocs = AdminDoc::with(['project.company', 'adminDocCategory'])->withoutTrashed()->get();
 
-        if ($adminDocs->isEmpty()) {
+            if ($adminDocs->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Admin docs retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Admin docs retrieved successfully'
+                'Admin docs retrieved successfully',
+                AdminDocResource::collection($adminDocs)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve admin docs',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Admin docs retrieved successfully',
-            AdminDocResource::collection($adminDocs)
-        );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = AdminDoc::with(['project.company', 'adminDocCategory']);
+        try {
+            $query = AdminDoc::with(['project.company', 'adminDocCategory']);
 
-        foreach ($request->all() as $key => $value) {
-            if (in_array($key, ['title', 'project_id', 'admin_doc_category_id'])) {
-                $query->where($key, 'LIKE', "%{$value}%");
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['title', 'project_id', 'admin_doc_category_id'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
             }
-        }
 
-        $adminDocs = $query->withoutTrashed()->get();
+            $adminDocs = $query->withoutTrashed()->get();
 
-        if ($adminDocs->isEmpty()) {
+            if ($adminDocs->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Admin docs retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Admin docs retrieved successfully'
+                'Admin docs retrieved successfully',
+                AdminDocResource::collection($adminDocs)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve admin docs',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Admin docs retrieved successfully',
-            AdminDocResource::collection($adminDocs)
-        );
     }
 
     public function getById($id): JsonResponse
     {
-        $adminDoc = AdminDoc::with(['project.company', 'adminDocCategory'])->find($id);
+        try {
+            $adminDoc = AdminDoc::with(['project.company', 'adminDocCategory'])->find($id);
 
-        if (!$adminDoc) {
+            if (!$adminDoc) {
+                return Response::handler(
+                    400,
+                    'Failed to retrieve admin doc',
+                    [],
+                    'Admin doc not found.'
+                );
+            }
+
             return Response::handler(
-                400,
+                200,
+                'Admin doc retrieved successfully',
+                [AdminDocResource::make($adminDoc)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to retrieve admin doc',
                 [],
-                'Admin doc not found.'
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Admin doc retrieved successfully',
-            [AdminDocResource::make($adminDoc)]
-        );
     }
 
     public function softDelete($id): JsonResponse
     {
-        $adminDoc = AdminDoc::find($id);
+        try {
+            $adminDoc = AdminDoc::find($id);
 
-        if (!$adminDoc) {
+            if (!$adminDoc) {
+                return Response::handler(
+                    400,
+                    'Failed to delete admin doc',
+                    [],
+                    'Admin doc not found.'
+                );
+            }
+
+            $adminDoc->delete();
+
             return Response::handler(
-                400,
+                200,
+                'Admin doc deleted successfully'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to delete admin doc',
                 [],
-                'Admin doc not found.'
+                $err->getMessage()
             );
         }
-
-        $adminDoc->delete();
-
-        return Response::handler(
-            200,
-            'Admin doc deleted successfully'
-        );
     }
 }

@@ -16,163 +16,217 @@ class CompanyController extends Controller
 {
     public function create(CompanyCreateRequest $request): JsonResponse
     {
-        $company = Company::where('name', $request->name)->exists();
+        try {
+            $company = Company::where('name', $request->name)->exists();
 
-        if ($company) {
+            if ($company) {
+                return Response::handler(
+                    400,
+                    'Failed to create company',
+                    [],
+                    'Company name already exists.'
+                );
+            }
+
+            $filePath = null;
+
+            if ($request->hasFile('director_signature')) {
+                $date = Carbon::now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
+                $fileName = "{$date}-{$randomStr}.{$request->file('director_signature')->extension()}";
+
+                $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
+            }
+
+            $company = Company::create([
+                'name' => $request->name,
+                'address' => $request->address,
+                'director_name' => $request->director_name,
+                'director_phone' => $request->director_phone,
+                'director_signature' => $filePath
+            ]);
+
             return Response::handler(
-                400,
+                200,
+                'Company created successfully',
+                CompanyResource::make($company)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to create company',
                 [],
-                'Company name already exists.'
+                $err->getMessage()
             );
         }
-
-        $filePath = null;
-
-        if ($request->hasFile('director_signature')) {
-            $date = Carbon::now()->format('Ymd');
-            $uuid = Str::uuid()->toString();
-            $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-            $fileName = "{$date}-{$randomStr}.{$request->file('director_signature')->extension()}";
-
-            $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
-        }
-
-        $company = Company::create([
-            'name' => $request->name,
-            'address' => $request->address,
-            'director_name' => $request->director_name,
-            'director_phone' => $request->director_phone,
-            'director_signature' => $filePath
-        ]);
-
-        return Response::handler(
-            200,
-            'Company created successfully',
-            CompanyResource::make($company)
-        );
     }
 
     public function getAll(): JsonResponse
     {
-        $companies = Company::withoutTrashed()->get();
+        try {
+            $companies = Company::withoutTrashed()->get();
 
-        if ($companies->isEmpty()) {
+            if ($companies->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Companies retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Companies retrieved successfully'
+                'Companies retrieved successfully',
+                CompanyResource::collection($companies)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve companies',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Companies retrieved successfully',
-            CompanyResource::collection($companies)
-        );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = Company::query();
+        try {
+            $query = Company::query();
 
-        foreach ($request->all() as $key => $value) {
-            if (in_array($key, ['name', 'address', 'director_name', 'director_phone'])) {
-                $query->where($key, 'LIKE', "%{$value}%");
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['name', 'address', 'director_name', 'director_phone'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
             }
-        }
 
-        $companies = $query->withoutTrashed()->get();
+            $companies = $query->withoutTrashed()->get();
 
-        if ($companies->isEmpty()) {
+            if ($companies->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Companies retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Companies retrieved successfully'
+                'Companies retrieved successfully',
+                CompanyResource::collection($companies)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve companies',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Companies retrieved successfully',
-            CompanyResource::collection($companies)
-        );
     }
 
     public function getById($id): JsonResponse
     {
-        $company = Company::withoutTrashed()->find($id);
+        try {
+            $company = Company::withoutTrashed()->find($id);
 
-        if (!$company) {
+            if (!$company) {
+                return Response::handler(
+                    400,
+                    'Failed to retrieve company',
+                    [],
+                    'Company not found.'
+                );
+            }
+
             return Response::handler(
-                400,
+                200,
+                'Company retrieved successfully',
+                [CompanyResource::make($company)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to retrieve company',
                 [],
-                'Company not found.'
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Company retrieved successfully',
-            [CompanyResource::make($company)]
-        );
     }
 
     public function update(CompanyUpdateRequest $request, $id): JsonResponse
     {
-        $company = Company::withoutTrashed()->find($id);
+        try {
+            $company = Company::withoutTrashed()->find($id);
 
-        if (!$company) {
+            if (!$company) {
+                return Response::handler(
+                    400,
+                    'Failed to update company',
+                    [],
+                    'Company not found.'
+                );
+            }
+
+            if ($request->hasFile('director_signature')) {
+                $date = Carbon::now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
+                $fileName = "{$date}-{$randomStr}.{$request->file('director_signature')->extension()}";
+
+                $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
+
+                $company->director_signature = $filePath;
+            }
+
+            $company->fill($request->only([
+                'name',
+                'address',
+                'director_name',
+                'director_phone',
+            ]))->save();
+
             return Response::handler(
-                400,
+                200,
+                'Company updated successfully',
+                CompanyResource::make($company)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to update company',
                 [],
-                'Company not found.'
+                $err->getMessage()
             );
         }
-
-        if ($request->hasFile('director_signature')) {
-            $date = Carbon::now()->format('Ymd');
-            $uuid = Str::uuid()->toString();
-            $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-            $fileName = "{$date}-{$randomStr}.{$request->file('director_signature')->extension()}";
-
-            $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
-
-            $company->director_signature = $filePath;
-        }
-
-        $company->fill($request->only([
-            'name',
-            'address',
-            'director_name',
-            'director_phone',
-        ]))->save();
-
-        return Response::handler(
-            200,
-            'Company updated successfully',
-            CompanyResource::make($company)
-        );
     }
 
     public function softDelete($id): JsonResponse
     {
-        $company = Company::withoutTrashed()->find($id);
+        try {
+            $company = Company::withoutTrashed()->find($id);
 
-        if (!$company) {
+            if (!$company) {
+                return Response::handler(
+                    400,
+                    'Failed to delete company',
+                    [],
+                    'Company not found.'
+                );
+            }
+
+            $company->delete();
+
             return Response::handler(
-                400,
+                200,
+                'Company deleted successfully'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to delete company',
                 [],
-                'Company not found.'
+                $err->getMessage()
             );
         }
-
-        $company->delete();
-
-        return Response::handler(
-            200,
-            'Company deleted successfully'
-        );
     }
 }

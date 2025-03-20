@@ -62,99 +62,142 @@ class ActivityDocController extends Controller
                 [],
                 'Uploaded file exceeds the size limit.'
             );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to create activity document',
+                [],
+                $err->getMessage()
+            );
         }
     }
 
     public function getAll(): JsonResponse
     {
-        $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->withoutTrashed()->get();
+        try {
+            $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->withoutTrashed()->get();
 
-        if ($activityDocs->isEmpty()) {
+            if ($activityDocs->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Activity docs retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Activity docs retrieved successfully'
+                'Activity docs retrieved successfully',
+                ActivityDocResource::collection($activityDocs)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve activity docs',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activity docs retrieved successfully',
-            ActivityDocResource::collection($activityDocs)
-        );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = ActivityDoc::with(['activityDocCategory', 'activity.project.company']);
+        try {
+            $query = ActivityDoc::with(['activityDocCategory', 'activity.project.company']);
 
-        foreach ($request->all() as $key => $value) {
-            if (in_array($key, ['id', 'title', 'description', 'activity_doc_category_id', 'activity_id'])) {
-                $query->where($key, 'LIKE', "%{$value}%");
-            }
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['id', 'title', 'description', 'activity_doc_category_id', 'activity_id'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
 
-            if ($key === 'tags') {
-                $tags = is_array($value) ? $value : explode(',', $value);
+                if ($key === 'tags') {
+                    $tags = is_array($value) ? $value : explode(',', $value);
 
-                foreach ($tags as $tag) {
-                    $query->orWhereJsonContains('tags', $tag);
+                    foreach ($tags as $tag) {
+                        $query->orWhereJsonContains('tags', $tag);
+                    }
                 }
             }
-        }
 
-        $activityDocs = $query->withoutTrashed()->get();
+            $activityDocs = $query->withoutTrashed()->get();
 
-        if ($activityDocs->isEmpty()) {
+            if ($activityDocs->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Activity docs retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Activity docs retrieved successfully'
+                'Activity docs retrieved successfully',
+                ActivityDocResource::collection($activityDocs)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve activity docs',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activity docs retrieved successfully',
-            ActivityDocResource::collection($activityDocs)
-        );
     }
 
     public function getById($id): JsonResponse
     {
-        $activityDoc = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->find($id);
+        try {
+            $activityDoc = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->find($id);
 
-        if (!$activityDoc) {
+            if (!$activityDoc) {
+                return Response::handler(
+                    400,
+                    'Failed to retrieve activity doc',
+                    [],
+                    'Activity doc not found.'
+                );
+            }
+
             return Response::handler(
-                400,
+                200,
+                'Activity doc retrieved successfully',
+                [ActivityDocResource::make($activityDoc)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to retrieve activity doc',
                 [],
-                'Activity doc not found.'
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activity doc retrieved successfully',
-            [ActivityDocResource::make($activityDoc)]
-        );
     }
 
     public function softDelete($id): JsonResponse
     {
-        $activityDoc = ActivityDoc::find($id);
+        try {
+            $activityDoc = ActivityDoc::find($id);
 
-        if (!$activityDoc) {
+            if (!$activityDoc) {
+                return Response::handler(
+                    400,
+                    'Failed to delete activity doc',
+                    [],
+                    'Activity doc not found.'
+                );
+            }
+
+            $activityDoc->delete();
+
             return Response::handler(
-                400,
+                200,
+                'Activity doc deleted successfully'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to delete activity doc',
                 [],
-                'Activity doc not found.'
+                $err->getMessage()
             );
         }
-
-        $activityDoc->delete();
-
-        return Response::handler(
-            200,
-            'Activity doc deleted successfully'
-        );
     }
 }

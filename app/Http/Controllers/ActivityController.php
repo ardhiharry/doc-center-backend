@@ -14,148 +14,202 @@ class ActivityController extends Controller
 {
     public function create(ActivityCreateRequest $request): JsonResponse
     {
-        $activity = Activity::where('title', $request->title)->exists();
+        try {
+            $activity = Activity::where('title', $request->title)->exists();
 
-        if ($activity) {
+            if ($activity) {
+                return Response::handler(
+                    400,
+                    'Failed to create activity',
+                    [],
+                    'Activity title already exists.'
+                );
+            }
+
+            $activity = Activity::create($request->all());
+
+            $activity->load('project.company');
+
             return Response::handler(
-                400,
+                200,
+                'Activity created successfully',
+                ActivityResource::make($activity)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to create activity',
                 [],
-                'Activity title already exists.'
+                $err->getMessage()
             );
         }
-
-        $activity = Activity::create($request->all());
-
-        $activity->load('project.company');
-
-        return Response::handler(
-            200,
-            'Activity created successfully',
-            ActivityResource::make($activity)
-        );
     }
 
     public function getAll(): JsonResponse
     {
-        $activities = Activity::with('project.company')->withoutTrashed()->get();
+        try {
+            $activities = Activity::with('project.company')->withoutTrashed()->get();
 
-        if ($activities->isEmpty()) {
+            if ($activities->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Activities retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Activities retrieved successfully'
+                'Activities retrieved successfully',
+                ActivityResource::collection($activities)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve activities',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activities retrieved successfully',
-            ActivityResource::collection($activities)
-        );
     }
 
     public function search(Request $request): JsonResponse
     {
-        $query = Activity::with('project.company');
+        try {
+            $query = Activity::with('project.company');
 
-        foreach ($request->all() as $key => $value) {
-            if (in_array($key, ['title', 'project_id', 'start_date', 'end_date'])) {
-                $query->where($key, 'LIKE', "%{$value}%");
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['title', 'project_id', 'start_date', 'end_date'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
             }
-        }
 
-        $activities = $query->withoutTrashed()->get();
+            $activities = $query->withoutTrashed()->get();
 
-        if ($activities->isEmpty()) {
+            if ($activities->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Activities retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Activities retrieved successfully'
+                'Activities retrieved successfully',
+                ActivityResource::collection($activities)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve activities',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activities retrieved successfully',
-            ActivityResource::collection($activities)
-        );
     }
 
     public function getById($id): JsonResponse
     {
-        $activity = Activity::with('project.company')->find($id);
+        try {
+            $activity = Activity::with('project.company')->find($id);
 
-        if (!$activity) {
+            if (!$activity) {
+                return Response::handler(
+                    400,
+                    'Failed to retrieve activity',
+                    [],
+                    'Activity not found.'
+                );
+            }
+
             return Response::handler(
-                400,
+                200,
+                'Activity retrieved successfully',
+                [ActivityResource::make($activity)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to retrieve activity',
                 [],
-                'Activity not found.'
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activity retrieved successfully',
-            [ActivityResource::make($activity)]
-        );
     }
 
     public function update(ActivityUpdateRequest $request, $id): JsonResponse
     {
-        $activity = Activity::find($id);
+        try {
+            $activity = Activity::find($id);
 
-        if (!$activity) {
+            if (!$activity) {
+                return Response::handler(
+                    400,
+                    'Failed to update activity',
+                    [],
+                    'Activity not found.'
+                );
+            }
+
+            if (Activity::where('title', $request->title)->exists()) {
+                return Response::handler(
+                    400,
+                    'Failed to update activity',
+                    [],
+                    'Activity title already exists.'
+                );
+            }
+
+            $activity->update($request->only([
+                'title',
+                'start_date',
+                'end_date',
+                'project_id'
+            ]));
+
+            $activity->load('project.company');
+
             return Response::handler(
-                400,
+                200,
+                'Activity updated successfully',
+                ActivityResource::make($activity)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to update activity',
                 [],
-                'Activity not found.'
+                $err->getMessage()
             );
         }
-
-        if (Activity::where('title', $request->title)->exists()) {
-            return Response::handler(
-                400,
-                'Failed to update activity',
-                [],
-                'Activity title already exists.'
-            );
-        }
-
-        $activity->update($request->only([
-            'title',
-            'start_date',
-            'end_date',
-            'project_id'
-        ]));
-
-        $activity->load('project.company');
-
-        return Response::handler(
-            200,
-            'Activity updated successfully',
-            ActivityResource::make($activity)
-        );
     }
 
     public function softDelete($id): JsonResponse
     {
-        $activity = Activity::find($id);
+        try {
+            $activity = Activity::find($id);
 
-        if (!$activity) {
+            if (!$activity) {
+                return Response::handler(
+                    400,
+                    'Failed to delete activity',
+                    [],
+                    'Activity not found.'
+                );
+            }
+
+            $activity->delete();
+
             return Response::handler(
-                400,
+                200,
+                'Activity deleted successfully'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to delete activity',
                 [],
-                'Activity not found.'
+                $err->getMessage()
             );
         }
-
-        $activity->delete();
-
-        return Response::handler(
-            200,
-            'Activity deleted successfully'
-        );
     }
 }

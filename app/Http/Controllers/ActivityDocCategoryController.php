@@ -13,106 +13,151 @@ class ActivityDocCategoryController extends Controller
 {
     public function create(ActivityDocCategoryCreateRequest $request)
     {
-        $activityDocCategory = ActivityDocCategory::where('name', $request->name)->exists();
+        try {
+            $activityDocCategory = ActivityDocCategory::where('name', $request->name)->exists();
 
-        if ($activityDocCategory) {
+            if ($activityDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to create activity doc category',
+                    [],
+                    'Activity doc category name already exists.'
+                );
+            }
+
+            $activityDocCategory = ActivityDocCategory::create($request->all());
+
             return Response::handler(
-                400,
+                201,
+                'Activity doc category created successfully',
+                ActivityDocCategoryResource::make($activityDocCategory)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to create activity doc category',
                 [],
-                'Activity doc category name already exists.'
+                $err->getMessage()
             );
         }
-
-        $activityDocCategory = ActivityDocCategory::create($request->all());
-
-        return Response::handler(
-            201,
-            'Activity doc category created successfully',
-            ActivityDocCategoryResource::make($activityDocCategory)
-        );
     }
 
     public function getAll()
     {
-        $activityDocCategories = ActivityDocCategory::withoutTrashed()->get();
+        try {
+            $activityDocCategories = ActivityDocCategory::withoutTrashed()->get();
 
-        if ($activityDocCategories->isEmpty()) {
+            if ($activityDocCategories->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Activity doc categories retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Activity doc categories retrieved successfully'
+                'Activity doc categories retrieved successfully',
+                ActivityDocCategoryResource::collection($activityDocCategories)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve activity doc categories',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activity doc categories retrieved successfully',
-            ActivityDocCategoryResource::collection($activityDocCategories)
-        );
     }
 
     public function getById($id)
     {
-        $activityDocCategory = ActivityDocCategory::find($id);
+        try {
+            $activityDocCategory = ActivityDocCategory::find($id);
 
-        if (!$activityDocCategory) {
+            if (!$activityDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to retrieve activity doc category',
+                    [],
+                    'Activity doc category not found.'
+                );
+            }
+
             return Response::handler(
-                400,
+                200,
+                'Activity doc category retrieved successfully',
+                [ActivityDocCategoryResource::make($activityDocCategory)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to retrieve activity doc category',
                 [],
-                'Activity doc category not found.'
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Activity doc category retrieved successfully',
-            [ActivityDocCategoryResource::make($activityDocCategory)]
-        );
     }
 
     public function update(ActivityDocCategoryUpdateRequest $request, $id)
     {
-        $activityDocCategory = ActivityDocCategory::find($id);
+        try {
+            $activityDocCategory = ActivityDocCategory::find($id);
 
-        if (!$activityDocCategory) {
+            if (!$activityDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to update activity doc category',
+                    [],
+                    'Activity doc category not found.'
+                );
+            }
+
+            $activityDocCategory->update($request->only([
+                'name',
+            ]));
+
             return Response::handler(
-                400,
+                200,
+                'Activity doc category updated successfully',
+                ActivityDocCategoryResource::make($activityDocCategory)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to update activity doc category',
                 [],
-                'Activity doc category not found.'
+                $err->getMessage()
             );
         }
-
-        $activityDocCategory->update($request->only([
-            'name',
-        ]));
-
-        return Response::handler(
-            200,
-            'Activity doc category updated successfully',
-            ActivityDocCategoryResource::make($activityDocCategory)
-        );
     }
 
     public function softDelete($id)
     {
-        $activityDocCategory = ActivityDocCategory::find($id);
+        try {
+            $activityDocCategory = ActivityDocCategory::find($id);
 
-        if (!$activityDocCategory) {
+            if (!$activityDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to delete activity doc category',
+                    [],
+                    'Activity doc category not found.'
+                );
+            }
+
+            $activityDocCategory->delete();
+
             return Response::handler(
-                400,
+                200,
+                'Activity doc category deleted successfully'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to delete activity doc category',
                 [],
-                'Activity doc category not found.'
+                $err->getMessage()
             );
         }
-
-        $activityDocCategory->delete();
-
-        return Response::handler(
-            200,
-            'Activity doc category deleted successfully'
-        );
     }
 }

@@ -13,106 +13,151 @@ class AdminDocCategoryController extends Controller
 {
     public function create(AdminDocCategoryCreateRequest $request)
     {
-        $adminDocCategory = AdminDocCategory::where('name', $request->name)->exists();
+        try {
+            $adminDocCategory = AdminDocCategory::where('name', $request->name)->exists();
 
-        if ($adminDocCategory) {
+            if ($adminDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to create admin doc category',
+                    [],
+                    'Admin doc category name already exists.'
+                );
+            }
+
+            $adminDocCategory = AdminDocCategory::create($request->all());
+
             return Response::handler(
-                400,
+                201,
+                'Admin doc category created successfully',
+                AdminDocCategoryResource::make($adminDocCategory)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to create admin doc category',
                 [],
-                'Admin doc category name already exists.'
+                $err->getMessage()
             );
         }
-
-        $adminDocCategory = AdminDocCategory::create($request->all());
-
-        return Response::handler(
-            201,
-            'Admin doc category created successfully',
-            AdminDocCategoryResource::make($adminDocCategory)
-        );
     }
 
     public function getAll()
     {
-        $adminDocCategories = AdminDocCategory::withoutTrashed()->get();
+        try {
+            $adminDocCategories = AdminDocCategory::withoutTrashed()->get();
 
-        if ($adminDocCategories->isEmpty()) {
+            if ($adminDocCategories->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Admin doc categories retrieved successfully'
+                );
+            }
+
             return Response::handler(
                 200,
-                'Admin doc categories retrieved successfully'
+                'Admin doc categories retrieved successfully',
+                AdminDocCategoryResource::collection($adminDocCategories)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve admin doc categories',
+                [],
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Admin doc categories retrieved successfully',
-            AdminDocCategoryResource::collection($adminDocCategories)
-        );
     }
 
     public function getById($id)
     {
-        $adminDocCategory = AdminDocCategory::find($id);
+        try {
+            $adminDocCategory = AdminDocCategory::find($id);
 
-        if (!$adminDocCategory) {
+            if (!$adminDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to retrieve admin doc category',
+                    [],
+                    'Admin doc category not found.'
+                );
+            }
+
             return Response::handler(
-                400,
+                200,
+                'Admin doc category retrieved successfully',
+                [AdminDocCategoryResource::make($adminDocCategory)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to retrieve admin doc category',
                 [],
-                'Admin doc category not found.'
+                $err->getMessage()
             );
         }
-
-        return Response::handler(
-            200,
-            'Admin doc category retrieved successfully',
-            [AdminDocCategoryResource::make($adminDocCategory)]
-        );
     }
 
     public function update(AdminDocCategoryUpdateRequest $request, $id)
     {
-        $adminDocCategory = AdminDocCategory::find($id);
+        try {
+            $adminDocCategory = AdminDocCategory::find($id);
 
-        if (!$adminDocCategory) {
+            if (!$adminDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to update admin doc category',
+                    [],
+                    'Admin doc category not found.'
+                );
+            }
+
+            $adminDocCategory->update($request->only([
+                'name',
+            ]));
+
             return Response::handler(
-                400,
+                200,
+                'Admin doc category updated successfully',
+                AdminDocCategoryResource::make($adminDocCategory)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to update admin doc category',
                 [],
-                'Admin doc category not found.'
+                $err->getMessage()
             );
         }
-
-        $adminDocCategory->update($request->only([
-            'name',
-        ]));
-
-        return Response::handler(
-            200,
-            'Admin doc category updated successfully',
-            AdminDocCategoryResource::make($adminDocCategory)
-        );
     }
 
     public function softDelete($id)
     {
-        $adminDocCategory = AdminDocCategory::find($id);
+        try {
+            $adminDocCategory = AdminDocCategory::find($id);
 
-        if (!$adminDocCategory) {
+            if (!$adminDocCategory) {
+                return Response::handler(
+                    400,
+                    'Failed to delete admin doc category',
+                    [],
+                    'Admin doc category not found.'
+                );
+            }
+
+            $adminDocCategory->delete();
+
             return Response::handler(
-                400,
+                200,
+                'Admin doc category deleted successfully'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
                 'Failed to delete admin doc category',
                 [],
-                'Admin doc category not found.'
+                $err->getMessage()
             );
         }
-
-        $adminDocCategory->delete();
-
-        return Response::handler(
-            200,
-            'Admin doc category deleted successfully'
-        );
     }
 }
