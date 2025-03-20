@@ -97,7 +97,7 @@ class UserController extends Controller
         if (!$user) {
             return Response::handler(
                 400,
-                'Failed to retrieve project'
+                'Failed to retrieve project',
                 [],
                 'User not found'
             );

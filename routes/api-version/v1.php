@@ -20,7 +20,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     // Users
-    Route::get('/users', [UserController::class, 'getAll'])->middleware('role:SUPERADMIN');
+    Route::get('/users', [UserController::class, 'getAll'])->middleware('role:SUPERADMIN,ADMIN,USER');
     Route::get('/users/{id}', [UserController::class, 'getById']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'softDelete']);
