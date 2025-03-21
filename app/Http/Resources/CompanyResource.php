@@ -20,7 +20,7 @@ class CompanyResource extends JsonResource
             'address' => $this->address,
             'director_name' => $this->director_name,
             'director_phone' => $this->director_phone,
-            'director_signature' => $this->director_signature,
+            'director_signature' => '/storage/'.$this->director_signature,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

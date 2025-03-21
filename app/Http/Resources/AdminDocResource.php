@@ -17,7 +17,7 @@ class AdminDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'file' => $this->file,
+            'file' => '/storage/'.$this->file,
             'project' => new ProjectResource($this->whenLoaded('project')),
             'admin_doc_category' => new AdminDocCategoryResource($this->whenLoaded('adminDocCategory')),
             'created_at' => $this->created_at

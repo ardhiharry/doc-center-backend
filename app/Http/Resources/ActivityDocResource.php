@@ -17,7 +17,7 @@ class ActivityDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'file' => $this->file,
+            'file' => '/storage/'.$this->file,
             'description' => $this->description,
             'tags' => $this->tags,
             'activity_doc_category' => new ActivityDocCategoryResource($this->whenLoaded('activityDocCategory')),
