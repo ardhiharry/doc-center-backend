@@ -21,7 +21,7 @@ class ActivityDocCategoryController extends Controller
                     400,
                     'Failed to create activity doc category',
                     [],
-                    'Activity doc category name already exists.'
+                    ['name' => ['Activity doc category name already exists.']]
                 );
             }
 
@@ -109,6 +109,15 @@ class ActivityDocCategoryController extends Controller
                     'Failed to update activity doc category',
                     [],
                     'Activity doc category not found.'
+                );
+            }
+
+            if (ActivityDocCategory::where('name', $request->name)->exists()) {
+                return Response::handler(
+                    400,
+                    'Failed to update activity doc category',
+                    [],
+                    ['name' => ['Activity doc category name already exists.']]
                 );
             }
 

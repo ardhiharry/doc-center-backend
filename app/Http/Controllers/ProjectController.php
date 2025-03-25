@@ -22,7 +22,7 @@ class ProjectController extends Controller
                     400,
                     'Failed to create project',
                     [],
-                    'Project name already exists.'
+                    ['name' => ['Project name already exists.']]
                 );
             }
 
@@ -147,6 +147,15 @@ class ProjectController extends Controller
                     'Failed to update project',
                     [],
                     'Project not found.'
+                );
+            }
+
+            if (Project::where('name', $request->name)->exists()) {
+                return Response::handler(
+                    400,
+                    'Failed to update project',
+                    [],
+                    ['name' => ['Project name already exists.']]
                 );
             }
 

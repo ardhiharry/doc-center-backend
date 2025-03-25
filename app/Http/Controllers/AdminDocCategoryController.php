@@ -21,7 +21,7 @@ class AdminDocCategoryController extends Controller
                     400,
                     'Failed to create admin doc category',
                     [],
-                    'Admin doc category name already exists.'
+                    ['name' => ['Admin doc category name already exists.']]
                 );
             }
 
@@ -109,6 +109,15 @@ class AdminDocCategoryController extends Controller
                     'Failed to update admin doc category',
                     [],
                     'Admin doc category not found.'
+                );
+            }
+
+            if (AdminDocCategory::where('name', $request->name)->exists()) {
+                return Response::handler(
+                    400,
+                    'Failed to update admin doc category',
+                    [],
+                    ['name' => ['Admin doc category name already exists.']]
                 );
             }
 

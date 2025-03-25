@@ -24,7 +24,7 @@ class CompanyController extends Controller
                     400,
                     'Failed to create company',
                     [],
-                    'Company name already exists.'
+                    ['name' => ['Company name already exists.']]
                 );
             }
 
@@ -164,6 +164,15 @@ class CompanyController extends Controller
                     'Failed to update company',
                     [],
                     'Company not found.'
+                );
+            }
+
+            if (Company::where('name', $request->name)->where('id', '!=', $id)->exists()) {
+                return Response::handler(
+                    400,
+                    'Failed to update company',
+                    [],
+                    ['name' => ['Company name already exists.']]
                 );
             }
 

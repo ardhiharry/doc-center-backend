@@ -23,7 +23,7 @@ class AdminDocController extends Controller
                     400,
                     'Failed to create admin doc',
                     [],
-                    'Admin doc title already exists.'
+                    ['title' => ['Admin doc title already exists.']]
                 );
             }
 

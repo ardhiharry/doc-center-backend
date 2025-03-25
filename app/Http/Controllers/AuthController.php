@@ -23,7 +23,7 @@ class AuthController extends Controller
                     400,
                     'Failed to register',
                     [],
-                    'The username has already been taken.'
+                    ['username' => ['The username has already been taken.']]
                 );
             }
 

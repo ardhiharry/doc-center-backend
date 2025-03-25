@@ -80,6 +80,15 @@ class UserController extends Controller
                 );
             }
 
+            if (User::where('username', $request->username)->where('id', '!=', $id)->exists()) {
+                return Response::handler(
+                    400,
+                    'Failed to update user',
+                    [],
+                    ['username' => ['The username has already been taken.']]
+                );
+            }
+
             $data = $request->only(['username', 'name']);
 
             if ($request->filled('old_password') || $request->filled('new_password') || $request->filled('confirm_new_password')) {

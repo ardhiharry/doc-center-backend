@@ -24,7 +24,7 @@ class ActivityDocController extends Controller
                     400,
                     'Failed to create activity doc',
                     [],
-                    'Activity doc title already exists.'
+                    ['title' => ['Activity doc title already exists.']]
                 );
             }
 

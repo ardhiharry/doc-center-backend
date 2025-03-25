@@ -22,7 +22,7 @@ class ActivityController extends Controller
                     400,
                     'Failed to create activity',
                     [],
-                    'Activity title already exists.'
+                    ['title' => ['Activity title already exists.']]
                 );
             }
 
@@ -155,7 +155,7 @@ class ActivityController extends Controller
                     400,
                     'Failed to update activity',
                     [],
-                    'Activity title already exists.'
+                    ['title' => ['Activity title already exists.']]
                 );
             }
 
