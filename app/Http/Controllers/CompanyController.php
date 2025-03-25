@@ -28,7 +28,7 @@ class CompanyController extends Controller
                 );
             }
 
-            $filePath = null;
+            $filePath = '/storage/companies/default.png';
 
             if ($request->hasFile('director_signature')) {
                 $date = Carbon::now()->format('Ymd');
