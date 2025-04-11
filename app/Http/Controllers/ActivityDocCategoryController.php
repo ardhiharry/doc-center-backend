@@ -7,11 +7,12 @@ use App\Http\Requests\ActivityDocCategoryCreateRequest;
 use App\Http\Requests\ActivityDocCategoryUpdateRequest;
 use App\Http\Resources\ActivityDocCategoryResource;
 use App\Models\ActivityDocCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ActivityDocCategoryController extends Controller
 {
-    public function create(ActivityDocCategoryCreateRequest $request)
+    public function create(ActivityDocCategoryCreateRequest $request): JsonResponse
     {
         try {
             $activityDocCategory = ActivityDocCategory::where('name', $request->name)->exists();
@@ -20,6 +21,7 @@ class ActivityDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to create activity doc category',
+                    [],
                     [],
                     ['name' => ['Activity doc category name already exists.']]
                 );
@@ -37,15 +39,17 @@ class ActivityDocCategoryController extends Controller
                 500,
                 'Failed to create activity doc category',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll()
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $activityDocCategories = ActivityDocCategory::withoutTrashed()->get();
+            $activityDocCategories = ActivityDocCategory::withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($activityDocCategories->isEmpty()) {
                 return Response::handler(
@@ -57,19 +61,21 @@ class ActivityDocCategoryController extends Controller
             return Response::handler(
                 200,
                 'Activity doc categories retrieved successfully',
-                ActivityDocCategoryResource::collection($activityDocCategories)
+                ActivityDocCategoryResource::collection($activityDocCategories),
+                Response::pagination($activityDocCategories)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve activity doc categories',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getById($id)
+    public function getById($id): JsonResponse
     {
         try {
             $activityDocCategory = ActivityDocCategory::find($id);
@@ -78,6 +84,7 @@ class ActivityDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to retrieve activity doc category',
+                    [],
                     [],
                     'Activity doc category not found.'
                 );
@@ -93,12 +100,13 @@ class ActivityDocCategoryController extends Controller
                 500,
                 'Failed to retrieve activity doc category',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function update(ActivityDocCategoryUpdateRequest $request, $id)
+    public function update(ActivityDocCategoryUpdateRequest $request, $id): JsonResponse
     {
         try {
             $activityDocCategory = ActivityDocCategory::find($id);
@@ -108,6 +116,7 @@ class ActivityDocCategoryController extends Controller
                     400,
                     'Failed to update activity doc category',
                     [],
+                    [],
                     'Activity doc category not found.'
                 );
             }
@@ -116,6 +125,7 @@ class ActivityDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to update activity doc category',
+                    [],
                     [],
                     ['name' => ['Activity doc category name already exists.']]
                 );
@@ -135,6 +145,7 @@ class ActivityDocCategoryController extends Controller
                 500,
                 'Failed to update activity doc category',
                 [],
+                [],
                 $err->getMessage()
             );
         }
@@ -150,6 +161,7 @@ class ActivityDocCategoryController extends Controller
                     400,
                     'Failed to delete activity doc category',
                     [],
+                    [],
                     'Activity doc category not found.'
                 );
             }
@@ -164,6 +176,7 @@ class ActivityDocCategoryController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete activity doc category',
+                [],
                 [],
                 $err->getMessage()
             );

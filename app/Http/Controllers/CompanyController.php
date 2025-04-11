@@ -24,6 +24,7 @@ class CompanyController extends Controller
                     400,
                     'Failed to create company',
                     [],
+                    [],
                     ['name' => ['Company name already exists.']]
                 );
             }
@@ -57,15 +58,17 @@ class CompanyController extends Controller
                 500,
                 'Failed to create company',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $companies = Company::withoutTrashed()->get();
+            $companies = Company::withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($companies->isEmpty()) {
                 return Response::handler(
@@ -77,12 +80,14 @@ class CompanyController extends Controller
             return Response::handler(
                 200,
                 'Companies retrieved successfully',
-                CompanyResource::collection($companies)
+                CompanyResource::collection($companies),
+                Response::pagination($companies)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve companies',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -100,7 +105,8 @@ class CompanyController extends Controller
                 }
             }
 
-            $companies = $query->withoutTrashed()->get();
+            $companies = $query->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($companies->isEmpty()) {
                 return Response::handler(
@@ -112,12 +118,14 @@ class CompanyController extends Controller
             return Response::handler(
                 200,
                 'Companies retrieved successfully',
-                CompanyResource::collection($companies)
+                CompanyResource::collection($companies),
+                Response::pagination($companies)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve companies',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -134,6 +142,7 @@ class CompanyController extends Controller
                     400,
                     'Failed to retrieve company',
                     [],
+                    [],
                     'Company not found.'
                 );
             }
@@ -147,6 +156,7 @@ class CompanyController extends Controller
             return Response::handler(
                 500,
                 'Failed to retrieve company',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -163,6 +173,7 @@ class CompanyController extends Controller
                     400,
                     'Failed to update company',
                     [],
+                    [],
                     'Company not found.'
                 );
             }
@@ -171,6 +182,7 @@ class CompanyController extends Controller
                 return Response::handler(
                     400,
                     'Failed to update company',
+                    [],
                     [],
                     ['name' => ['Company name already exists.']]
                 );
@@ -204,6 +216,7 @@ class CompanyController extends Controller
                 500,
                 'Failed to update company',
                 [],
+                [],
                 $err->getMessage()
             );
         }
@@ -219,6 +232,7 @@ class CompanyController extends Controller
                     400,
                     'Failed to delete company',
                     [],
+                    [],
                     'Company not found.'
                 );
             }
@@ -233,6 +247,7 @@ class CompanyController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete company',
+                [],
                 [],
                 $err->getMessage()
             );

@@ -7,11 +7,12 @@ use App\Http\Requests\AdminDocCategoryCreateRequest;
 use App\Http\Requests\AdminDocCategoryUpdateRequest;
 use App\Http\Resources\AdminDocCategoryResource;
 use App\Models\AdminDocCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AdminDocCategoryController extends Controller
 {
-    public function create(AdminDocCategoryCreateRequest $request)
+    public function create(AdminDocCategoryCreateRequest $request): JsonResponse
     {
         try {
             $adminDocCategory = AdminDocCategory::where('name', $request->name)->exists();
@@ -20,6 +21,7 @@ class AdminDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to create admin doc category',
+                    [],
                     [],
                     ['name' => ['Admin doc category name already exists.']]
                 );
@@ -37,15 +39,17 @@ class AdminDocCategoryController extends Controller
                 500,
                 'Failed to create admin doc category',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll()
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $adminDocCategories = AdminDocCategory::withoutTrashed()->get();
+            $adminDocCategories = AdminDocCategory::withoutTrashed()
+                ->paginate(request()->query('limit', 10));
 
             if ($adminDocCategories->isEmpty()) {
                 return Response::handler(
@@ -57,19 +61,21 @@ class AdminDocCategoryController extends Controller
             return Response::handler(
                 200,
                 'Admin doc categories retrieved successfully',
-                AdminDocCategoryResource::collection($adminDocCategories)
+                AdminDocCategoryResource::collection($adminDocCategories),
+                Response::pagination($adminDocCategories)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve admin doc categories',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getById($id)
+    public function getById($id): JsonResponse
     {
         try {
             $adminDocCategory = AdminDocCategory::find($id);
@@ -78,6 +84,7 @@ class AdminDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to retrieve admin doc category',
+                    [],
                     [],
                     'Admin doc category not found.'
                 );
@@ -93,12 +100,13 @@ class AdminDocCategoryController extends Controller
                 500,
                 'Failed to retrieve admin doc category',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function update(AdminDocCategoryUpdateRequest $request, $id)
+    public function update(AdminDocCategoryUpdateRequest $request, $id): JsonResponse
     {
         try {
             $adminDocCategory = AdminDocCategory::find($id);
@@ -108,6 +116,7 @@ class AdminDocCategoryController extends Controller
                     400,
                     'Failed to update admin doc category',
                     [],
+                    [],
                     'Admin doc category not found.'
                 );
             }
@@ -116,6 +125,7 @@ class AdminDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to update admin doc category',
+                    [],
                     [],
                     ['name' => ['Admin doc category name already exists.']]
                 );
@@ -135,12 +145,13 @@ class AdminDocCategoryController extends Controller
                 500,
                 'Failed to update admin doc category',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function softDelete($id)
+    public function softDelete($id): JsonResponse
     {
         try {
             $adminDocCategory = AdminDocCategory::find($id);
@@ -149,6 +160,7 @@ class AdminDocCategoryController extends Controller
                 return Response::handler(
                     400,
                     'Failed to delete admin doc category',
+                    [],
                     [],
                     'Admin doc category not found.'
                 );
@@ -164,6 +176,7 @@ class AdminDocCategoryController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete admin doc category',
+                [],
                 [],
                 $err->getMessage()
             );

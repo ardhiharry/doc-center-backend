@@ -17,11 +17,21 @@ class ActivityDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'file' => '/storage/'.$this->file,
+            'file' => $this->file ? '/storage/'.$this->file : '',
             'description' => $this->description,
             'tags' => $this->tags,
-            'activity_doc_category' => new ActivityDocCategoryResource($this->whenLoaded('activityDocCategory')),
-            'activity' => new ActivityResource($this->whenLoaded('activity')),
+            'activity_doc_category' => $this->whenLoaded('activityDocCategory', function () {
+                return [
+                    'id' => $this->activityDocCategory->id,
+                    'name' => $this->activityDocCategory->name
+                ];
+            }),
+            'activity' => $this->whenLoaded('activity', function () {
+                return [
+                    'id' => $this->activity->id,
+                    'title' => $this->activity->title
+                ];
+            }),
             'created_at' => $this->created_at
         ];
     }

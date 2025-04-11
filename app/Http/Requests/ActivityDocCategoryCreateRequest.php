@@ -43,6 +43,7 @@ class ActivityDocCategoryCreateRequest extends FormRequest
             400,
             'Failed to create activity document category',
             [],
+            [],
             $validator->errors()
         ));
     }

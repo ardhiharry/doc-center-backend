@@ -60,6 +60,7 @@ class ActivityDocRequest extends FormRequest
             400,
             'Failed to create activity document',
             [],
+            [],
             $validator->errors()
         ));
     }

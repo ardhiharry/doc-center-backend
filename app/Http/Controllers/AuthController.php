@@ -8,12 +8,13 @@ use App\Http\Requests\UserRefreshRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
-    public function register(UserRegisterRequest $request)
+    public function register(UserRegisterRequest $request): JsonResponse
     {
         try {
             $user = User::where('username', $request->username)->exists();
@@ -22,6 +23,7 @@ class AuthController extends Controller
                 return Response::handler(
                     400,
                     'Failed to register',
+                    [],
                     [],
                     ['username' => ['The username has already been taken.']]
                 );
@@ -43,12 +45,13 @@ class AuthController extends Controller
                 500,
                 'Failed to register',
                 [],
+                [],
                 $e->getMessage()
             );
         }
     }
 
-    public function login(UserLoginRequest $request)
+    public function login(UserLoginRequest $request): JsonResponse
     {
         try {
             $user = User::where('username', $request->username)->first();
@@ -57,6 +60,7 @@ class AuthController extends Controller
                 return Response::handler(
                     401,
                     'Failed to login',
+                    [],
                     [],
                     'Username or password is invalid.'
                 );
@@ -90,12 +94,13 @@ class AuthController extends Controller
                 500,
                 'Failed to login',
                 [],
+                [],
                 $e->getMessage()
             );
         }
     }
 
-    public function refreshToken(UserRefreshRequest $request)
+    public function refreshToken(UserRefreshRequest $request): JsonResponse
     {
         try {
             $refreshToken = $request->input('refresh_token');
@@ -104,6 +109,7 @@ class AuthController extends Controller
                 return Response::handler(
                     401,
                     'Failed to refresh access token',
+                    [],
                     [],
                     'Refresh token is required'
                 );
@@ -116,6 +122,7 @@ class AuthController extends Controller
                     401,
                     'Failed to refresh access token',
                     [],
+                    [],
                     'Invalid or expired refresh token'
                 );
             }
@@ -124,6 +131,7 @@ class AuthController extends Controller
                 return Response::handler(
                     401,
                     'Failed to refresh access token',
+                    [],
                     [],
                     'Invalid or expired refresh token'
                 );
@@ -135,6 +143,7 @@ class AuthController extends Controller
                 return Response::handler(
                     401,
                     'Failed to refresh access token',
+                    [],
                     [],
                     'User not found'
                 );
@@ -155,12 +164,13 @@ class AuthController extends Controller
                 500,
                 'Failed to refresh access token',
                 [],
+                [],
                 [$e->getMessage()]
             );
         }
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         try {
             $user = auth()->user();
@@ -169,6 +179,7 @@ class AuthController extends Controller
                 return Response::handler(
                     401,
                     'Unauthorized',
+                    [],
                     [],
                     'You must be logged in to perform this action'
                 );
@@ -187,12 +198,14 @@ class AuthController extends Controller
                 401,
                 'Unauthorized',
                 [],
+                [],
                 'Token is invalid or expired'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Internal Server Error',
+                [],
                 [],
                 'Something went wrong'
             );

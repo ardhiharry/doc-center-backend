@@ -50,6 +50,7 @@ class CompanyCreateRequest extends FormRequest
             400,
             'Failed to create company',
             [],
+            [],
             $validator->errors()
         ));
     }

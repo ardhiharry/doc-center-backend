@@ -53,6 +53,7 @@ class ActivityCreateRequest extends FormRequest
             400,
             'Failed to create activity',
             [],
+            [],
             $validator->errors()
         ));
     }

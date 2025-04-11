@@ -55,6 +55,7 @@ class UserUpdateRequest extends FormRequest
             400,
             'Failed to update user',
             [],
+            [],
             $validator->errors()
         ));
     }

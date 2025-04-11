@@ -23,6 +23,7 @@ class AdminDocController extends Controller
                     400,
                     'Failed to create admin doc',
                     [],
+                    [],
                     ['title' => ['Admin doc title already exists.']]
                 );
             }
@@ -57,15 +58,18 @@ class AdminDocController extends Controller
                 500,
                 'Failed to create admin doc',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $adminDocs = AdminDoc::with(['project.company', 'adminDocCategory'])->withoutTrashed()->get();
+            $adminDocs = AdminDoc::with(['project.company', 'adminDocCategory'])
+                ->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($adminDocs->isEmpty()) {
                 return Response::handler(
@@ -77,12 +81,14 @@ class AdminDocController extends Controller
             return Response::handler(
                 200,
                 'Admin docs retrieved successfully',
-                AdminDocResource::collection($adminDocs)
+                AdminDocResource::collection($adminDocs),
+                Response::pagination($adminDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve admin docs',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -100,7 +106,8 @@ class AdminDocController extends Controller
                 }
             }
 
-            $adminDocs = $query->withoutTrashed()->get();
+            $adminDocs = $query->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($adminDocs->isEmpty()) {
                 return Response::handler(
@@ -112,12 +119,14 @@ class AdminDocController extends Controller
             return Response::handler(
                 200,
                 'Admin docs retrieved successfully',
-                AdminDocResource::collection($adminDocs)
+                AdminDocResource::collection($adminDocs),
+                Response::pagination($adminDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve admin docs',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -134,6 +143,7 @@ class AdminDocController extends Controller
                     400,
                     'Failed to retrieve admin doc',
                     [],
+                    [],
                     'Admin doc not found.'
                 );
             }
@@ -147,6 +157,7 @@ class AdminDocController extends Controller
             return Response::handler(
                 500,
                 'Failed to retrieve admin doc',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -163,6 +174,7 @@ class AdminDocController extends Controller
                     400,
                     'Failed to delete admin doc',
                     [],
+                    [],
                     'Admin doc not found.'
                 );
             }
@@ -177,6 +189,7 @@ class AdminDocController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete admin doc',
+                [],
                 [],
                 $err->getMessage()
             );

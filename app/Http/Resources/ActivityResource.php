@@ -19,7 +19,12 @@ class ActivityResource extends JsonResource
             'title' => $this->title,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'project' => new ProjectResource($this->whenLoaded('project')),
+            'project' => $this->whenLoaded('project', function () {
+                return [
+                    'id' => $this->project->id,
+                    'name' => $this->project->name
+                ];
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

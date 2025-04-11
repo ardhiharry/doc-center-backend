@@ -22,6 +22,7 @@ class ActivityController extends Controller
                     400,
                     'Failed to create activity',
                     [],
+                    [],
                     ['title' => ['Activity title already exists.']]
                 );
             }
@@ -40,15 +41,18 @@ class ActivityController extends Controller
                 500,
                 'Failed to create activity',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $activities = Activity::with('project.company')->withoutTrashed()->get();
+            $activities = Activity::with('project.company')
+                ->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {
                 return Response::handler(
@@ -60,12 +64,14 @@ class ActivityController extends Controller
             return Response::handler(
                 200,
                 'Activities retrieved successfully',
-                ActivityResource::collection($activities)
+                ActivityResource::collection($activities),
+                Response::pagination($activities)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve activities',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -83,7 +89,8 @@ class ActivityController extends Controller
                 }
             }
 
-            $activities = $query->withoutTrashed()->get();
+            $activities = $query->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {
                 return Response::handler(
@@ -95,12 +102,14 @@ class ActivityController extends Controller
             return Response::handler(
                 200,
                 'Activities retrieved successfully',
-                ActivityResource::collection($activities)
+                ActivityResource::collection($activities),
+                Response::pagination($activities)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve activities',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -117,6 +126,7 @@ class ActivityController extends Controller
                     400,
                     'Failed to retrieve activity',
                     [],
+                    [],
                     'Activity not found.'
                 );
             }
@@ -130,6 +140,7 @@ class ActivityController extends Controller
             return Response::handler(
                 500,
                 'Failed to retrieve activity',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -146,6 +157,7 @@ class ActivityController extends Controller
                     400,
                     'Failed to update activity',
                     [],
+                    [],
                     'Activity not found.'
                 );
             }
@@ -154,6 +166,7 @@ class ActivityController extends Controller
                 return Response::handler(
                     400,
                     'Failed to update activity',
+                    [],
                     [],
                     ['title' => ['Activity title already exists.']]
                 );
@@ -178,6 +191,7 @@ class ActivityController extends Controller
                 500,
                 'Failed to update activity',
                 [],
+                [],
                 $err->getMessage()
             );
         }
@@ -193,6 +207,7 @@ class ActivityController extends Controller
                     400,
                     'Failed to delete activity',
                     [],
+                    [],
                     'Activity not found.'
                 );
             }
@@ -207,6 +222,7 @@ class ActivityController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete activity',
+                [],
                 [],
                 $err->getMessage()
             );

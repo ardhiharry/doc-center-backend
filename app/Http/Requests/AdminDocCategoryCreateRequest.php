@@ -43,6 +43,7 @@ class AdminDocCategoryCreateRequest extends FormRequest
             400,
             'Failed to create admin document category',
             [],
+            [],
             $validator->errors()
         ));
     }

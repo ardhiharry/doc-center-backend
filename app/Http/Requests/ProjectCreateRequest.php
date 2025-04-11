@@ -32,8 +32,8 @@ class ProjectCreateRequest extends FormRequest
                 'required',
                 Rule::exists('companies', 'id')->whereNull('deleted_at'),
             ],
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required|date|before_or_equal:end_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ];
     }
 
@@ -52,6 +52,7 @@ class ProjectCreateRequest extends FormRequest
         throw new ValidationException($validator, Response::handler(
             400,
             'Failed to create project',
+            [],
             [],
             $validator->errors()
         ));

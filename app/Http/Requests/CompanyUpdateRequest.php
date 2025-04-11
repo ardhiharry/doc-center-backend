@@ -63,6 +63,7 @@ class CompanyUpdateRequest extends FormRequest
             400,
             'Failed to update company',
             [],
+            [],
             $validator->errors()
         ));
     }

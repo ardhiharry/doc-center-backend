@@ -36,6 +36,7 @@ class UserRefreshRequest extends FormRequest
             400,
             'Failed to refresh token',
             [],
+            [],
             $validator->errors()
         ));
     }

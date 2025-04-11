@@ -22,6 +22,7 @@ class ProjectController extends Controller
                     400,
                     'Failed to create project',
                     [],
+                    [],
                     ['name' => ['Project name already exists.']]
                 );
             }
@@ -40,32 +41,37 @@ class ProjectController extends Controller
                 500,
                 'Failed to create project',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $projects = Project::with('company')->withoutTrashed()->get();
+            $projects = Project::with('company')
+                ->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($projects->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Projects retrieved successfully',
+                    'Projects retrieved successfully'
                 );
             }
 
             return Response::handler(
                 200,
                 'Projects retrieved successfully',
-                ProjectResource::collection($projects)
+                ProjectResource::collection($projects),
+                Response::pagination($projects)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve projects',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -83,7 +89,8 @@ class ProjectController extends Controller
                 }
             }
 
-            $projects = $query->withoutTrashed()->get();
+            $projects = $query->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($projects->isEmpty()) {
                 return Response::handler(
@@ -95,12 +102,14 @@ class ProjectController extends Controller
             return Response::handler(
                 200,
                 'Projects retrieved successfully',
-                ProjectResource::collection($projects)
+                ProjectResource::collection($projects),
+                Response::pagination($projects)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve projects',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -117,6 +126,7 @@ class ProjectController extends Controller
                     400,
                     'Failed to retrieve project',
                     [],
+                    [],
                     'Project not found.'
                 );
             }
@@ -130,6 +140,7 @@ class ProjectController extends Controller
             return Response::handler(
                 500,
                 'Failed to retrieve project',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -146,6 +157,7 @@ class ProjectController extends Controller
                     400,
                     'Failed to update project',
                     [],
+                    [],
                     'Project not found.'
                 );
             }
@@ -154,6 +166,7 @@ class ProjectController extends Controller
                 return Response::handler(
                     400,
                     'Failed to update project',
+                    [],
                     [],
                     ['name' => ['Project name already exists.']]
                 );
@@ -178,6 +191,7 @@ class ProjectController extends Controller
                 500,
                 'Failed to update project',
                 [],
+                [],
                 $err->getMessage()
             );
         }
@@ -193,6 +207,7 @@ class ProjectController extends Controller
                     400,
                     'Failed to delete project',
                     [],
+                    [],
                     'Project not found.'
                 );
             }
@@ -207,6 +222,7 @@ class ProjectController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete project',
+                [],
                 [],
                 $err->getMessage()
             );

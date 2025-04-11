@@ -46,6 +46,7 @@ class UserRegisterRequest extends FormRequest
             400,
             'Failed to register',
             [],
+            [],
             $validator->errors()
         ));
     }

@@ -62,6 +62,7 @@ class ProjectUpdateRequest extends FormRequest
             400,
             'Failed to update project',
             [],
+            [],
             $validator->errors()
         ));
     }

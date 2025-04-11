@@ -62,6 +62,7 @@ class ActivityUpdateRequest extends FormRequest
             400,
             'Failed to update activity',
             [],
+            [],
             $validator->errors()
         ));
     }

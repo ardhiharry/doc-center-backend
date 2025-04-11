@@ -24,6 +24,7 @@ class ActivityDocController extends Controller
                     400,
                     'Failed to create activity doc',
                     [],
+                    [],
                     ['title' => ['Activity doc title already exists.']]
                 );
             }
@@ -60,6 +61,7 @@ class ActivityDocController extends Controller
                 400,
                 'Failed to create activity document',
                 [],
+                [],
                 'Uploaded file exceeds the size limit.'
             );
         } catch (\Exception $err) {
@@ -67,15 +69,18 @@ class ActivityDocController extends Controller
                 500,
                 'Failed to create activity document',
                 [],
+                [],
                 $err->getMessage()
             );
         }
     }
 
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         try {
-            $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->withoutTrashed()->get();
+            $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])
+                ->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($activityDocs->isEmpty()) {
                 return Response::handler(
@@ -87,12 +92,14 @@ class ActivityDocController extends Controller
             return Response::handler(
                 200,
                 'Activity docs retrieved successfully',
-                ActivityDocResource::collection($activityDocs)
+                ActivityDocResource::collection($activityDocs),
+                Response::pagination($activityDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve activity docs',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -118,7 +125,8 @@ class ActivityDocController extends Controller
                 }
             }
 
-            $activityDocs = $query->withoutTrashed()->get();
+            $activityDocs = $query->withoutTrashed()
+                ->paginate($request->query('limit', 10));
 
             if ($activityDocs->isEmpty()) {
                 return Response::handler(
@@ -130,12 +138,14 @@ class ActivityDocController extends Controller
             return Response::handler(
                 200,
                 'Activity docs retrieved successfully',
-                ActivityDocResource::collection($activityDocs)
+                ActivityDocResource::collection($activityDocs),
+                Response::pagination($activityDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
                 'Failed to retrieve activity docs',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -152,6 +162,7 @@ class ActivityDocController extends Controller
                     400,
                     'Failed to retrieve activity doc',
                     [],
+                    [],
                     'Activity doc not found.'
                 );
             }
@@ -165,6 +176,7 @@ class ActivityDocController extends Controller
             return Response::handler(
                 500,
                 'Failed to retrieve activity doc',
+                [],
                 [],
                 $err->getMessage()
             );
@@ -181,6 +193,7 @@ class ActivityDocController extends Controller
                     400,
                     'Failed to delete activity doc',
                     [],
+                    [],
                     'Activity doc not found.'
                 );
             }
@@ -195,6 +208,7 @@ class ActivityDocController extends Controller
             return Response::handler(
                 500,
                 'Failed to delete activity doc',
+                [],
                 [],
                 $err->getMessage()
             );

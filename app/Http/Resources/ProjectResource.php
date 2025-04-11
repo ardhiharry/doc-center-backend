@@ -17,7 +17,7 @@ class ProjectResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'company' => new CompanyResource($this->whenLoaded('company')),
+            'company' => $this->whenLoaded('company', CompanyResource::make($this->company)),
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'created_at' => $this->created_at,
