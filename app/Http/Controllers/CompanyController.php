@@ -178,14 +178,19 @@ class CompanyController extends Controller
                 );
             }
 
-            if (Company::where('name', $request->name)->where('id', '!=', $id)->exists()) {
-                return Response::handler(
-                    400,
-                    'Failed to update company',
-                    [],
-                    [],
-                    ['name' => ['Company name already exists.']]
-                );
+            if ($request->name !== $company->name) {
+                if (Company::where('name', $request->name)
+                    ->where('id', '!=', $id)
+                    ->exists()
+                ) {
+                    return Response::handler(
+                        400,
+                        'Failed to update company',
+                        [],
+                        [],
+                        ['name' => ['Company name already exists.']]
+                    );
+                }
             }
 
             if ($request->hasFile('director_signature')) {

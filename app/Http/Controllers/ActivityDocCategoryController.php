@@ -121,14 +121,19 @@ class ActivityDocCategoryController extends Controller
                 );
             }
 
-            if (ActivityDocCategory::where('name', $request->name)->exists()) {
-                return Response::handler(
-                    400,
-                    'Failed to update activity doc category',
-                    [],
-                    [],
-                    ['name' => ['Activity doc category name already exists.']]
-                );
+            if ($request->name !== $activityDocCategory->name) {
+                if (ActivityDocCategory::where('name', $request->name)
+                    ->where('id', '!=', $id)
+                    ->exists()
+                ) {
+                    return Response::handler(
+                        400,
+                        'Failed to update activity doc category',
+                        [],
+                        [],
+                        ['name' => ['Activity doc category name already exists.']]
+                    );
+                }
             }
 
             $activityDocCategory->update($request->only([

@@ -88,14 +88,19 @@ class UserController extends Controller
                 );
             }
 
-            if (User::where('username', $request->username)->where('id', '!=', $id)->exists()) {
-                return Response::handler(
-                    400,
-                    'Failed to update user',
-                    [],
-                    [],
-                    ['username' => ['The username has already been taken.']]
-                );
+            if ($request->username !== $user->username) {
+                if (User::where('username', $request->username)
+                    ->where('id', '!=', $id)
+                    ->exists()
+                ) {
+                    return Response::handler(
+                        400,
+                        'Failed to update user',
+                        [],
+                        [],
+                        ['username' => ['The username has already been taken.']]
+                    );
+                }
             }
 
             $data = $request->only(['username', 'name']);

@@ -121,6 +121,21 @@ class AdminDocCategoryController extends Controller
                 );
             }
 
+            if ($request->name !== $adminDocCategory->name) {
+                if (AdminDocCategory::where('name', $request->name)
+                    ->where('id', '!=', $adminDocCategory->id)
+                    ->exists()
+                ) {
+                    return Response::handler(
+                        400,
+                        'Failed to update admin doc category',
+                        [],
+                        [],
+                        ['name' => ['Admin doc category name already exists.']]
+                    );
+                }
+            }
+
             if (AdminDocCategory::where('name', $request->name)->exists()) {
                 return Response::handler(
                     400,

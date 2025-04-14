@@ -162,14 +162,19 @@ class ActivityController extends Controller
                 );
             }
 
-            if (Activity::where('title', $request->title)->exists()) {
-                return Response::handler(
-                    400,
-                    'Failed to update activity',
-                    [],
-                    [],
-                    ['title' => ['Activity title already exists.']]
-                );
+            if ($request->title !== $activity->title) {
+                if (Activity::where('title', $request->title)
+                    ->where('id', '!=', $id)
+                    ->exists()
+                ) {
+                    return Response::handler(
+                        400,
+                        'Failed to update activity',
+                        [],
+                        [],
+                        ['title' => ['Activity title already exists.']]
+                    );
+                }
             }
 
             $activity->update($request->only([

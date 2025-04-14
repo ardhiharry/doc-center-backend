@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Helpers\Response;
+use App\Models\Activity;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
@@ -54,6 +55,29 @@ class ActivityUpdateRequest extends FormRequest
         }
 
         $this->merge($data);
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $activityId = $this->route('id');
+            $activity = Activity::find($activityId);
+
+            if (!$activity) {
+                return;
+            }
+
+            $startDate = $this->input('start_date', $activity->start_date);
+            $endDate = $this->input('end_date', $activity->end_date);
+
+            if ($startDate && $endDate && $startDate > $endDate) {
+                $validator->errors()->add('start_date', 'The start date must be a date before or equal to end date.');
+            }
+
+            if ($startDate && $endDate && $endDate < $startDate) {
+                $validator->errors()->add('end_date', 'The end date must be a date after or equal to start date.');
+            }
+        });
     }
 
     protected function failedValidation(Validator $validator)

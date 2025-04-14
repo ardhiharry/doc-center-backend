@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Helpers\Response;
+use App\Models\Project;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
 class ProjectUpdateRequest extends FormRequest
@@ -54,6 +54,29 @@ class ProjectUpdateRequest extends FormRequest
         }
 
         $this->merge($data);
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $projectId = $this->route('id');
+            $project = Project::find($projectId);
+
+            if (!$project) {
+                return;
+            }
+
+            $startDate = $this->input('start_date', $project->start_date);
+            $endDate = $this->input('end_date', $project->end_date);
+
+            if ($startDate && $endDate && $startDate > $endDate) {
+                $validator->errors()->add('start_date', 'The start date must be a date before or equal to end date.');
+            }
+
+            if ($startDate && $endDate && $endDate < $startDate) {
+                $validator->errors()->add('end_date', 'The end date must be a date after or equal to start date.');
+            }
+        });
     }
 
     protected function failedValidation(Validator $validator)

@@ -162,14 +162,19 @@ class ProjectController extends Controller
                 );
             }
 
-            if (Project::where('name', $request->name)->exists()) {
-                return Response::handler(
-                    400,
-                    'Failed to update project',
-                    [],
-                    [],
-                    ['name' => ['Project name already exists.']]
-                );
+            if ($request->name !== $project->name) {
+                if (Project::where('name', $request->name)
+                    ->where('id', '!=', $project->id)
+                    ->exists()
+                ) {
+                    return Response::handler(
+                        400,
+                        'Failed to update project',
+                        [],
+                        [],
+                        ['name' => ['Project name already exists.']]
+                    );
+                }
             }
 
             $project->update($request->only([

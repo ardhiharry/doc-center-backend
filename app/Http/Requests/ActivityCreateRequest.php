@@ -28,8 +28,8 @@ class ActivityCreateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:100',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required|date|before_or_equal:end_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
             'project_id' => [
                 'required',
                 Rule::exists('projects', 'id')->whereNull('deleted_at'),

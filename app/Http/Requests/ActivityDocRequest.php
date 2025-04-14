@@ -8,6 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Mews\Purifier\Facades\Purifier;
 
 class ActivityDocRequest extends FormRequest
 {
@@ -47,7 +48,7 @@ class ActivityDocRequest extends FormRequest
     {
         $this->merge([
             'title' => strip_tags($this->title),
-            'description' => strip_tags($this->description),
+            'description' => Purifier::clean($this->description),
             'tags' => is_string($this->tags) ? json_decode($this->tags, true) : $this->tags,
             'activity_doc_category_id' => strip_tags($this->activity_doc_category_id),
             'activity_id' => strip_tags($this->activity_id),
