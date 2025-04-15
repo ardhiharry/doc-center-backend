@@ -123,6 +123,14 @@ class ActivityDocController extends Controller
                         $query->orWhereJsonContains('tags', $tag);
                     }
                 }
+
+                if ($key === 'project_id') {
+                    $projectIds = is_array($value) ? $value : explode(',', $value);
+
+                    $query->whereHas('activity.project', function ($q) use ($projectIds) {
+                        $q->whereIn('id', $projectIds);
+                    });
+                }
             }
 
             $activityDocs = $query->withoutTrashed()
