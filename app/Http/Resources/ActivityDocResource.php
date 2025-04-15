@@ -29,7 +29,11 @@ class ActivityDocResource extends JsonResource
             'activity' => $this->whenLoaded('activity', function () {
                 return [
                     'id' => $this->activity->id,
-                    'title' => $this->activity->title
+                    'title' => $this->activity->title,
+                    'project' => [
+                        'id' => $this->activity->project->id,
+                        'name' => $this->activity->project->name
+                    ]
                 ];
             }),
             'created_at' => $this->created_at
