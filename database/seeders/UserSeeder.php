@@ -14,10 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'username' => 'usertest',
-            'password' => Hash::make('secret'),
-            'name' => 'User Test',
-        ]);
+        User::factory()->count(10)->create();
     }
 }
