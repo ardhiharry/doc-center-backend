@@ -16,19 +16,11 @@ class TeamResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'project' => $this->whenLoaded('project', function () {
-                return [
-                    'id' => $this->project->id,
-                    'name' => $this->project->name
-                ];
-            }),
-            'user' => $this->whenLoaded('user', function () {
-                return [
-                    'id' => $this->user->id,
-                    'username' => $this->user->username,
-                    'name' => $this->user->name
-                ];
-            }),
+            'project_id' => optional($this->project)->id,
+            'project_name' => optional($this->project)->name,
+            'user_id' => optional($this->user)->id,
+            'user_username' => optional($this->user)->username,
+            'user_name' => optional($this->user)->name
         ];
     }
 }
