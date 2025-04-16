@@ -22,7 +22,11 @@ class ActivityDocFactory extends Factory
             'title' => fake()->sentence(3),
             'file' => null,
             'description' => fake()->paragraph(),
-            'tags' => json_encode(fake()->words(3)),
+            'tags' => [
+                fake()->word(),
+                fake()->word(),
+                fake()->word(),
+            ],
             'activity_doc_category_id' => ActivityDocCategory::factory(),
             'activity_id' => Activity::factory(),
         ];

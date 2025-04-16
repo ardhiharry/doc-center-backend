@@ -20,22 +20,12 @@ class ActivityDocResource extends JsonResource
             'file' => $this->file ? '/storage/'.$this->file : '',
             'description' => $this->description,
             'tags' => $this->tags,
-            'activity_doc_category' => $this->whenLoaded('activityDocCategory', function () {
-                return [
-                    'id' => $this->activityDocCategory->id,
-                    'name' => $this->activityDocCategory->name
-                ];
-            }),
-            'activity' => $this->whenLoaded('activity', function () {
-                return [
-                    'id' => $this->activity->id,
-                    'title' => $this->activity->title,
-                    'project' => [
-                        'id' => $this->activity->project->id,
-                        'name' => $this->activity->project->name
-                    ]
-                ];
-            }),
+            'activity_doc_category_id' => optional($this->activityDocCategory)->id,
+            'activity_doc_category_name' => optional($this->activityDocCategory)->name,
+            'activity_id' => optional($this->activity)->id,
+            'activity_title' => optional($this->activity)->title,
+            'project_id' => optional(optional($this->activity)->project)->id,
+            'project_name' => optional(optional($this->activity)->project)->name,
             'created_at' => $this->created_at
         ];
     }

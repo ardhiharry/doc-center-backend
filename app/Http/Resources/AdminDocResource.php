@@ -18,18 +18,10 @@ class AdminDocResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'file' => $this->file ? '/storage/'.$this->file : '',
-            'project' => $this->whenLoaded('project', function () {
-                return [
-                    'id' => $this->project->id,
-                    'name' => $this->project->name
-                ];
-            }),
-            'admin_doc_category' => $this->whenLoaded('adminDocCategory', function () {
-                return [
-                    'id' => $this->adminDocCategory->id,
-                    'name' => $this->adminDocCategory->name
-                ];
-            }),
+            'project_id' => optional($this->project)->id,
+            'project_name' => optional($this->project)->name,
+            'admin_doc_category_id' => optional($this->adminDocCategory)->id,
+            'admin_doc_category_name' => optional($this->adminDocCategory)->name,
             'created_at' => $this->created_at
         ];
     }
