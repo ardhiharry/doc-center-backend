@@ -72,9 +72,35 @@ class TeamController extends Controller
         try {
             $query = Team::with(['project', 'user']);
 
+            $relationList = [
+                'project_name' => ['relation' => 'project', 'column' => 'name'],
+                'user_username' => ['relation' => 'user', 'column' => 'username'],
+                'user_name' => ['relation' => 'user', 'column' => 'name'],
+            ];
+
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['project_id', 'user_id'])) {
-                    $query->where($key, 'LIKE', "%{$value}%");
+                if (array_key_exists($key, $relationList)) {
+                    $relation = $relationList[$key]['relation'];
+                    $column = $relationList[$key]['column'];
+
+                    $query->whereHas($relation, function ($q) use ($column, $value) {
+                        $q->where($column, 'LIKE', "%{$value}%");
+                    });
+
+                    continue;
+                }
+
+                if ($key === 'project_id') {
+                    $projectIds = is_array($value) ? $value : explode(',', $value);
+                    $projectIds = array_map('trim', $projectIds);
+
+                    $query->whereHas('project', function ($q) use ($projectIds) {
+                        $q->whereIn('id', $projectIds);
+                    });
+                }
+
+                if (in_array($key, ['user_id'])) {
+                    $query->where($key, $value);
                 }
             }
 

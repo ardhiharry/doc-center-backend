@@ -118,6 +118,7 @@ class ActivityDocController extends Controller
 
                 if ($key === 'tags') {
                     $tags = is_array($value) ? $value : explode(',', $value);
+                    $tags = array_map('trim', $tags);
 
                     foreach ($tags as $tag) {
                         $query->orWhereJsonContains('tags', $tag);

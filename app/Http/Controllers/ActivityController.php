@@ -84,8 +84,12 @@ class ActivityController extends Controller
             $query = Activity::with('project.company');
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['title', 'project_id', 'start_date', 'end_date'])) {
+                if (in_array($key, ['title', 'start_date', 'end_date'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
+                }
+
+                if (in_array($key, ['project_id'])) {
+                    $query->where($key, $value);
                 }
             }
 

@@ -104,6 +104,10 @@ class AdminDocController extends Controller
                 if (in_array($key, ['title', 'project_id', 'admin_doc_category_id'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
+
+                if (in_array($key, ['project_id'])) {
+                    $query->where($key, $value);
+                }
             }
 
             $adminDocs = $query->withoutTrashed()
