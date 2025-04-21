@@ -49,7 +49,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/teams/search', [TeamController::class, 'search']);
     Route::get('/teams/{id}', [TeamController::class, 'getById']);
     Route::patch('/teams/{id}', [TeamController::class, 'update']);
-    Route::delete('/teams/{id}', [TeamController::class, 'softDelete']);
+    Route::delete('/teams/{projectId}', [TeamController::class, 'softDelete']);
 
     // Admin Doc Category
     Route::post('/admin-doc-categories', [AdminDocCategoryController::class, 'create']);

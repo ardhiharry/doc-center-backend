@@ -212,7 +212,7 @@ class ProjectController extends Controller
     public function softDelete($id): JsonResponse
     {
         try {
-            $project = Project::find($id);
+            $project = Project::withoutTrashed()->find($id);
 
             if (!$project) {
                 return Response::handler(
