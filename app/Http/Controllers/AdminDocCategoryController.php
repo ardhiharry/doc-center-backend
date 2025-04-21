@@ -75,6 +75,43 @@ class AdminDocCategoryController extends Controller
         }
     }
 
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $query = AdminDocCategory::withoutTrashed();
+
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['name'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
+            }
+
+            $adminDocCategories = $query->paginate($request->query('limit', 10));
+
+            if ($adminDocCategories->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Admin doc categories retrieved successfully'
+                );
+            }
+
+            return Response::handler(
+                200,
+                'Admin doc categories retrieved successfully',
+                AdminDocCategoryResource::collection($adminDocCategories),
+                Response::pagination($adminDocCategories)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve admin doc categories',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
+
     public function getById($id): JsonResponse
     {
         try {

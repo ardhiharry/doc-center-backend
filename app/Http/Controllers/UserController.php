@@ -42,6 +42,43 @@ class UserController extends Controller
         }
     }
 
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $query = User::withoutTrashed();
+
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['username', 'name'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
+            }
+
+            $users = $query->paginate($request->query('limit', 10));
+
+            if ($users->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Users retrieved successfully'
+                );
+            }
+
+            return Response::handler(
+                200,
+                'Users retrieved successfully',
+                UserResource::collection($users),
+                Response::pagination($users)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve users',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
+
     public function getById($id): JsonResponse
     {
         try {

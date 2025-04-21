@@ -22,6 +22,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Users
     Route::get('/users', [UserController::class, 'getAll'])->middleware('role:SUPERADMIN,ADMIN,USER');
+    Route::get('/users/search', [UserController::class, 'search']);
     Route::get('/users/{id}', [UserController::class, 'getById']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'softDelete']);
@@ -53,6 +54,7 @@ Route::middleware('auth:api')->group(function () {
     // Admin Doc Category
     Route::post('/admin-doc-categories', [AdminDocCategoryController::class, 'create']);
     Route::get('/admin-doc-categories', [AdminDocCategoryController::class, 'getAll']);
+    Route::get('/admin-doc-categories/search', [AdminDocCategoryController::class, 'search']);
     Route::get('/admin-doc-categories/{id}', [AdminDocCategoryController::class, 'getById']);
     Route::patch('/admin-doc-categories/{id}', [AdminDocCategoryController::class, 'update']);
     Route::delete('/admin-doc-categories/{id}', [AdminDocCategoryController::class, 'softDelete']);
@@ -75,6 +77,7 @@ Route::middleware('auth:api')->group(function () {
     // Activity Doc Category
     Route::post('/activity-doc-categories', [ActivityDocCategoryController::class, 'create']);
     Route::get('/activity-doc-categories', [ActivityDocCategoryController::class, 'getAll']);
+    Route::get('/activity-doc-categories/search', [ActivityDocCategoryController::class, 'search']);
     Route::get('/activity-doc-categories/{id}', [ActivityDocCategoryController::class, 'getById']);
     Route::patch('/activity-doc-categories/{id}', [ActivityDocCategoryController::class, 'update']);
     Route::delete('/activity-doc-categories/{id}', [ActivityDocCategoryController::class, 'softDelete']);

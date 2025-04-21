@@ -75,6 +75,43 @@ class ActivityDocCategoryController extends Controller
         }
     }
 
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $query = ActivityDocCategory::withoutTrashed();
+
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['name'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
+            }
+
+            $activityDocCategories = $query->paginate($request->query('limit', 10));
+
+            if ($activityDocCategories->isEmpty()) {
+                return Response::handler(
+                    200,
+                    'Activity doc categories retrieved successfully'
+                );
+            }
+
+            return Response::handler(
+                200,
+                'Activity doc categories retrieved successfully',
+                ActivityDocCategoryResource::collection($activityDocCategories),
+                Response::pagination($activityDocCategories)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Failed to retrieve activity doc categories',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
+
     public function getById($id): JsonResponse
     {
         try {
