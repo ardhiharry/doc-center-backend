@@ -127,6 +127,7 @@ class ActivityDocController extends Controller
 
                 if ($key === 'project_id') {
                     $projectIds = is_array($value) ? $value : explode(',', $value);
+                    $projectIds = array_map('trim', $projectIds);
 
                     $query->whereHas('activity.project', function ($q) use ($projectIds) {
                         $q->whereIn('id', $projectIds);

@@ -88,8 +88,13 @@ class ActivityController extends Controller
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
 
-                if (in_array($key, ['project_id'])) {
-                    $query->where($key, $value);
+                if ($key === 'project_id') {
+                    $projectIds = is_array($value) ? $value : explode(',', $value);
+                    $projectIds = array_map('trim', $projectIds);
+
+                    $query->whereHas('project', function ($q) use ($projectIds) {
+                        $q->whereIn('id', $projectIds);
+                    });
                 }
             }
 

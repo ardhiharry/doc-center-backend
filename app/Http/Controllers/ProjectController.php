@@ -87,6 +87,13 @@ class ProjectController extends Controller
                 if (in_array($key, ['name', 'company_id', 'start_date', 'end_date'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
+
+                if ($key === 'id') {
+                    $ids = is_array($value) ? $value : explode(',', $value);
+                    $ids = array_map('trim', $ids);
+
+                    $query->whereIn('id', $ids);
+                }
             }
 
             $projects = $query->withoutTrashed()
