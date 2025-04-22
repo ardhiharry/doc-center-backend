@@ -69,6 +69,7 @@ class AdminDocController extends Controller
         try {
             $adminDocs = AdminDoc::with(['project.company', 'adminDocCategory'])
                 ->withoutTrashed()
+                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($adminDocs->isEmpty()) {
@@ -111,6 +112,7 @@ class AdminDocController extends Controller
             }
 
             $adminDocs = $query->withoutTrashed()
+                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($adminDocs->isEmpty()) {

@@ -52,6 +52,7 @@ class ActivityController extends Controller
         try {
             $activities = Activity::with('project.company')
                 ->withoutTrashed()
+                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {
@@ -99,6 +100,7 @@ class ActivityController extends Controller
             }
 
             $activities = $query->withoutTrashed()
+                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {

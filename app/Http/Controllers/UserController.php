@@ -16,6 +16,7 @@ class UserController extends Controller
     {
         try {
             $users = User::withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($users->isEmpty()) {
@@ -53,7 +54,8 @@ class UserController extends Controller
                 }
             }
 
-            $users = $query->paginate($request->query('limit', 10));
+            $users = $query->orderBy('name', 'asc')
+                ->paginate($request->query('limit', 10));
 
             if ($users->isEmpty()) {
                 return Response::handler(

@@ -49,6 +49,7 @@ class ActivityDocCategoryController extends Controller
     {
         try {
             $activityDocCategories = ActivityDocCategory::withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($activityDocCategories->isEmpty()) {
@@ -86,7 +87,8 @@ class ActivityDocCategoryController extends Controller
                 }
             }
 
-            $activityDocCategories = $query->paginate($request->query('limit', 10));
+            $activityDocCategories = $query->orderBy('name', 'asc')
+                ->paginate($request->query('limit', 10));
 
             if ($activityDocCategories->isEmpty()) {
                 return Response::handler(

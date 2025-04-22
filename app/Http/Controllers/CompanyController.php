@@ -68,6 +68,7 @@ class CompanyController extends Controller
     {
         try {
             $companies = Company::withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($companies->isEmpty()) {
@@ -106,6 +107,7 @@ class CompanyController extends Controller
             }
 
             $companies = $query->withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($companies->isEmpty()) {

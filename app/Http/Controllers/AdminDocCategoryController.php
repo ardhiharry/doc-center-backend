@@ -49,6 +49,7 @@ class AdminDocCategoryController extends Controller
     {
         try {
             $adminDocCategories = AdminDocCategory::withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate(request()->query('limit', 10));
 
             if ($adminDocCategories->isEmpty()) {
@@ -86,7 +87,8 @@ class AdminDocCategoryController extends Controller
                 }
             }
 
-            $adminDocCategories = $query->paginate($request->query('limit', 10));
+            $adminDocCategories = $query->orderBy('name', 'asc')
+                ->paginate($request->query('limit', 10));
 
             if ($adminDocCategories->isEmpty()) {
                 return Response::handler(

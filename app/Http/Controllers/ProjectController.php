@@ -52,6 +52,7 @@ class ProjectController extends Controller
         try {
             $projects = Project::with('company')
                 ->withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($projects->isEmpty()) {
@@ -97,6 +98,7 @@ class ProjectController extends Controller
             }
 
             $projects = $query->withoutTrashed()
+                ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($projects->isEmpty()) {

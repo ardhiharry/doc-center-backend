@@ -80,6 +80,7 @@ class ActivityDocController extends Controller
         try {
             $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])
                 ->withoutTrashed()
+                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($activityDocs->isEmpty()) {
@@ -136,6 +137,7 @@ class ActivityDocController extends Controller
             }
 
             $activityDocs = $query->withoutTrashed()
+                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($activityDocs->isEmpty()) {
