@@ -20,10 +20,10 @@ class AdminDocCategoryController extends Controller
             if ($adminDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to create admin doc category',
+                    'Gagal membuat kategori dokumen administrasi',
                     [],
                     [],
-                    ['name' => ['Admin doc category name already exists.']]
+                    ['name' => ['Nama kategori dokumen administrasi sudah ada.']]
                 );
             }
 
@@ -31,13 +31,13 @@ class AdminDocCategoryController extends Controller
 
             return Response::handler(
                 201,
-                'Admin doc category created successfully',
+                'Berhasil membuat kategori dokumen administrasi',
                 AdminDocCategoryResource::make($adminDocCategory)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create admin doc category',
+                'Gagal membuat kategori dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -55,20 +55,20 @@ class AdminDocCategoryController extends Controller
             if ($adminDocCategories->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Admin doc categories retrieved successfully'
+                    'Berhasil mengambil data kategori dokumen administrasi'
                 );
             }
 
             return Response::handler(
                 200,
-                'Admin doc categories retrieved successfully',
+                'Berhasil mengambil data kategori dokumen administrasi',
                 AdminDocCategoryResource::collection($adminDocCategories),
                 Response::pagination($adminDocCategories)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve admin doc categories',
+                'Gagal mengambil data kategori dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -93,20 +93,20 @@ class AdminDocCategoryController extends Controller
             if ($adminDocCategories->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Admin doc categories retrieved successfully'
+                    'Berhasil mengambil data kategori dokumen administrasi'
                 );
             }
 
             return Response::handler(
                 200,
-                'Admin doc categories retrieved successfully',
+                'Berhasil mengambil data kategori dokumen administrasi',
                 AdminDocCategoryResource::collection($adminDocCategories),
                 Response::pagination($adminDocCategories)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve admin doc categories',
+                'Gagal mengambil data kategori dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -122,22 +122,22 @@ class AdminDocCategoryController extends Controller
             if (!$adminDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve admin doc category',
+                    'Gagal mengambil data kategori dokumen administrasi',
                     [],
                     [],
-                    'Admin doc category not found.'
+                    'Data kategori dokumen administrasi tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Admin doc category retrieved successfully',
+                'Berhasil mengambil data kategori dokumen administrasi',
                 [AdminDocCategoryResource::make($adminDocCategory)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve admin doc category',
+                'Gagal mengambil data kategori dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -153,10 +153,10 @@ class AdminDocCategoryController extends Controller
             if (!$adminDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to update admin doc category',
+                    'Gagal mengubah data kategori dokumen administrasi',
                     [],
                     [],
-                    'Admin doc category not found.'
+                    'Data kategori dokumen administrasi tidak ditemukan.'
                 );
             }
 
@@ -167,22 +167,12 @@ class AdminDocCategoryController extends Controller
                 ) {
                     return Response::handler(
                         400,
-                        'Failed to update admin doc category',
+                        'Gagal mengubah data kategori dokumen administrasi',
                         [],
                         [],
-                        ['name' => ['Admin doc category name already exists.']]
+                        ['name' => ['Nama kategori dokumen administrasi sudah ada.']]
                     );
                 }
-            }
-
-            if (AdminDocCategory::where('name', $request->name)->exists()) {
-                return Response::handler(
-                    400,
-                    'Failed to update admin doc category',
-                    [],
-                    [],
-                    ['name' => ['Admin doc category name already exists.']]
-                );
             }
 
             $adminDocCategory->update($request->only([
@@ -191,13 +181,13 @@ class AdminDocCategoryController extends Controller
 
             return Response::handler(
                 200,
-                'Admin doc category updated successfully',
+                'Berhasil mengubah data kategori dokumen administrasi',
                 AdminDocCategoryResource::make($adminDocCategory)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update admin doc category',
+                'Gagal mengubah data kategori dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -213,10 +203,10 @@ class AdminDocCategoryController extends Controller
             if (!$adminDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to delete admin doc category',
+                    'Gagal menghapus kategori dokumen administrasi',
                     [],
                     [],
-                    'Admin doc category not found.'
+                    'Data kategori dokumen administrasi tidak ditemukan.'
                 );
             }
 
@@ -224,12 +214,12 @@ class AdminDocCategoryController extends Controller
 
             return Response::handler(
                 200,
-                'Admin doc category deleted successfully'
+                'Berhasil menghapus kategori dokumen administrasi'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete admin doc category',
+                'Gagal menghapus kategori dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()

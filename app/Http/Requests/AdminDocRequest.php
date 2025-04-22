@@ -29,11 +29,33 @@ class AdminDocRequest extends FormRequest
         return [
             'title' => 'required|string|max:100',
             'file' => 'sometimes|file|mimes:pdf|max:2048',
-            'project_id' => 'required|exists:projects,id',
+            'project_id' => [
+                'required',
+                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+            ],
             'admin_doc_category_id' => [
                 'required',
                 Rule::exists('admin_doc_categories', 'id')->whereNull('deleted_at'),
             ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'Judul wajib diisi.',
+            'title.string' => 'Judul harus berupa teks.',
+            'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
+
+            'file.file' => 'File harus berupa file.',
+            'file.mimes' => 'File harus berupa PDF.',
+            'file.max' => 'Ukuran file maksimal 2MB.',
+
+            'project_id.required' => 'Project wajib dipilih.',
+            'project_id.exists' => 'Project tidak ditemukan.',
+
+            'admin_doc_category_id.required' => 'Kategori wajib dipilih.',
+            'admin_doc_category_id.exists' => 'Kategori tidak ditemukan.',
         ];
     }
 

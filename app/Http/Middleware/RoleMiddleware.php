@@ -22,7 +22,8 @@ class RoleMiddleware
                 Response::HTTP_FORBIDDEN,
                 'Forbidden',
                 [],
-                'You do not have permission to access this resource'
+                [],
+                'Anda tidak memiliki izin untuk mengakses sumber daya ini.'
             );
         }
 

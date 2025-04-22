@@ -20,10 +20,10 @@ class ProjectController extends Controller
             if ($project) {
                 return Response::handler(
                     400,
-                    'Failed to create project',
+                    'Gagal membuat proyek',
                     [],
                     [],
-                    ['name' => ['Project name already exists.']]
+                    ['name' => ['Nama proyek sudah ada.']]
                 );
             }
 
@@ -33,13 +33,13 @@ class ProjectController extends Controller
 
             return Response::handler(
                 201,
-                'Project created successfully',
+                'Berhasil membuat proyek',
                 ProjectResource::make($project)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create project',
+                'Gagal membuat proyek',
                 [],
                 [],
                 $err->getMessage()
@@ -58,20 +58,20 @@ class ProjectController extends Controller
             if ($projects->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Projects retrieved successfully'
+                    'Berhasil mengambil data proyek'
                 );
             }
 
             return Response::handler(
                 200,
-                'Projects retrieved successfully',
+                'Berhasil mengambil data proyek',
                 ProjectResource::collection($projects),
                 Response::pagination($projects)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve projects',
+                'Gagal mengambil data proyek',
                 [],
                 [],
                 $err->getMessage()
@@ -104,20 +104,20 @@ class ProjectController extends Controller
             if ($projects->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Projects retrieved successfully'
+                    'Berhasil mengambil data proyek'
                 );
             }
 
             return Response::handler(
                 200,
-                'Projects retrieved successfully',
+                'Berhasil mengambil data proyek',
                 ProjectResource::collection($projects),
                 Response::pagination($projects)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve projects',
+                'Gagal mengambil data proyek',
                 [],
                 [],
                 $err->getMessage()
@@ -133,22 +133,22 @@ class ProjectController extends Controller
             if (!$project) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve project',
+                    'Gagal mengambil data proyek',
                     [],
                     [],
-                    'Project not found.'
+                    'Data proyek tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Project retrieved successfully',
+                'Berhasil mengambil data proyek',
                 [ProjectResource::make($project)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve project',
+                'Gagal mengambil data proyek',
                 [],
                 [],
                 $err->getMessage()
@@ -164,10 +164,10 @@ class ProjectController extends Controller
             if (!$project) {
                 return Response::handler(
                     400,
-                    'Failed to update project',
+                    'Gagal mengubah data proyek',
                     [],
                     [],
-                    'Project not found.'
+                    'Data proyek tidak ditemukan.'
                 );
             }
 
@@ -178,10 +178,10 @@ class ProjectController extends Controller
                 ) {
                     return Response::handler(
                         400,
-                        'Failed to update project',
+                        'Gagal mengubah data proyek',
                         [],
                         [],
-                        ['name' => ['Project name already exists.']]
+                        ['name' => ['Nama proyek sudah ada.']]
                     );
                 }
             }
@@ -197,13 +197,13 @@ class ProjectController extends Controller
 
             return Response::handler(
                 200,
-                'Project updated successfully',
+                'Berhasil mengubah data proyek',
                 ProjectResource::make($project)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update project',
+                'Gagal mengubah data proyek',
                 [],
                 [],
                 $err->getMessage()
@@ -219,10 +219,10 @@ class ProjectController extends Controller
             if (!$project) {
                 return Response::handler(
                     400,
-                    'Failed to delete project',
+                    'Gagal menghapus data proyek',
                     [],
                     [],
-                    'Project not found.'
+                    'Data proyek tidak ditemukan.'
                 );
             }
 
@@ -230,12 +230,12 @@ class ProjectController extends Controller
 
             return Response::handler(
                 200,
-                'Project deleted successfully'
+                'Berhasil menghapus data proyek'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete project',
+                'Gagal menghapus data proyek',
                 [],
                 [],
                 $err->getMessage()

@@ -31,6 +31,19 @@ class UserLoginRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'username.required' => 'Username wajib diisi.',
+            'username.string' => 'Username harus berupa teks.',
+            'username.max' => 'Username tidak boleh lebih dari 50 karakter.',
+
+            'password.required' => 'Password wajib diisi.',
+            'password.string' => 'Password harus berupa teks.',
+            'password.max' => 'Password tidak boleh lebih dari 255 karakter.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $this->merge([

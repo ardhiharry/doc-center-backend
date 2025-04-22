@@ -37,6 +37,26 @@ class ActivityCreateRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'Judul wajib diisi.',
+            'title.string' => 'Judul harus berupa teks.',
+            'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
+
+            'start_date.required' => 'Tanggal mulai wajib diisi.',
+            'start_date.date' => 'Tanggal mulai harus berupa tanggal.',
+            'start_date.before_or_equal' => 'Tanggal mulai harus sebelum atau sama dengan tanggal selesai.',
+
+            'end_date.required' => 'Tanggal selesai wajib diisi.',
+            'end_date.date' => 'Tanggal selesai harus berupa tanggal.',
+            'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.',
+
+            'project_id.required' => 'Proyek wajib dipilih.',
+            'project_id.exists' => 'Proyek tidak ditemukan.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $this->merge([

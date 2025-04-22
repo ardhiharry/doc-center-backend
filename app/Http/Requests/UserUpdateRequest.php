@@ -34,6 +34,34 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'username.required' => 'Username wajib diisi.',
+            'username.string' => 'Username harus berupa teks.',
+            'username.max' => 'Username tidak boleh lebih dari 100 karakter.',
+            'username.unique' => 'Username sudah digunakan.',
+
+            'name.required' => 'Nama wajib diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+
+            'old_password.required' => 'Password lama wajib diisi.',
+            'old_password.string' => 'Password lama harus berupa teks.',
+            'old_password.max' => 'Password lama tidak boleh lebih dari 255 karakter.',
+
+            'new_password.required' => 'Password baru wajib diisi.',
+            'new_password.string' => 'Password baru harus berupa teks.',
+            'new_password.max' => 'Password baru tidak boleh lebih dari 255 karakter.',
+            'new_password.different' => 'Password baru tidak boleh sama dengan password lama.',
+
+            'confirm_new_password.required' => 'Konfirmasi password baru wajib diisi.',
+            'confirm_new_password.string' => 'Konfirmasi password baru harus berupa teks.',
+            'confirm_new_password.max' => 'Konfirmasi password baru tidak boleh lebih dari 255 karakter.',
+            'confirm_new_password.same' => 'Konfirmasi password baru harus sama dengan password baru.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $data = [];

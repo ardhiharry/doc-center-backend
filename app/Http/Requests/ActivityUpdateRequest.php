@@ -7,6 +7,7 @@ use App\Models\Activity;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ActivityUpdateRequest extends FormRequest
@@ -27,10 +28,33 @@ class ActivityUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'sometimes|string|max:100',
-            'start_date' => 'sometimes|date',
-            'end_date' => 'sometimes|date',
-            'project_id' => 'sometimes|exists:projects,id',
+            'title' => 'sometimes|required|string|max:100',
+            'start_date' => 'sometimes|required|date|before_or_equal:end_date',
+            'end_date' => 'sometimes|required|date|after_or_equal:start_date',
+            'project_id' => [
+                'sometimes', 'required',
+                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+            ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'Judul wajib diisi.',
+            'title.string' => 'Judul harus berupa teks.',
+            'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
+
+            'start_date.required' => 'Tanggal mulai wajib diisi.',
+            'start_date.date' => 'Tanggal mulai harus berupa tanggal.',
+            'start_date.before_or_equal' => 'Tanggal mulai harus sebelum atau sama dengan tanggal selesai.',
+
+            'end_date.required' => 'Tanggal selesai wajib diisi.',
+            'end_date.date' => 'Tanggal selesai harus berupa tanggal.',
+            'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.',
+
+            'project_id.required' => 'Proyek wajib dipilih.',
+            'project_id.exists' => 'Proyek tidak ditemukan.',
         ];
     }
 

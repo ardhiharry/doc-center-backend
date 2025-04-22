@@ -37,6 +37,17 @@ class TeamUpdateRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'project_id.required' => 'Project wajib dipilih.',
+            'project_id.exists' => 'Project tidak ditemukan atau sudah dihapus.',
+
+            'user_id.required' => 'User wajib dipilih.',
+            'user_id.exists' => 'User tidak ditemukan atau sudah dihapus.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $data = [];

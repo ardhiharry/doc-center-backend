@@ -20,10 +20,10 @@ class ActivityController extends Controller
             if ($activity) {
                 return Response::handler(
                     400,
-                    'Failed to create activity',
+                    'Gagal membuat aktivitas',
                     [],
                     [],
-                    ['title' => ['Activity title already exists.']]
+                    ['title' => ['Judul aktivitas sudah ada.']]
                 );
             }
 
@@ -33,13 +33,13 @@ class ActivityController extends Controller
 
             return Response::handler(
                 200,
-                'Activity created successfully',
+                'Berhasil membuat aktivitas',
                 ActivityResource::make($activity)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create activity',
+                'Gagal membuat aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -58,20 +58,20 @@ class ActivityController extends Controller
             if ($activities->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Activities retrieved successfully'
+                    'Berhasil mengambil data aktivitas'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activities retrieved successfully',
+                'Berhasil mengambil data aktivitas',
                 ActivityResource::collection($activities),
                 Response::pagination($activities)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activities',
+                'Gagal mengambil data aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -106,20 +106,20 @@ class ActivityController extends Controller
             if ($activities->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Activities retrieved successfully'
+                    'Berhasil mengambil data aktivitas'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activities retrieved successfully',
+                'Berhasil mengambil data aktivitas',
                 ActivityResource::collection($activities),
                 Response::pagination($activities)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activities',
+                'Gagal mengambil data aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -135,22 +135,22 @@ class ActivityController extends Controller
             if (!$activity) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve activity',
+                    'Gagal mengambil data aktivitas',
                     [],
                     [],
-                    'Activity not found.'
+                    'Data aktivitas tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity retrieved successfully',
+                'Berhasil mengambil data aktivitas',
                 [ActivityResource::make($activity)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity',
+                'Gagal mengambil data aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -166,10 +166,10 @@ class ActivityController extends Controller
             if (!$activity) {
                 return Response::handler(
                     400,
-                    'Failed to update activity',
+                    'Gagal mengubah data aktivitas',
                     [],
                     [],
-                    'Activity not found.'
+                    'Data aktivitas tidak ditemukan.'
                 );
             }
 
@@ -180,10 +180,10 @@ class ActivityController extends Controller
                 ) {
                     return Response::handler(
                         400,
-                        'Failed to update activity',
+                        'Gagal mengubah data aktivitas',
                         [],
                         [],
-                        ['title' => ['Activity title already exists.']]
+                        ['title' => ['Judul aktivitas sudah ada.']]
                     );
                 }
             }
@@ -199,13 +199,13 @@ class ActivityController extends Controller
 
             return Response::handler(
                 200,
-                'Activity updated successfully',
+                'Berhasil mengubah data aktivitas',
                 ActivityResource::make($activity)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update activity',
+                'Gagal mengubah data aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -221,10 +221,10 @@ class ActivityController extends Controller
             if (!$activity) {
                 return Response::handler(
                     400,
-                    'Failed to delete activity',
+                    'Gagal menghapus data aktivitas',
                     [],
                     [],
-                    'Activity not found.'
+                    'Data aktivitas tidak ditemukan.'
                 );
             }
 
@@ -232,12 +232,12 @@ class ActivityController extends Controller
 
             return Response::handler(
                 200,
-                'Activity deleted successfully'
+                'Berhasil menghapus data aktivitas'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete activity',
+                'Gagal menghapus data aktivitas',
                 [],
                 [],
                 $err->getMessage()

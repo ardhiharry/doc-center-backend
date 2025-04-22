@@ -18,7 +18,7 @@ class Handler extends ExceptionHandler
                 401,
                 'Unauthorized',
                 [],
-                ['token' => ['Token is invalid or expired']]
+                ['token' => ['Token tidak valid atau kadaluarsa.']]
             );
         }
 
@@ -27,7 +27,7 @@ class Handler extends ExceptionHandler
                 401,
                 'Unauthorized',
                 [],
-                ['token' => ['Token is invalid or expired']]
+                ['token' => ['Token tidak valid atau kadaluarsa.']]
             );
         }
 

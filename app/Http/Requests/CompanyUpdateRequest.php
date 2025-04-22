@@ -34,6 +34,30 @@ class CompanyUpdateRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama perusahaan wajib diisi.',
+            'name.string' => 'Nama perusahaan harus berupa teks.',
+            'name.max' => 'Nama perusahaan maksimal 100 karakter.',
+
+            'address.required' => 'Alamat perusahaan wajib diisi.',
+            'address.string' => 'Alamat perusahaan harus berupa teks.',
+
+            'director_name.required' => 'Nama direktur wajib diisi.',
+            'director_name.string' => 'Nama direktur harus berupa teks.',
+            'director_name.max' => 'Nama direktur maksimal 100 karakter.',
+
+            'director_phone.required' => 'Nomor telepon direktur wajib diisi.',
+            'director_phone.string' => 'Nomor telepon direktur harus berupa teks.',
+            'director_phone.max' => 'Nomor telepon direktur maksimal 20 karakter.',
+
+            'director_signature.image' => 'Tanda tangan harus berupa gambar.',
+            'director_signature.mimes' => 'Tanda tangan harus berformat jpeg, png, atau jpg.',
+            'director_signature.max' => 'Ukuran tanda tangan maksimal 2MB.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $data = [];

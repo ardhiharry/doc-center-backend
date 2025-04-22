@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use App\Models\Project;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ProjectUpdateRequest extends FormRequest
@@ -27,9 +28,32 @@ class ProjectUpdateRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:100',
-            'company_id' => 'sometimes|required|exists:companies,id',
-            'start_date' => 'sometimes|required|date',
-            'end_date' => 'sometimes|required|date',
+            'company_id' => [
+                'sometimes', 'required',
+                Rule::exists('companies', 'id')->whereNull('deleted_at'),
+            ],
+            'start_date' => 'sometimes|required|date|before_or_equal:end_date',
+            'end_date' => 'sometimes|required|date|after_or_equal:start_date',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama wajib diisi.',
+            'name.string' => 'Nama harus berupa teks.',
+            'name.max' => 'Nama maksimal 100 karakter.',
+
+            'company_id.required' => 'Perusahaan wajib dipilih.',
+            'company_id.exists' => 'Perusahaan tidak ditemukan.',
+
+            'start_date.required' => 'Tanggal mulai wajib diisi.',
+            'start_date.date' => 'Tanggal mulai harus berupa tanggal yang valid.',
+            'start_date.before_or_equal' => 'Tanggal mulai harus sebelum atau sama dengan tanggal selesai.',
+
+            'end_date.required' => 'Tanggal selesai wajib diisi.',
+            'end_date.date' => 'Tanggal selesai harus berupa tanggal yang valid.',
+            'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.',
         ];
     }
 

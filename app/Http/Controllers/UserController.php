@@ -22,20 +22,20 @@ class UserController extends Controller
             if ($users->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Users retrieved successfully'
+                    'Berhasil mengambil data pengguna'
                 );
             }
 
             return Response::handler(
                 200,
-                'Users retrieved successfully',
+                'Berhasil mengambil data pengguna',
                 UserResource::collection($users),
                 Response::pagination($users)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve users',
+                'Gagal mengambil data pengguna',
                 [],
                 [],
                 $err->getMessage()
@@ -60,20 +60,20 @@ class UserController extends Controller
             if ($users->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Users retrieved successfully'
+                    'Berhasil mengambil data pengguna'
                 );
             }
 
             return Response::handler(
                 200,
-                'Users retrieved successfully',
+                'Berhasil mengambil data pengguna',
                 UserResource::collection($users),
                 Response::pagination($users)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve users',
+                'Gagal mengambil data pengguna',
                 [],
                 [],
                 $err->getMessage()
@@ -89,22 +89,22 @@ class UserController extends Controller
             if (!$user) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve project',
+                    'Gagal mengambil data pengguna',
                     [],
                     [],
-                    'User not found'
+                    'Data pengguna tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'User retrieved successfully',
+                'Berhasil mengambil data pengguna',
                 [UserResource::make($user)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve user',
+                'Gagal mengambil data pengguna',
                 [],
                 [],
                 $err->getMessage()
@@ -120,10 +120,10 @@ class UserController extends Controller
             if (!$user) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve project',
+                    'Gagal mengubah data pengguna',
                     [],
                     [],
-                    'User not found'
+                    'Data pengguna tidak ditemukan.'
                 );
             }
 
@@ -134,10 +134,10 @@ class UserController extends Controller
                 ) {
                     return Response::handler(
                         400,
-                        'Failed to update user',
+                        'Gagal mengubah data pengguna',
                         [],
                         [],
-                        ['username' => ['The username has already been taken.']]
+                        ['username' => ['Username sudah ada.']]
                     );
                 }
             }
@@ -148,30 +148,30 @@ class UserController extends Controller
                 if (!$request->filled(['old_password', 'new_password', 'confirm_new_password'])) {
                     return Response::handler(
                         400,
-                        'Failed to update user',
+                        'Gagal mengubah data pengguna',
                         [],
                         [],
-                        'All password fields are required'
+                        'Semua password harus diisi.'
                     );
                 }
 
                 if (!Hash::check($request->old_password, $user->password)) {
                     return Response::handler(
                         400,
-                        'Failed to update user',
+                        'Gagal mengubah data pengguna',
                         [],
                         [],
-                        'Old password is incorrect'
+                        'Password lama salah.'
                     );
                 }
 
                 if ($request->new_password !== $request->confirm_new_password) {
                     return Response::handler(
                         400,
-                        'Failed to update user',
+                        'Gagal mengubah data pengguna',
                         [],
                         [],
-                        'New password confirmation does not match'
+                        'Konfirmasi password tidak cocok.'
                     );
                 }
 
@@ -182,13 +182,13 @@ class UserController extends Controller
 
             return Response::handler(
                 200,
-                'User updated successfully',
+                'Berhasil mengubah data pengguna',
                 UserResource::make($user)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update user',
+                'Gagal mengubah data pengguna',
                 [],
                 [],
                 $err->getMessage()
@@ -204,20 +204,20 @@ class UserController extends Controller
             if (!$user) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve project',
+                    'Gagal menghapus data pengguna',
                     [],
                     [],
-                    'User not found'
+                    'Data pengguna tidak ditemukan.'
                 );
             }
 
             $user->delete();
 
-            return Response::handler(200, 'User deleted successfully');
+            return Response::handler(200, 'Berhasil menghapus data pengguna');
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete user',
+                'Gagal menghapus data pengguna',
                 [],
                 [],
                 $err->getMessage()

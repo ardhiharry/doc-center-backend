@@ -30,6 +30,14 @@ class UserRefreshRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'refresh_token.required' => 'Refresh token wajib diisi.',
+            'refresh_token.string' => 'Refresh token harus berupa teks.',
+        ];
+    }
+
     protected function failedValidation(Validator $validator)
     {
         throw new ValidationException($validator, Response::handler(

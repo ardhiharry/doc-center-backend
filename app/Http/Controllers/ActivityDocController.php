@@ -22,10 +22,10 @@ class ActivityDocController extends Controller
             if ($activityDoc) {
                 return Response::handler(
                     400,
-                    'Failed to create activity doc',
+                    'Gagal membuat dokumen aktivitas',
                     [],
                     [],
-                    ['title' => ['Activity doc title already exists.']]
+                    ['title' => ['Judul dokumen aktivitas sudah ada.']]
                 );
             }
 
@@ -53,21 +53,21 @@ class ActivityDocController extends Controller
 
             return Response::handler(
                 200,
-                'Activity doc created successfully',
+                'Berhasil membuat dokumen aktivitas',
                 ActivityDocResource::make($activityDoc)
             );
         } catch (PostTooLargeException $err) {
             return Response::handler(
                 400,
-                'Failed to create activity document',
+                'Gagal membuat dokumen aktivitas',
                 [],
                 [],
-                'Uploaded file exceeds the size limit.'
+                'File yang diunggah melebihi batas ukuran.'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create activity document',
+                'Gagal membuat dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -86,20 +86,20 @@ class ActivityDocController extends Controller
             if ($activityDocs->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Activity docs retrieved successfully'
+                    'Berhasil mengambil data dokumen aktivitas'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity docs retrieved successfully',
+                'Berhasil mengambil data dokumen aktivitas',
                 ActivityDocResource::collection($activityDocs),
                 Response::pagination($activityDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity docs',
+                'Gagal mengambil data dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -143,20 +143,20 @@ class ActivityDocController extends Controller
             if ($activityDocs->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Activity docs retrieved successfully'
+                    'Berhasil mengambil data dokumen aktivitas'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity docs retrieved successfully',
+                'Berhasil mengambil data dokumen aktivitas',
                 ActivityDocResource::collection($activityDocs),
                 Response::pagination($activityDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity docs',
+                'Gagal mengambil data dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -172,22 +172,22 @@ class ActivityDocController extends Controller
             if (!$activityDoc) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve activity doc',
+                    'Gagal mengambil data dokumen aktivitas',
                     [],
                     [],
-                    'Activity doc not found.'
+                    'Data dokumen aktivitas tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity doc retrieved successfully',
+                'Berhasil mengambil data dokumen aktivitas',
                 [ActivityDocResource::make($activityDoc)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity doc',
+                'Gagal mengambil data dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -203,10 +203,10 @@ class ActivityDocController extends Controller
             if (!$activityDoc) {
                 return Response::handler(
                     400,
-                    'Failed to delete activity doc',
+                    'Gagal menghapus dokumen aktivitas',
                     [],
                     [],
-                    'Activity doc not found.'
+                    'Data dokumen aktivitas tidak ditemukan.'
                 );
             }
 
@@ -214,12 +214,12 @@ class ActivityDocController extends Controller
 
             return Response::handler(
                 200,
-                'Activity doc deleted successfully'
+                'Berhasil menghapus dokumen aktivitas'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete activity doc',
+                'Gagal menghapus dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()

@@ -22,10 +22,10 @@ class CompanyController extends Controller
             if ($company) {
                 return Response::handler(
                     400,
-                    'Failed to create company',
+                    'Gagal membuat perusahaan',
                     [],
                     [],
-                    ['name' => ['Company name already exists.']]
+                    ['name' => ['Nama perusahaan sudah ada.']]
                 );
             }
 
@@ -50,13 +50,13 @@ class CompanyController extends Controller
 
             return Response::handler(
                 200,
-                'Company created successfully',
+                'Perusahaan berhasil dibuat',
                 CompanyResource::make($company)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create company',
+                'Gagal membuat perusahaan',
                 [],
                 [],
                 $err->getMessage()
@@ -74,20 +74,20 @@ class CompanyController extends Controller
             if ($companies->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Companies retrieved successfully'
+                    'Berhasil mengambil data perusahaan'
                 );
             }
 
             return Response::handler(
                 200,
-                'Companies retrieved successfully',
+                'Berhasil mengambil data perusahaan',
                 CompanyResource::collection($companies),
                 Response::pagination($companies)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve companies',
+                'Gagal mengambil data perusahaan',
                 [],
                 [],
                 $err->getMessage()
@@ -113,20 +113,20 @@ class CompanyController extends Controller
             if ($companies->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Companies retrieved successfully'
+                    'Berhasil mengambil data perusahaan'
                 );
             }
 
             return Response::handler(
                 200,
-                'Companies retrieved successfully',
+                'Berhasil mengambil data perusahaan',
                 CompanyResource::collection($companies),
                 Response::pagination($companies)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve companies',
+                'Gagal mengambil data perusahaan',
                 [],
                 [],
                 $err->getMessage()
@@ -142,22 +142,22 @@ class CompanyController extends Controller
             if (!$company) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve company',
+                    'Gagal mengambil data perusahaan',
                     [],
                     [],
-                    'Company not found.'
+                    'Data perusahaan tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Company retrieved successfully',
+                'Berhasil mengambil data perusahaan',
                 [CompanyResource::make($company)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve company',
+                'Gagal mengambil data perusahaan',
                 [],
                 [],
                 $err->getMessage()
@@ -173,10 +173,10 @@ class CompanyController extends Controller
             if (!$company) {
                 return Response::handler(
                     400,
-                    'Failed to update company',
+                    'Gagal mengubah data perusahaan',
                     [],
                     [],
-                    'Company not found.'
+                    'Data perusahaan tidak ditemukan.'
                 );
             }
 
@@ -187,10 +187,10 @@ class CompanyController extends Controller
                 ) {
                     return Response::handler(
                         400,
-                        'Failed to update company',
+                        'Gagal mengubah data perusahaan',
                         [],
                         [],
-                        ['name' => ['Company name already exists.']]
+                        ['name' => ['Nama perusahaan sudah ada.']]
                     );
                 }
             }
@@ -215,13 +215,13 @@ class CompanyController extends Controller
 
             return Response::handler(
                 200,
-                'Company updated successfully',
+                'Berhasil mengubah data perusahaan',
                 CompanyResource::make($company)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update company',
+                'Gagal mengubah data perusahaan',
                 [],
                 [],
                 $err->getMessage()
@@ -237,10 +237,10 @@ class CompanyController extends Controller
             if (!$company) {
                 return Response::handler(
                     400,
-                    'Failed to delete company',
+                    'Gagal menghapus data perusahaan',
                     [],
                     [],
-                    'Company not found.'
+                    'Data perusahaan tidak ditemukan.'
                 );
             }
 
@@ -248,12 +248,12 @@ class CompanyController extends Controller
 
             return Response::handler(
                 200,
-                'Company deleted successfully'
+                'Berhasil menghapus data perusahaan'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete company',
+                'Gagal menghapus data perusahaan',
                 [],
                 [],
                 $err->getMessage()

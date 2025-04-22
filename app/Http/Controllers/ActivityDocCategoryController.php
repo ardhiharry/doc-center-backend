@@ -20,10 +20,10 @@ class ActivityDocCategoryController extends Controller
             if ($activityDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to create activity doc category',
+                    'Gagal membuat kategori dokumen aktivitas',
                     [],
                     [],
-                    ['name' => ['Activity doc category name already exists.']]
+                    ['name' => ['Nama kategori dokumen aktivitas sudah ada.']]
                 );
             }
 
@@ -31,13 +31,13 @@ class ActivityDocCategoryController extends Controller
 
             return Response::handler(
                 201,
-                'Activity doc category created successfully',
+                'Berhasil membuat kategori dokumen aktivitas',
                 ActivityDocCategoryResource::make($activityDocCategory)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create activity doc category',
+                'Gagal membuat kategori dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -55,20 +55,20 @@ class ActivityDocCategoryController extends Controller
             if ($activityDocCategories->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Activity doc categories retrieved successfully'
+                    'Berhasil mengambil data kategori dokumen aktivitas'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity doc categories retrieved successfully',
+                'Berhasil mengambil data kategori dokumen aktivitas',
                 ActivityDocCategoryResource::collection($activityDocCategories),
                 Response::pagination($activityDocCategories)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity doc categories',
+                'Gagal mengambil data kategori dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -93,20 +93,20 @@ class ActivityDocCategoryController extends Controller
             if ($activityDocCategories->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Activity doc categories retrieved successfully'
+                    'Berhasil mengambil data kategori dokumen aktivitas'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity doc categories retrieved successfully',
+                'Berhasil mengambil data kategori dokumen aktivitas',
                 ActivityDocCategoryResource::collection($activityDocCategories),
                 Response::pagination($activityDocCategories)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity doc categories',
+                'Gagal mengambil data kategori dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -122,22 +122,22 @@ class ActivityDocCategoryController extends Controller
             if (!$activityDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve activity doc category',
+                    'Gagal mengambil data kategori dokumen aktivitas',
                     [],
                     [],
-                    'Activity doc category not found.'
+                    'Data kategori dokumen aktivitas tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Activity doc category retrieved successfully',
+                'Berhasil mengambil data kategori dokumen aktivitas',
                 [ActivityDocCategoryResource::make($activityDocCategory)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve activity doc category',
+                'Gagal mengambil data kategori dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -153,10 +153,10 @@ class ActivityDocCategoryController extends Controller
             if (!$activityDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to update activity doc category',
+                    'Gagal mengubah data kategori dokumen aktivitas',
                     [],
                     [],
-                    'Activity doc category not found.'
+                    'Data kategori dokumen aktivitas tidak ditemukan.'
                 );
             }
 
@@ -167,10 +167,10 @@ class ActivityDocCategoryController extends Controller
                 ) {
                     return Response::handler(
                         400,
-                        'Failed to update activity doc category',
+                        'Gagal mengubah data kategori dokumen aktivitas',
                         [],
                         [],
-                        ['name' => ['Activity doc category name already exists.']]
+                        ['name' => ['Nama kategori dokumen aktivitas sudah ada.']]
                     );
                 }
             }
@@ -181,13 +181,13 @@ class ActivityDocCategoryController extends Controller
 
             return Response::handler(
                 200,
-                'Activity doc category updated successfully',
+                'Berhasil mengubah data kategori dokumen aktivitas',
                 ActivityDocCategoryResource::make($activityDocCategory)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update activity doc category',
+                'Gagal mengubah data kategori dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()
@@ -203,10 +203,10 @@ class ActivityDocCategoryController extends Controller
             if (!$activityDocCategory) {
                 return Response::handler(
                     400,
-                    'Failed to delete activity doc category',
+                    'Gagal menghapus kategori dokumen aktivitas',
                     [],
                     [],
-                    'Activity doc category not found.'
+                    'Data kategori dokumen aktivitas tidak ditemukan.'
                 );
             }
 
@@ -214,12 +214,12 @@ class ActivityDocCategoryController extends Controller
 
             return Response::handler(
                 200,
-                'Activity doc category deleted successfully'
+                'Berhasil menghapus kategori dokumen aktivitas'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete activity doc category',
+                'Gagal menghapus kategori dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()

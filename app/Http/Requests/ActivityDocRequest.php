@@ -44,6 +44,31 @@ class ActivityDocRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'title.required' => 'Judul wajib diisi.',
+            'title.string' => 'Judul harus berupa teks.',
+            'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
+
+            'file.file' => 'File harus berupa file.',
+            'file.mimes' => 'File harus berupa PDF.',
+            'file.max' => 'Ukuran file maksimal 2MB.',
+
+            'description.string' => 'Deskripsi harus berupa teks.',
+
+            'tags.required' => 'Tag wajib diisi.',
+            'tags.array' => 'Tag harus berupa array.',
+            'tags.*.string' => 'Tag harus berupa teks.',
+
+            'activity_doc_category_id.required' => 'Kategori wajib dipilih.',
+            'activity_doc_category_id.exists' => 'Kategori tidak ditemukan.',
+
+            'activity_id.required' => 'Proyek wajib dipilih.',
+            'activity_id.exists' => 'Proyek tidak ditemukan.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $this->merge([
@@ -64,12 +89,5 @@ class ActivityDocRequest extends FormRequest
             [],
             $validator->errors()
         ));
-    }
-
-    public function messages()
-    {
-        return [
-            'file.max' => 'The uploaded file exceeds the maximum allowed size of 2MB.'
-        ];
     }
 }

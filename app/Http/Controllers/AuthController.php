@@ -22,10 +22,10 @@ class AuthController extends Controller
             if ($user) {
                 return Response::handler(
                     400,
-                    'Failed to register',
+                    'Gagal mendaftar',
                     [],
                     [],
-                    ['username' => ['The username has already been taken.']]
+                    ['username' => ['Username sudah terdaftar.']]
                 );
             }
 
@@ -37,13 +37,13 @@ class AuthController extends Controller
 
             return Response::handler(
                 201,
-                'Registration successful',
+                'Berhasil mendaftar',
                 UserResource::make($user)
             );
         } catch (\Exception $e) {
             return Response::handler(
                 500,
-                'Failed to register',
+                'Gagal mendaftar',
                 [],
                 [],
                 $e->getMessage()
@@ -59,10 +59,10 @@ class AuthController extends Controller
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return Response::handler(
                     401,
-                    'Failed to login',
+                    'Gagal login',
                     [],
                     [],
-                    'Username or password is invalid.'
+                    'Username atau password salah.'
                 );
             }
 
@@ -80,7 +80,7 @@ class AuthController extends Controller
 
             return Response::handler(
                 200,
-                'Login successful',
+                'Berhasil login',
                 [
                     'username' => $user->username,
                     'name' => $user->name,
@@ -92,7 +92,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return Response::handler(
                 500,
-                'Failed to login',
+                'Gagal login',
                 [],
                 [],
                 $e->getMessage()
@@ -108,10 +108,10 @@ class AuthController extends Controller
             if (!$refreshToken) {
                 return Response::handler(
                     401,
-                    'Failed to refresh access token',
+                    'Gagal refresh access token',
                     [],
                     [],
-                    'Refresh token is required'
+                    'Refresh token diperlukan.'
                 );
             }
 
@@ -120,20 +120,20 @@ class AuthController extends Controller
             } catch (\Exception $e) {
                 return Response::handler(
                     401,
-                    'Failed to refresh access token',
+                    'Gagal refresh access token',
                     [],
                     [],
-                    'Invalid or expired refresh token'
+                    'Refresh token tidak valid atau kadaluarsa.'
                 );
             }
 
             if ($payload['type'] !== 'refresh') {
                 return Response::handler(
                     401,
-                    'Failed to refresh access token',
+                    'Gagal refresh access token',
                     [],
                     [],
-                    'Invalid or expired refresh token'
+                    'Refresh token tidak valid atau kadaluarsa.'
                 );
             }
 
@@ -142,10 +142,10 @@ class AuthController extends Controller
             if (!$user) {
                 return Response::handler(
                     401,
-                    'Failed to refresh access token',
+                    'Gagal refresh access token',
                     [],
                     [],
-                    'User not found'
+                    'Data pengguna tidak ditemukan.'
                 );
             }
 
@@ -156,13 +156,13 @@ class AuthController extends Controller
 
             return Response::handler(
                 200,
-                'Access token refreshed successfully',
+                'Berhasil refresh access token',
                 ['access_token' => $newAccessToken]
             );
         } catch (\Exception $e) {
             return Response::handler(
                 500,
-                'Failed to refresh access token',
+                'Gagal refresh access token',
                 [],
                 [],
                 [$e->getMessage()]
@@ -181,7 +181,7 @@ class AuthController extends Controller
                     'Unauthorized',
                     [],
                     [],
-                    'You must be logged in to perform this action'
+                    'Anda harus login untuk melakukan tindakan ini.'
                 );
             }
 
@@ -191,7 +191,7 @@ class AuthController extends Controller
 
             return Response::handler(
                 200,
-                'Logout successful'
+                'Berhasil logout',
             );
         } catch (TokenInvalidException $err) {
             return Response::handler(
@@ -199,7 +199,7 @@ class AuthController extends Controller
                 'Unauthorized',
                 [],
                 [],
-                'Token is invalid or expired'
+                'Token tidak valid atau kadaluarsa.'
             );
         } catch (\Exception $err) {
             return Response::handler(

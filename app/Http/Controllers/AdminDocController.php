@@ -21,10 +21,10 @@ class AdminDocController extends Controller
             if ($adminDoc) {
                 return Response::handler(
                     400,
-                    'Failed to create admin doc',
+                    'Gagal membuat dokumen administrasi',
                     [],
                     [],
-                    ['title' => ['Admin doc title already exists.']]
+                    ['title' => ['Judul dokumen administrasi sudah ada.']]
                 );
             }
 
@@ -50,13 +50,13 @@ class AdminDocController extends Controller
 
             return Response::handler(
                 200,
-                'Admin doc created successfully',
+                'Berhasil membuat dokumen administrasi',
                 AdminDocResource::make($adminDoc)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create admin doc',
+                'Gagal membuat dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -75,20 +75,20 @@ class AdminDocController extends Controller
             if ($adminDocs->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Admin docs retrieved successfully'
+                    'Berhasil mengambil data dokumen administrasi'
                 );
             }
 
             return Response::handler(
                 200,
-                'Admin docs retrieved successfully',
+                'Berhasil mengambil data dokumen administrasi',
                 AdminDocResource::collection($adminDocs),
                 Response::pagination($adminDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve admin docs',
+                'Gagal mengambil data dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -118,20 +118,20 @@ class AdminDocController extends Controller
             if ($adminDocs->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Admin docs retrieved successfully'
+                    'Berhasil mengambil data dokumen administrasi'
                 );
             }
 
             return Response::handler(
                 200,
-                'Admin docs retrieved successfully',
+                'Berhasil mengambil data dokumen administrasi',
                 AdminDocResource::collection($adminDocs),
                 Response::pagination($adminDocs)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve admin docs',
+                'Gagal mengambil data dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -147,22 +147,22 @@ class AdminDocController extends Controller
             if (!$adminDoc) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve admin doc',
+                    'Gagal mengambil data dokumen administrasi',
                     [],
                     [],
-                    'Admin doc not found.'
+                    'Data dokumen administrasi tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Admin doc retrieved successfully',
+                'Berhasil mengambil data dokumen administrasi',
                 [AdminDocResource::make($adminDoc)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve admin doc',
+                'Gagal mengambil data dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()
@@ -178,10 +178,10 @@ class AdminDocController extends Controller
             if (!$adminDoc) {
                 return Response::handler(
                     400,
-                    'Failed to delete admin doc',
+                    'Gagal menghapus data dokumen administrasi',
                     [],
                     [],
-                    'Admin doc not found.'
+                    'Data dokumen administrasi tidak ditemukan.'
                 );
             }
 
@@ -189,12 +189,12 @@ class AdminDocController extends Controller
 
             return Response::handler(
                 200,
-                'Admin doc deleted successfully'
+                'Berhasil menghapus data dokumen administrasi'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete admin doc',
+                'Gagal menghapus data dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()

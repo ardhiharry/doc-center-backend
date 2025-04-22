@@ -22,13 +22,13 @@ class TeamController extends Controller
 
             return Response::handler(
                 201,
-                'Team created successfully',
+                'Berhasil membuat tim',
                 TeamResource::make($team)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to create team',
+                'Gagal membuat tim',
                 [],
                 [],
                 $err->getMessage()
@@ -50,20 +50,20 @@ class TeamController extends Controller
             if ($teams->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Teams retrieved successfully'
+                    'Berhasil mengambil data tim'
                 );
             }
 
             return Response::handler(
                 200,
-                'Teams retrieved successfully',
+                'Berhasil mengambil data tim',
                 TeamResource::collection($teams),
                 Response::pagination($teams)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve teams',
+                'Gagal mengambil data tim',
                 [],
                 [],
                 $err->getMessage()
@@ -118,20 +118,20 @@ class TeamController extends Controller
             if ($teams->isEmpty()) {
                 return Response::handler(
                     200,
-                    'Teams retrieved successfully'
+                    'Berhasil mengambil data tim'
                 );
             }
 
             return Response::handler(
                 200,
-                'Teams retrieved successfully',
+                'Berhasil mengambil data tim',
                 TeamResource::collection($teams),
                 Response::pagination($teams)
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve teams',
+                'Gagal mengambil data tim',
                 [],
                 [],
                 $err->getMessage()
@@ -147,22 +147,22 @@ class TeamController extends Controller
             if (!$team) {
                 return Response::handler(
                     400,
-                    'Failed to retrieve team',
+                    'Gagal mengambil data tim',
                     [],
                     [],
-                    'Team not found.'
+                    'Data tim tidak ditemukan.'
                 );
             }
 
             return Response::handler(
                 200,
-                'Team retrieved successfully',
+                'Berhasil mengambil data tim',
                 [TeamResource::make($team)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to retrieve team',
+                'Gagal mengambil data tim',
                 [],
                 [],
                 $err->getMessage()
@@ -178,10 +178,10 @@ class TeamController extends Controller
             if (!$team) {
                 return Response::handler(
                     400,
-                    'Failed to update team',
+                    'Gagal mengubah data tim',
                     [],
                     [],
-                    'Team not found.'
+                    'Data tim tidak ditemukan.'
                 );
             }
 
@@ -195,13 +195,13 @@ class TeamController extends Controller
 
             return Response::handler(
                 200,
-                'Team updated successfully',
+                'Berhasil mengubah data tim',
                 [TeamResource::make($team)]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to update team',
+                'Gagal mengubah data tim',
                 [],
                 [],
                 $err->getMessage()
@@ -217,10 +217,10 @@ class TeamController extends Controller
             if ($teams->isEmpty()) {
                 return Response::handler(
                     400,
-                    'Failed to delete teams',
+                    'Gagal menghapus data tim',
                     [],
                     [],
-                    'No teams found for this project.'
+                    'Tidak ada tim yang ditemukan untuk proyek ini.'
                 );
             }
 
@@ -228,12 +228,12 @@ class TeamController extends Controller
 
             return Response::handler(
                 200,
-                'Team deleted successfully'
+                'Berhasil menghapus data tim'
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Failed to delete team',
+                'Gagal menghapus data tim',
                 [],
                 [],
                 $err->getMessage()

@@ -30,6 +30,15 @@ class ActivityDocCategoryCreateRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama kategori wajib diisi.',
+            'name.string' => 'Nama kategori harus berupa teks.',
+            'name.max' => 'Panjang nama kategori maksimal 100 karakter.',
+        ];
+    }
+
     protected function prepareForValidation()
     {
         $this->merge([
