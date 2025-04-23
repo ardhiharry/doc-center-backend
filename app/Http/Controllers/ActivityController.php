@@ -85,7 +85,7 @@ class ActivityController extends Controller
             $query = Activity::with('project.company');
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['title', 'start_date', 'end_date'])) {
+                if ($key === 'title') {
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
 
@@ -97,6 +97,18 @@ class ActivityController extends Controller
                         $q->whereIn('id', $projectIds);
                     });
                 }
+            }
+
+            $startDate = $request->query('start_date');
+            $endDate = $request->query('end_date');
+
+            if ($startDate && $endDate) {
+              $query->whereDate('start_date', '>=', $startDate)
+                ->whereDate('end_date', '<=', $endDate);
+            } else if ($startDate) {
+                $query->whereDate('start_date', '=', $startDate);
+            } else if ($endDate) {
+                $query->whereDate('end_date', '=', $endDate);
             }
 
             $activities = $query->withoutTrashed()
