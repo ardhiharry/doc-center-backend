@@ -19,7 +19,7 @@ class ActivityDocFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(3),
+            'title' => fake()->unique()->words(3, true),
             'file' => null,
             'description' => fake()->paragraph(),
             'tags' => [

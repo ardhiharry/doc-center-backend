@@ -19,7 +19,7 @@ class AdminDocFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(3),
+            'title' => fake()->unique()->words(3, true),
             'file' => null,
             'project_id' => Project::factory(),
             'admin_doc_category_id' => AdminDocCategory::factory(),
