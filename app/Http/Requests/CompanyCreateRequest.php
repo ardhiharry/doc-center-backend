@@ -29,7 +29,12 @@ class CompanyCreateRequest extends FormRequest
             'name' => 'required|string|max:100',
             'address' => 'required|string',
             'director_name' => 'required|string|max:100',
-            'director_phone' => 'required|string|max:20',
+            'director_phone' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^(?:\+62|62|0)8[1-9][0-9]{6,9}$/',
+            ],
             'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
@@ -51,6 +56,7 @@ class CompanyCreateRequest extends FormRequest
             'director_phone.required' => 'Nomor telepon direktur wajib diisi.',
             'director_phone.string' => 'Nomor telepon harus berupa teks.',
             'director_phone.max' => 'Nomor telepon maksimal 20 karakter.',
+            'director_phone.regex' => 'Nomor telepon harus memiliki format yang benar. Contoh: 081xxx, +6281xxx, 6281xxx.',
 
             'director_signature.image' => 'Tanda tangan harus berupa gambar.',
             'director_signature.mimes' => 'Tanda tangan harus berformat jpeg, png, atau jpg.',
