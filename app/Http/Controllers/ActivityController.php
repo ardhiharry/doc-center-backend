@@ -106,13 +106,18 @@ class ActivityController extends Controller
               $query->whereDate('start_date', '>=', $startDate)
                 ->whereDate('end_date', '<=', $endDate);
             } else if ($startDate) {
-                $query->whereDate('start_date', '=', $startDate);
+                $query->whereDate('start_date', '>=', $startDate);
             } else if ($endDate) {
-                $query->whereDate('end_date', '=', $endDate);
+                $query->whereDate('end_date', '<=', $endDate);
+            }
+
+            if ($startDate || $endDate) {
+                $query->orderBy('start_date', 'asc');
+            } else {
+                $query->orderBy('title', 'asc');
             }
 
             $activities = $query->withoutTrashed()
-                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {
