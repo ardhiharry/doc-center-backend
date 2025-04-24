@@ -110,7 +110,7 @@ class ProjectController extends Controller
             }
 
             if ($startDate || $endDate) {
-                $query->orderBy('start_date', 'asc');
+                $query->orderBy('start_date', 'desc');
             } else {
                 $query->orderBy('name', 'asc');
             }

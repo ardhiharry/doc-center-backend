@@ -52,7 +52,7 @@ class ActivityController extends Controller
         try {
             $activities = Activity::with('project.company')
                 ->withoutTrashed()
-                ->orderBy('title', 'asc')
+                ->orderBy('start_date', 'desc')
                 ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {
@@ -111,13 +111,8 @@ class ActivityController extends Controller
                 $query->whereDate('end_date', '<=', $endDate);
             }
 
-            if ($startDate || $endDate) {
-                $query->orderBy('start_date', 'asc');
-            } else {
-                $query->orderBy('title', 'asc');
-            }
-
             $activities = $query->withoutTrashed()
+                ->orderBy('start_date', 'desc')
                 ->paginate($request->query('limit', 10));
 
             if ($activities->isEmpty()) {
