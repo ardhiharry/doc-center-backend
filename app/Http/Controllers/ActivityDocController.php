@@ -113,8 +113,26 @@ class ActivityDocController extends Controller
             $query = ActivityDoc::with(['activityDocCategory', 'activity.project.company']);
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['id', 'title', 'description', 'activity_doc_category_id', 'activity_id'])) {
+                if (in_array($key, ['id', 'title', 'description'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
+                }
+
+                if ($key === 'activity_doc_category_id') {
+                    $activityDocCategoryIds = is_array($value) ? $value : explode(',', $value);
+                    $activityDocCategoryIds = array_map('trim', $activityDocCategoryIds);
+
+                    $query->whereHas('activityDocCategory', function ($q) use ($activityDocCategoryIds) {
+                        $q->whereIn('id', $activityDocCategoryIds);
+                    });
+                }
+
+                if ($key === 'activity_id') {
+                    $activityIds = is_array($value) ? $value : explode(',', $value);
+                    $activityIds = array_map('trim', $activityIds);
+
+                    $query->whereHas('activity', function ($q) use ($activityIds) {
+                        $q->whereIn('id', $activityIds);
+                    });
                 }
 
                 if ($key === 'tags') {
