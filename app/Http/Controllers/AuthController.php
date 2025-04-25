@@ -82,6 +82,7 @@ class AuthController extends Controller
                 200,
                 'Berhasil login',
                 [
+                    'id' => $user->id,
                     'username' => $user->username,
                     'name' => $user->name,
                     'role' => $user->role,
