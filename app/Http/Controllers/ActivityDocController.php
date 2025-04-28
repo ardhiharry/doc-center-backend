@@ -113,7 +113,7 @@ class ActivityDocController extends Controller
             $query = ActivityDoc::with(['activityDocCategory', 'activity.project.company']);
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['id', 'title', 'description'])) {
+                if (in_array($key, ['id', 'title'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
 
@@ -133,6 +133,15 @@ class ActivityDocController extends Controller
                     $query->whereHas('activity', function ($q) use ($activityIds) {
                         $q->whereIn('id', $activityIds);
                     });
+                }
+
+                if ($key === 'description') {
+                    $descriptions = is_array($value) ? $value : explode(',', $value);
+                    $descriptions = array_map('trim', $descriptions);
+
+                    foreach ($descriptions as $description) {
+                        $query->orWhere('description', 'LIKE', "%{$description}%");
+                    }
                 }
 
                 if ($key === 'tags') {
@@ -180,6 +189,24 @@ class ActivityDocController extends Controller
                 $err->getMessage()
             );
         }
+    }
+
+    public function getAllTags(): JsonResponse
+    {
+        $activityDocs = ActivityDoc::all();
+
+        if ($activityDocs->isEmpty()) {
+            return Response::handler(
+                200,
+                'Berhasil mengambil data tag dokumen aktivitas'
+            );
+        }
+
+        return Response::handler(
+            200,
+            'Berhasil mengambil data tag dokumen aktivitas',
+            $activityDocs->pluck('tags')->flatten()->unique()->values()
+        );
     }
 
     public function getById($id): JsonResponse

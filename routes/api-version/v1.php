@@ -86,6 +86,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/activity-docs', [ActivityDocController::class, 'create']);
     Route::get('/activity-docs', [ActivityDocController::class, 'getAll']);
     Route::get('/activity-docs/search', [ActivityDocController::class, 'search']);
+    Route::get('/activity-docs/tags', [ActivityDocController::class, 'getAllTags']);
     Route::get('/activity-docs/{id}', [ActivityDocController::class, 'getById']);
     Route::delete('/activity-docs/{id}', [ActivityDocController::class, 'softDelete']);
 });
