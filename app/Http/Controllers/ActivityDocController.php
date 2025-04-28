@@ -29,27 +29,27 @@ class ActivityDocController extends Controller
                 );
             }
 
-            $filePath = null;
+            $filePaths = null;
 
-            if ($request->hasFile('file')) {
-                $date = Carbon::now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-                $fileName = "{$date}-{$randomStr}.{$request->file('file')->extension()}";
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $date = Carbon::now()->format('Ymd');
+                    $uuid = Str::uuid()->toString();
+                    $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
+                    $fileName = "{$date}-{$randomStr}.{$file->extension()}";
 
-                $filePath = $request->file('file')->storeAs('activity_docs', $fileName, 'public');
+                    $filePaths[] = $file->storeAs('activity_docs', $fileName, 'public');
+                }
             }
 
             $activityDoc = ActivityDoc::create([
                 'title' => $request->title,
-                'file' => $filePath,
+                'files' => $filePaths,
                 'description' => $request->description,
                 'tags' => $request->tags,
                 'activity_doc_category_id' => $request->activity_doc_category_id,
                 'activity_id' => $request->activity_id
-            ]);
-
-            $activityDoc->load('activityDocCategory', 'activity.project.company');
+            ])->refresh()->load('activityDocCategory', 'activity.project.company');
 
             return Response::handler(
                 200,

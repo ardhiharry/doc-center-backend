@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('activity_docs', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable(false);
-            $table->string('file', 100)->nullable();
+            $table->json('files')->nullable();
             $table->text('description')->nullable();
             $table->json('tags')->nullable(false);
             $table->foreignId('activity_doc_category_id')->nullable(false)->constrained('activity_doc_categories')->onDelete('cascade');

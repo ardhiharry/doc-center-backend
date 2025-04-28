@@ -19,7 +19,7 @@ class ActivityDoc extends Model
 
     protected $fillable = [
         'title',
-        'file',
+        'files',
         'description',
         'tags',
         'activity_doc_category_id',
@@ -31,7 +31,8 @@ class ActivityDoc extends Model
     ];
 
     protected $casts = [
-        'tags' => 'array'
+        'tags' => 'array',
+        'files' => 'array'
     ];
 
     public function activityDocCategory(): BelongsTo

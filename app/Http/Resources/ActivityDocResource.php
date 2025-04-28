@@ -17,7 +17,9 @@ class ActivityDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'file' => $this->file ? '/storage/'.$this->file : '',
+            'files' => is_array($this->files)
+                ? array_map(fn($file) => '/storage/' . $file, $this->files)
+                : [],
             'description' => $this->description,
             'tags' => $this->tags,
             'activity_doc_category_id' => optional($this->activityDocCategory)->id,

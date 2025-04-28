@@ -20,7 +20,7 @@ class ActivityDocFactory extends Factory
     {
         return [
             'title' => fake()->unique()->words(3, true),
-            'file' => null,
+            'files' => null,
             'description' => fake()->paragraph(),
             'tags' => [
                 fake()->word(),
