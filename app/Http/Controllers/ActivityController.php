@@ -27,9 +27,8 @@ class ActivityController extends Controller
                 );
             }
 
-            $activity = Activity::create($request->all());
-
-            $activity->load('project.company');
+            $activity = Activity::create($request->all())
+                ->refresh()->load('activityCategory', 'project.company');
 
             return Response::handler(
                 200,
@@ -50,7 +49,7 @@ class ActivityController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         try {
-            $activities = Activity::with('project.company')
+            $activities = Activity::with('activityCategory', 'project.company')
                 ->withoutTrashed()
                 ->orderBy('start_date', 'desc')
                 ->paginate($request->query('limit', 10));
@@ -82,11 +81,20 @@ class ActivityController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $query = Activity::with('project.company');
+            $query = Activity::with('activityCategory', 'project.company');
 
             foreach ($request->all() as $key => $value) {
                 if ($key === 'title') {
                     $query->where($key, 'LIKE', "%{$value}%");
+                }
+
+                if ($key === 'activity_category_id') {
+                    $activityCategoryIds = is_array($value) ? $value : explode(',', $value);
+                    $activityCategoryIds = array_map('trim', $activityCategoryIds);
+
+                    $query->whereHas('activityCategory', function ($q) use ($activityCategoryIds) {
+                        $q->whereIn('id', $activityCategoryIds);
+                    });
                 }
 
                 if ($key === 'project_id') {
@@ -142,7 +150,7 @@ class ActivityController extends Controller
     public function getById($id): JsonResponse
     {
         try {
-            $activity = Activity::with('project.company')->find($id);
+            $activity = Activity::with('activityCategory', 'project.company')->find($id);
 
             if (!$activity) {
                 return Response::handler(
@@ -204,10 +212,9 @@ class ActivityController extends Controller
                 'title',
                 'start_date',
                 'end_date',
-                'project_id'
-            ]));
-
-            $activity->load('project.company');
+                'activity_category_id',
+                'project_id',
+            ]))->refresh()->load('activityCategory', 'project.company');
 
             return Response::handler(
                 200,

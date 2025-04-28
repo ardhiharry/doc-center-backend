@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
-class ActivityDocCategoryUpdateRequest extends FormRequest
+class ActivityCategoryUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

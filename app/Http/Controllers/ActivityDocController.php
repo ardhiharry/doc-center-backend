@@ -29,6 +29,18 @@ class ActivityDocController extends Controller
                 );
             }
 
+            $activityDocByActivity = ActivityDoc::where('activity_id', $request->activity_id)->exists();
+
+            if ($activityDocByActivity) {
+                return Response::handler(
+                    400,
+                    'Gagal membuat dokumen aktivitas',
+                    [],
+                    [],
+                    ['activity_id' => ['Aktivitas sudah ada.']]
+                );
+            }
+
             $filePaths = null;
 
             if ($request->hasFile('files')) {
@@ -47,22 +59,13 @@ class ActivityDocController extends Controller
                 'files' => $filePaths,
                 'description' => $request->description,
                 'tags' => $request->tags,
-                'activity_doc_category_id' => $request->activity_doc_category_id,
                 'activity_id' => $request->activity_id
-            ])->refresh()->load('activityDocCategory', 'activity.project.company');
+            ])->refresh()->load('activity.project.company');
 
             return Response::handler(
                 200,
                 'Berhasil membuat dokumen aktivitas',
                 ActivityDocResource::make($activityDoc)
-            );
-        } catch (PostTooLargeException $err) {
-            return Response::handler(
-                400,
-                'Gagal membuat dokumen aktivitas',
-                [],
-                [],
-                'File yang diunggah melebihi batas ukuran.'
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -78,7 +81,7 @@ class ActivityDocController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         try {
-            $activityDocs = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])
+            $activityDocs = ActivityDoc::with('activity.project.company')
                 ->withoutTrashed()
                 ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
@@ -110,20 +113,11 @@ class ActivityDocController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $query = ActivityDoc::with(['activityDocCategory', 'activity.project.company']);
+            $query = ActivityDoc::with('activity.project.company');
 
             foreach ($request->all() as $key => $value) {
                 if (in_array($key, ['id', 'title'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
-                }
-
-                if ($key === 'activity_doc_category_id') {
-                    $activityDocCategoryIds = is_array($value) ? $value : explode(',', $value);
-                    $activityDocCategoryIds = array_map('trim', $activityDocCategoryIds);
-
-                    $query->whereHas('activityDocCategory', function ($q) use ($activityDocCategoryIds) {
-                        $q->whereIn('id', $activityDocCategoryIds);
-                    });
                 }
 
                 if ($key === 'activity_id') {

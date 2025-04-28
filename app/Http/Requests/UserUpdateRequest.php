@@ -81,7 +81,7 @@ class UserUpdateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to update user',
+            'Gagal mengubah data pengguna',
             [],
             [],
             $validator->errors()

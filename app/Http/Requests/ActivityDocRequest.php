@@ -34,10 +34,6 @@ class ActivityDocRequest extends FormRequest
             'description' => 'nullable|string',
             'tags' => 'required|array',
             'tags.*' => 'string',
-            'activity_doc_category_id' => [
-                'required',
-                Rule::exists('activity_doc_categories', 'id')->whereNull('deleted_at'),
-            ],
             'activity_id' => [
                 'required',
                 Rule::exists('activities', 'id')->whereNull('deleted_at'),
@@ -63,9 +59,6 @@ class ActivityDocRequest extends FormRequest
             'tags.array' => 'Tag harus berupa array.',
             'tags.*.string' => 'Tag harus berupa teks.',
 
-            'activity_doc_category_id.required' => 'Kategori wajib dipilih.',
-            'activity_doc_category_id.exists' => 'Kategori tidak ditemukan.',
-
             'activity_id.required' => 'Proyek wajib dipilih.',
             'activity_id.exists' => 'Proyek tidak ditemukan.',
         ];
@@ -77,7 +70,6 @@ class ActivityDocRequest extends FormRequest
             'title' => strip_tags($this->title),
             'description' => Purifier::clean($this->description),
             'tags' => is_string($this->tags) ? json_decode($this->tags, true) : $this->tags,
-            'activity_doc_category_id' => strip_tags($this->activity_doc_category_id),
             'activity_id' => strip_tags($this->activity_id),
         ]);
     }
@@ -86,7 +78,7 @@ class ActivityDocRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create activity document',
+            'Gagal membuat dokumen aktivitas',
             [],
             [],
             $validator->errors()

@@ -71,7 +71,7 @@ class ProjectCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create project',
+            'Gagal membuat proyek',
             [],
             [],
             $validator->errors()

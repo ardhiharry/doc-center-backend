@@ -50,7 +50,7 @@ class AdminDocCategoryUpdateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to update admin document category',
+            'Gagal mengubah kategori dokumen administrasi',
             [],
             [],
             $validator->errors()

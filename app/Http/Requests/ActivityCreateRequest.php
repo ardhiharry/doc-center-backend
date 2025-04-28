@@ -30,6 +30,10 @@ class ActivityCreateRequest extends FormRequest
             'title' => 'required|string|max:100',
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'activity_category_id' => [
+                'required',
+                Rule::exists('activity_categories', 'id')->whereNull('deleted_at'),
+            ],
             'project_id' => [
                 'required',
                 Rule::exists('projects', 'id')->whereNull('deleted_at'),
@@ -52,6 +56,9 @@ class ActivityCreateRequest extends FormRequest
             'end_date.date' => 'Tanggal selesai harus berupa tanggal.',
             'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.',
 
+            'activity_category_id.required' => 'Kategori aktivitas wajib dipilih.',
+            'activity_category_id.exists' => 'Kategori aktivitas tidak ditemukan.',
+
             'project_id.required' => 'Proyek wajib dipilih.',
             'project_id.exists' => 'Proyek tidak ditemukan.',
         ];
@@ -63,6 +70,7 @@ class ActivityCreateRequest extends FormRequest
             'title' => strip_tags($this->title),
             'start_date' => strip_tags($this->start_date),
             'end_date' => strip_tags($this->end_date),
+            'activity_category_id' => strip_tags($this->activity_category_id),
             'project_id' => strip_tags($this->project_id),
         ]);
     }
@@ -71,7 +79,7 @@ class ActivityCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create activity',
+            'Gagal membuat aktivitas',
             [],
             [],
             $validator->errors()

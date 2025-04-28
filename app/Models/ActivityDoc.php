@@ -22,7 +22,6 @@ class ActivityDoc extends Model
         'files',
         'description',
         'tags',
-        'activity_doc_category_id',
         'activity_id'
     ];
 
@@ -34,11 +33,6 @@ class ActivityDoc extends Model
         'tags' => 'array',
         'files' => 'array'
     ];
-
-    public function activityDocCategory(): BelongsTo
-    {
-        return $this->belongsTo(ActivityDocCategory::class, 'activity_doc_category_id', 'id');
-    }
 
     public function activity(): BelongsTo
     {

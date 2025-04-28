@@ -94,11 +94,11 @@ class ProjectUpdateRequest extends FormRequest
             $endDate = $this->input('end_date', $project->end_date);
 
             if ($startDate && $endDate && $startDate > $endDate) {
-                $validator->errors()->add('start_date', 'The start date must be a date before or equal to end date.');
+                $validator->errors()->add('start_date', 'Tanggal mulai harus sebelum atau sama dengan tanggal selesai.');
             }
 
             if ($startDate && $endDate && $endDate < $startDate) {
-                $validator->errors()->add('end_date', 'The end date must be a date after or equal to start date.');
+                $validator->errors()->add('end_date', 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.');
             }
         });
     }
@@ -107,7 +107,7 @@ class ProjectUpdateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to update project',
+            'Gagal memperbarui proyek',
             [],
             [],
             $validator->errors()

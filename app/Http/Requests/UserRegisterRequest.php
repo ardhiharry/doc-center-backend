@@ -61,7 +61,7 @@ class UserRegisterRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to register',
+            'Gagal mendaftar',
             [],
             [],
             $validator->errors()

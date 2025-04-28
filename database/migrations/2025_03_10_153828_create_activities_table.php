@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('title', 100)->nullable(false);
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(false);
+            $table->foreignId('activity_category_id')
+                ->nullable(false)
+                ->constrained('activity_categories')
+                ->onDelete('cascade');
             $table->foreignId('project_id')->nullable(false)->constrained('projects')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

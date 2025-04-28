@@ -17,8 +17,11 @@ return new class extends Migration
             $table->json('files')->nullable();
             $table->text('description')->nullable();
             $table->json('tags')->nullable(false);
-            $table->foreignId('activity_doc_category_id')->nullable(false)->constrained('activity_doc_categories')->onDelete('cascade');
-            $table->foreignId('activity_id')->nullable(false)->constrained('activities')->onDelete('cascade');
+            $table->foreignId('activity_id')
+                ->unique()
+                ->nullable(false)
+                ->constrained('activities')
+                ->onDelete('cascade');
             $table->timestamp('created_at')->useCurrent();
             $table->softDeletes();
         });

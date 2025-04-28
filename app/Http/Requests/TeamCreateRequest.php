@@ -59,7 +59,7 @@ class TeamCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create team',
+            'Gagal membuat tim',
             [],
             [],
             $validator->errors()

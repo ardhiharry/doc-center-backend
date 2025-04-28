@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Activity;
 use App\Models\ActivityDoc;
-use App\Models\ActivityDocCategory;
+use App\Models\ActivityCategory;
 use App\Models\AdminDoc;
 use App\Models\AdminDocCategory;
 use App\Models\Company;
@@ -111,17 +111,20 @@ class DatabaseSeeder extends Seeder
         Activity::factory(rand(1, 2))->create([
             'project_id' => $project->id
         ])->each(function ($activity) {
-            $this->createActivityDocsForActivity($activity);
+            $this->createActivityDocForActivity($activity);
         });
     }
 
-    private function createActivityDocsForActivity(Activity $activity): void
+    private function createActivityDocForActivity(Activity $activity): void
     {
-        $activityDocCategory = ActivityDocCategory::factory()->create();
+        $activityCategory = ActivityCategory::factory()->create();
 
-        ActivityDoc::factory(rand(1, 3))->create([
-            'activity_id' => $activity->id,
-            'activity_doc_category_id' => $activityDocCategory->id
+        $activity->update([
+            'activity_category_id' => $activityCategory->id
+        ]);
+
+        ActivityDoc::factory()->create([
+            'activity_id' => $activity->id
         ]);
     }
 }

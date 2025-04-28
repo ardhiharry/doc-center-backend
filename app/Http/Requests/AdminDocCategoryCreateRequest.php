@@ -50,7 +50,7 @@ class AdminDocCategoryCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create admin document category',
+            'Gagal membuat kategori dokumen administrasi',
             [],
             [],
             $validator->errors()

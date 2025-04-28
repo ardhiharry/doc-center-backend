@@ -67,7 +67,7 @@ class TeamUpdateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to update team',
+            'Gagal memperbarui tim',
             [],
             [],
             $validator->errors()

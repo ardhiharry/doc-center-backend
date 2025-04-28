@@ -78,7 +78,7 @@ class CompanyCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create company',
+            'Gagal membuat perusahaan',
             [],
             [],
             $validator->errors()

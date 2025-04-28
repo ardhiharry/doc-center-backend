@@ -72,7 +72,7 @@ class AdminDocRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create admin document',
+            'Gagal membuat dokumen administrasi',
             [],
             [],
             $validator->errors()

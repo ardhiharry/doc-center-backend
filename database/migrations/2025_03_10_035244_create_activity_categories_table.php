@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_doc_categories', function (Blueprint $table) {
+        Schema::create('activity_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->nullable(false);
             $table->timestamps();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('activity_doc_categories');
+        Schema::dropIfExists('activity_categories');
     }
 };

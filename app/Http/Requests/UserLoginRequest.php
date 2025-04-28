@@ -56,7 +56,7 @@ class UserLoginRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to login',
+            'Gagal login',
             [],
             [],
             $validator->errors()

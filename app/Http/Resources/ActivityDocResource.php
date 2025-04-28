@@ -22,8 +22,6 @@ class ActivityDocResource extends JsonResource
                 : [],
             'description' => $this->description,
             'tags' => $this->tags,
-            'activity_doc_category_id' => optional($this->activityDocCategory)->id,
-            'activity_doc_category_name' => optional($this->activityDocCategory)->name,
             'activity_id' => optional($this->activity)->id,
             'activity_title' => optional($this->activity)->title,
             'project_id' => optional(optional($this->activity)->project)->id,

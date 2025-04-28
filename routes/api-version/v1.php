@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\ActivityDocCategoryController;
+use App\Http\Controllers\ActivityCategoryController;
 use App\Http\Controllers\ActivityDocController;
 use App\Http\Controllers\AdminDocCategoryController;
 use App\Http\Controllers\AdminDocController;
@@ -66,6 +66,14 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin-docs/{id}', [AdminDocController::class, 'getById']);
     Route::delete('/admin-docs/{id}', [AdminDocController::class, 'softDelete']);
 
+    // Activity Category
+    Route::post('/activity-categories', [ActivityCategoryController::class, 'create']);
+    Route::get('/activity-categories', [ActivityCategoryController::class, 'getAll']);
+    Route::get('/activity-categories/search', [ActivityCategoryController::class, 'search']);
+    Route::get('/activity-categories/{id}', [ActivityCategoryController::class, 'getById']);
+    Route::patch('/activity-categories/{id}', [ActivityCategoryController::class, 'update']);
+    Route::delete('/activity-categories/{id}', [ActivityCategoryController::class, 'softDelete']);
+
     // Activity
     Route::post('/activities', [ActivityController::class, 'create']);
     Route::get('/activities', [ActivityController::class, 'getAll']);
@@ -73,14 +81,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/activities/{id}', [ActivityController::class, 'getById']);
     Route::patch('/activities/{id}', [ActivityController::class, 'update']);
     Route::delete('/activities/{id}', [ActivityController::class, 'softDelete']);
-
-    // Activity Doc Category
-    Route::post('/activity-doc-categories', [ActivityDocCategoryController::class, 'create']);
-    Route::get('/activity-doc-categories', [ActivityDocCategoryController::class, 'getAll']);
-    Route::get('/activity-doc-categories/search', [ActivityDocCategoryController::class, 'search']);
-    Route::get('/activity-doc-categories/{id}', [ActivityDocCategoryController::class, 'getById']);
-    Route::patch('/activity-doc-categories/{id}', [ActivityDocCategoryController::class, 'update']);
-    Route::delete('/activity-doc-categories/{id}', [ActivityDocCategoryController::class, 'softDelete']);
 
     // Activity Docs
     Route::post('/activity-docs', [ActivityDocController::class, 'create']);

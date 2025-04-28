@@ -108,7 +108,7 @@ class ActivityUpdateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to update activity',
+            'Gagal mengubah aktivitas',
             [],
             [],
             $validator->errors()

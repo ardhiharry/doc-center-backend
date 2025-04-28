@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ActivityDocCategory extends Model
+class ActivityCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'activity_doc_categories';
+    protected $table = 'activity_categories';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
@@ -25,8 +25,8 @@ class ActivityDocCategory extends Model
         'deleted_at',
     ];
 
-    public function activityDoc(): HasMany
+    public function activity(): HasMany
     {
-        return $this->hasMany(ActivityDoc::class, 'activity_doc_category_id', 'id');
+        return $this->hasMany(Activity::class, 'activity_category_id', 'id');
     }
 }

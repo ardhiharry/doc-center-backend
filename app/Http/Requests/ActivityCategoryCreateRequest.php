@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
-class ActivityDocCategoryCreateRequest extends FormRequest
+class ActivityCategoryCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -50,7 +50,7 @@ class ActivityDocCategoryCreateRequest extends FormRequest
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Failed to create activity document category',
+            'Gagal membuat kategori aktivitas',
             [],
             [],
             $validator->errors()

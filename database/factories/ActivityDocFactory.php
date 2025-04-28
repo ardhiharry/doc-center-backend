@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Activity;
-use App\Models\ActivityDocCategory;
+use App\Models\ActivityCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,7 +27,6 @@ class ActivityDocFactory extends Factory
                 fake()->word(),
                 fake()->word(),
             ],
-            'activity_doc_category_id' => ActivityDocCategory::factory(),
             'activity_id' => Activity::factory(),
         ];
     }
