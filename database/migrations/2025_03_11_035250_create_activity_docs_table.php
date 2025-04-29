@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->json('tags')->nullable(false);
             $table->foreignId('activity_id')
-                ->unique()
                 ->nullable(false)
                 ->constrained('activities')
                 ->onDelete('cascade');

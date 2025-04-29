@@ -29,7 +29,9 @@ class ActivityDocController extends Controller
                 );
             }
 
-            $activityDocByActivity = ActivityDoc::where('activity_id', $request->activity_id)->exists();
+            $activityDocByActivity = ActivityDoc::where('activity_id', $request->activity_id)
+                ->whereNull('deleted_at')
+                ->exists();
 
             if ($activityDocByActivity) {
                 return Response::handler(
