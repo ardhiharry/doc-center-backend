@@ -30,7 +30,7 @@ class ActivityDocRequest extends FormRequest
         return [
             'title' => 'required|string|max:100',
             'files' => 'sometimes|array',
-            'files.*' => 'file|mimes:pdf|max:2048',
+            'files.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
             'description' => 'nullable|string',
             'tags' => 'required|array',
             'tags.*' => 'string',
@@ -50,7 +50,7 @@ class ActivityDocRequest extends FormRequest
 
             'files.array' => 'Files harus berupa array.',
             'files.*.file' => 'Setiap item harus berupa file.',
-            'files.*.mimes' => 'Setiap file harus berupa PDF.',
+            'files.*.mimes' => 'Setiap file harus berupa PDF atau gambar.',
             'files.*.max' => 'Ukuran file maksimal 2MB.',
 
             'description.string' => 'Deskripsi harus berupa teks.',
