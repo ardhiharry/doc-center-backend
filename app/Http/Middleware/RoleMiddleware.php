@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\Response;
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as HTTP;
 
 class RoleMiddleware
 {
@@ -13,13 +15,13 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, ...$roles): JsonResponse
     {
         $user = $request->user();
 
         if (!$user || !in_array($user->role, $roles)) {
-            return \App\Helpers\Response::handler(
-                Response::HTTP_FORBIDDEN,
+            return Response::handler(
+                HTTP::HTTP_FORBIDDEN,
                 'Forbidden',
                 [],
                 [],
