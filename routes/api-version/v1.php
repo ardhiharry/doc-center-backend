@@ -29,8 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'softDelete']);
 
     // Dashboard
-    Route::get('/dashboard/activities/total', [DashboardController::class, 'getTotalActivity']);
-    Route::get('/dashboard/activities/monthly', [DashboardController::class, 'getActivityThisMonth']);
+    Route::get('/dashboard', [DashboardController::class, 'getDashboard']);
 
     // Companies
     Route::post('/companies', [CompanyController::class, 'create']);

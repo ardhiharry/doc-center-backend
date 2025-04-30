@@ -4,39 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Models\Activity;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
-    public function getTotalActivity(): JsonResponse
-    {
-        try {
-            $activity = Activity::count();
-
-            return Response::handler(
-                200,
-                'Berhasil mengambil total aktivitas',
-                [['total_activity' => $activity]]
-            );
-        } catch (\Exception $err) {
-            return Response::handler(
-                500,
-                'Gagal mengambil total aktivitas',
-                [],
-                [],
-                $err->getMessage()
-            );
-        }
-    }
-
-    public function getActivityThisMonth(): JsonResponse
+    public function getDashboard(): JsonResponse
     {
         try {
             $now = Carbon::now();
 
-            $activities = Activity::with('project')
+            $totalActivity = Activity::count();
+
+            $totalIsProcessTrue = User::withoutTrashed()
+                ->where('is_process', true)
+                ->count();
+
+            $totalIsProcessFalse = User::withoutTrashed()
+                ->where('is_process', false)
+                ->count();
+
+            $totalActivityThisYear = Activity::with('project')
+                ->whereYear('start_date', $now->year)
+                ->count();
+
+            $activitiesThisMonth = Activity::with('project')
                 ->whereYear('start_date', $now->year)
                 ->whereMonth('start_date', $now->month)
                 ->orderBy('start_date', 'desc')
@@ -50,15 +44,23 @@ class DashboardController extends Controller
                     ];
                 });
 
+            $data = [
+                'total_activity' => $totalActivity,
+                'total_is_process_true' => $totalIsProcessTrue,
+                'total_is_process_false' => $totalIsProcessFalse,
+                'total_activity_this_year' => $totalActivityThisYear,
+                'activities_this_month' => $activitiesThisMonth
+            ];
+
             return Response::handler(
                 200,
-                'Berhasil mengambil aktivitas bulan ini',
-                $activities
+                'Berhasil mengambil data dashboard',
+                [$data]
             );
         } catch (\Exception $err) {
             return Response::handler(
                 500,
-                'Gagal mengambil aktivitas bulan ini',
+                'Gagal mengambil data dashboard',
                 [],
                 [],
                 $err->getMessage()
