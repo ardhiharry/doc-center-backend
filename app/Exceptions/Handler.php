@@ -26,6 +26,7 @@ class Handler extends ExceptionHandler
                 HTTP::HTTP_UNAUTHORIZED,
                 'Unauthorized',
                 [],
+                [],
                 ['token' => ['Token tidak valid atau kadaluarsa.']]
             );
         }

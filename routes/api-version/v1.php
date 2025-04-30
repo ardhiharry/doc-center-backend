@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminDocCategoryController;
 use App\Http\Controllers\AdminDocController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
@@ -26,6 +27,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/users/{id}', [UserController::class, 'getById']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'softDelete']);
+
+    // Dashboard
+    Route::get('/dashboard/activities/total', [DashboardController::class, 'getTotalActivity']);
+    Route::get('/dashboard/activities/monthly', [DashboardController::class, 'getActivityThisMonth']);
 
     // Companies
     Route::post('/companies', [CompanyController::class, 'create']);
