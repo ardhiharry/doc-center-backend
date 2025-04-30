@@ -20,7 +20,8 @@ class TeamResource extends JsonResource
             'project_name' => optional($this->project)->name,
             'user_id' => optional($this->user)->id,
             'user_username' => optional($this->user)->username,
-            'user_name' => optional($this->user)->name
+            'user_name' => optional($this->user)->name,
+            'user_is_process' => optional($this->user)->is_process
         ];
     }
 }

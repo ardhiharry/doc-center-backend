@@ -86,6 +86,7 @@ class AuthController extends Controller
                     'username' => $user->username,
                     'name' => $user->name,
                     'role' => $user->role,
+                    'is_process' => $user->is_process,
                     'refresh_token' => $user->token,
                     'access_token' => $accessToken
                 ]

@@ -19,7 +19,8 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'name' => $this->name,
             'role' => $this->role,
-            'token' => $this->whenNotNull($this->token)
+            'token' => $this->whenNotNull($this->token),
+            'is_process' => $this->is_process
         ];
     }
 }

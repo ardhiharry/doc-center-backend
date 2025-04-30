@@ -28,6 +28,14 @@ class UserUpdateRequest extends FormRequest
         return [
             'username'              => 'sometimes|required|string|max:100|unique:users,username,' . $this->route('id'),
             'name'                  => 'sometimes|required|string|max:255',
+            'is_process'            => [
+                'sometimes', 'required',
+                function ($attribute, $value, $fail) {
+                    if (!is_bool($value)) {
+                        $fail('Status proses harus berupa boolean.');
+                    }
+                }
+            ],
             'old_password'          => 'sometimes|required|required_with:new_password,confirm_new_password|string|max:255',
             'new_password'          => 'sometimes|required|required_with:old_password,confirm_new_password|string|max:255|different:old_password',
             'confirm_new_password'  => 'sometimes|required|required_with:old_password,new_password|string|max:255|same:new_password',
@@ -45,6 +53,8 @@ class UserUpdateRequest extends FormRequest
             'name.required' => 'Nama wajib diisi.',
             'name.string' => 'Nama harus berupa teks.',
             'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+
+            'is_process.required' => 'Status wajib diisi.',
 
             'old_password.required' => 'Password lama wajib diisi.',
             'old_password.string' => 'Password lama harus berupa teks.',

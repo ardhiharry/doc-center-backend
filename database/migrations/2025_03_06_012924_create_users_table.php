@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 100)->nullable(false);
             $table->enum('role', ['SUPERADMIN', 'ADMIN', 'USER'])->default('USER');
             $table->text('token')->nullable();
+            $table->boolean('is_process')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

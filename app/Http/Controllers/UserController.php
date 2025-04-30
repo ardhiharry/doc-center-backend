@@ -144,6 +144,10 @@ class UserController extends Controller
 
             $data = $request->only(['username', 'name']);
 
+            if ($request->has('is_process')) {
+                $data['is_process'] = $request->boolean('is_process');
+            }
+
             if ($request->filled('old_password') || $request->filled('new_password') || $request->filled('confirm_new_password')) {
                 if (!$request->filled(['old_password', 'new_password', 'confirm_new_password'])) {
                     return Response::handler(
