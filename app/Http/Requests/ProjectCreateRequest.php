@@ -32,6 +32,10 @@ class ProjectCreateRequest extends FormRequest
                 'required',
                 Rule::exists('companies', 'id')->whereNull('deleted_at'),
             ],
+            'project_leader_id' => [
+                'required',
+                Rule::exists('users', 'id')->whereNull('deleted_at'),
+            ],
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ];
@@ -46,6 +50,9 @@ class ProjectCreateRequest extends FormRequest
 
             'company_id.required' => 'Perusahaan wajib dipilih.',
             'company_id.exists' => 'Perusahaan tidak ditemukan atau sudah dihapus.',
+
+            'project_leader_id.required' => 'Pemimpin proyek wajib dipilih.',
+            'project_leader_id.exists' => 'Pemimpin proyek tidak ditemukan atau sudah dihapus.',
 
             'start_date.required' => 'Tanggal mulai wajib diisi.',
             'start_date.date' => 'Tanggal mulai harus berupa tanggal yang valid.',
@@ -62,6 +69,7 @@ class ProjectCreateRequest extends FormRequest
         $this->merge([
             'name' => strip_tags($this->name),
             'company_id' => strip_tags($this->company_id),
+            'project_leader_id' => strip_tags($this->project_leader_id),
             'start_date' => strip_tags($this->start_date),
             'end_date' => strip_tags($this->end_date),
         ]);

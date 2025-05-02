@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password123'),
             'role' => 'USER',
             'token' => null,
+            'is_process' => false
         ];
     }
 

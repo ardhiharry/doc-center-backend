@@ -29,7 +29,7 @@ class ProjectController extends Controller
 
             $project = Project::create($request->all());
 
-            $project->load('company');
+            $project->refresh()->load('company');
 
             return Response::handler(
                 201,
@@ -85,7 +85,7 @@ class ProjectController extends Controller
             $query = Project::with('company');
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['name', 'company_id'])) {
+                if ($key === 'name') {
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
 
@@ -94,6 +94,22 @@ class ProjectController extends Controller
                     $ids = array_map('trim', $ids);
 
                     $query->whereIn('id', $ids);
+                }
+
+                if ($key === 'company_id') {
+                    $companyIds = is_array($value) ? $value : explode(',', $value);
+                    $companyIds = array_map('trim', $companyIds);
+
+                    $query->whereHas('company', function ($q) use ($companyIds) {
+                        $q->whereIn('id', $companyIds);
+                    });
+                }
+
+                if ($key === 'project_leader_id') {
+                    $projectLeaderIds = is_array($value) ? $value : explode(',', $value);
+                    $projectLeaderIds = array_map('trim', $projectLeaderIds);
+
+                    $query->whereIn('project_leader_id', $projectLeaderIds);
                 }
             }
 

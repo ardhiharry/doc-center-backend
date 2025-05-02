@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Company;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,6 +22,7 @@ class ProjectFactory extends Factory
         return [
             'name' => fake()->unique()->words(2, true),
             'company_id' => Company::factory(),
+            'project_leader_id' => User::factory(),
             'start_date' => $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
             'end_date' => Carbon::parse($startDate)->addDays(rand(0, 10))->format('Y-m-d'),
         ];

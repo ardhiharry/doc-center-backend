@@ -26,6 +26,7 @@ class Project extends Model
     protected $fillable = [
         'name',
         'company_id',
+        'project_leader_id',
         'start_date',
         'end_date'
     ];
@@ -58,5 +59,10 @@ class Project extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'teams', 'project_id', 'user_id');
+    }
+
+    public function projectLeader(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'project_leader_id', 'id');
     }
 }

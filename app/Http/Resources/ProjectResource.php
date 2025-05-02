@@ -22,7 +22,11 @@ class ProjectResource extends JsonResource
             'company_address' => optional($this->company)->address,
             'company_director_name' => optional($this->company)->director_name,
             'company_director_phone' => optional($this->company)->director_phone,
-            'company_director_signature' => optional($this->company)->director_signature,
+            'company_director_signature' => $this->company->director_signature
+                ? '/storage/' . $this->company->director_signature
+                : '',
+            'project_leader_id' => optional($this->projectLeader)->id,
+            'project_leader_name' => optional($this->projectLeader)->name,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'created_at' => $this->created_at,

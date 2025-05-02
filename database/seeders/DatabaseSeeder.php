@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\Project;
 use App\Models\Team;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,77 +23,80 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->createAdminUsers();
-        $this->createRegularUsers(10);
-        $this->createCompaniesWithProjects(5);
+        $users = $this->createRegularUsers(10);
+        $this->createCompaniesWithProjects(5, $users);
     }
 
     private function createAdminUsers(): void
     {
-        User::factory()->create([
-            'username' => 'superadmin',
-            'password' => Hash::make('password123'),
-            'name' => 'Super Admin',
-            'role' => 'SUPERADMIN'
-        ]);
-
-        User::factory()->create([
-            'username' => 'admin',
-            'password' => Hash::make('password123'),
-            'name' => 'Admin',
-            'role' => 'ADMIN'
-        ]);
-
-        User::factory()->create([
-            'username' => 'ladur',
-            'password' => Hash::make('password123'),
-            'name' => 'Ladur Cobain',
-            'role' => 'SUPERADMIN'
-        ]);
-
-        User::factory()->create([
-            'username' => 'togi',
-            'password' => Hash::make('password123'),
-            'name' => 'Togi Togtog',
-            'role' => 'USER'
-        ]);
-    }
-
-    private function createRegularUsers(int $count): void
-    {
-        User::factory($count)->create([
-            'role' => 'USER'
+        User::factory()->createMany([
+            [
+                'username' => 'superadmin',
+                'password' => Hash::make('password123'),
+                'name' => 'Super Admin',
+                'role' => 'SUPERADMIN',
+            ],
+            [
+                'username' => 'admin',
+                'password' => Hash::make('password123'),
+                'name' => 'Admin',
+                'role' => 'ADMIN',
+            ],
+            [
+                'username' => 'ladur',
+                'password' => Hash::make('password123'),
+                'name' => 'Ladur Cobain',
+                'role' => 'SUPERADMIN',
+            ],
+            [
+                'username' => 'togi',
+                'password' => Hash::make('password123'),
+                'name' => 'Togi Togtog',
+                'role' => 'USER',
+            ],
         ]);
     }
 
-    private function createCompaniesWithProjects(int $count): void
+    private function createRegularUsers(int $count)
     {
-        Company::factory($count)->create()->each(function ($company) {
-            $this->createProjectsForCompany($company);
+        return User::factory($count)->create([
+            'role' => 'USER',
+        ]);
+    }
+
+    private function createCompaniesWithProjects(int $count, $users): void
+    {
+        Company::factory($count)->create()->each(function ($company) use ($users) {
+            $this->createProjectsForCompany($company, $users);
         });
     }
 
-    private function createProjectsForCompany(Company $company): void
+    private function createProjectsForCompany(Company $company, $users): void
     {
-        Project::factory(rand(2, 3))->create([
-            'company_id' => $company->id
-        ])->each(function ($project) {
-            $this->assignUsersToTeam($project);
-            $this->createAdminDocsForProject($project);
-            $this->createActivitiesForProject($project);
-        });
-    }
+        for ($i = 0; $i < rand(2, 3); $i++) {
+            $teamUsers = $users->random(rand(2, 4));
+            $projectLeader = $teamUsers->random();
 
-    private function assignUsersToTeam(Project $project): void
-    {
-        $userIds = User::where('role', 'USER')->inRandomOrder()->take(rand(2, 4))->pluck('id');
+            $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d');
+            $endDate = Carbon::parse($startDate)->addDays(rand(1, 10))->format('Y-m-d');
 
-        foreach ($userIds as $userId) {
-            if (!Team::where('project_id', $project->id)->where('user_id', $userId)->exists()) {
-                Team::factory()->create([
+            $project = Project::create([
+                'name' => fake()->unique()->words(2, true),
+                'company_id' => $company->id,
+                'project_leader_id' => $projectLeader->id,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ]);
+
+            foreach ($teamUsers as $user) {
+                Team::create([
                     'project_id' => $project->id,
-                    'user_id' => $userId
+                    'user_id' => $user->id,
                 ]);
             }
+
+            $this->createAdminDocsForProject($project);
+            $this->createActivitiesForProject($project);
         }
     }
 
@@ -102,14 +106,14 @@ class DatabaseSeeder extends Seeder
 
         AdminDoc::factory(rand(1, 3))->create([
             'project_id' => $project->id,
-            'admin_doc_category_id' => $adminDocCategory->id
+            'admin_doc_category_id' => $adminDocCategory->id,
         ]);
     }
 
     private function createActivitiesForProject(Project $project): void
     {
         Activity::factory(rand(1, 2))->create([
-            'project_id' => $project->id
+            'project_id' => $project->id,
         ])->each(function ($activity) {
             $this->createActivityDocForActivity($activity);
         });
@@ -120,11 +124,11 @@ class DatabaseSeeder extends Seeder
         $activityCategory = ActivityCategory::factory()->create();
 
         $activity->update([
-            'activity_category_id' => $activityCategory->id
+            'activity_category_id' => $activityCategory->id,
         ]);
 
         ActivityDoc::factory()->create([
-            'activity_id' => $activity->id
+            'activity_id' => $activity->id,
         ]);
     }
 }
