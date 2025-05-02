@@ -25,6 +25,7 @@ class Activity extends Model
         'end_date',
         'activity_category_id',
         'project_id',
+        'author_id',
     ];
 
     protected $hidden = [
@@ -36,7 +37,7 @@ class Activity extends Model
         parent::boot();
 
         static::deleting(function ($activity) {
-            $activity->activityDocs()->delete();
+            $activity->activityDoc()->delete();
         });
     }
 
@@ -53,5 +54,10 @@ class Activity extends Model
     public function activityDoc(): HasOne
     {
         return $this->hasOne(ActivityDoc::class, 'activity_id', 'id');
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 }

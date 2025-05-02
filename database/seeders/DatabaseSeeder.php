@@ -112,8 +112,11 @@ class DatabaseSeeder extends Seeder
 
     private function createActivitiesForProject(Project $project): void
     {
+        $teamUsers = $project->users;
+
         Activity::factory(rand(1, 2))->create([
             'project_id' => $project->id,
+            'author_id' => $teamUsers->random()->id,
         ])->each(function ($activity) {
             $this->createActivityDocForActivity($activity);
         });

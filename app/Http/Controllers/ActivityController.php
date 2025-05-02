@@ -214,7 +214,10 @@ class ActivityController extends Controller
                 'end_date',
                 'activity_category_id',
                 'project_id',
-            ]))->refresh()->load('activityCategory', 'project.company');
+                'author_id'
+            ]));
+
+            $activity->refresh()->load('activityCategory', 'project.company', 'author');
 
             return Response::handler(
                 200,

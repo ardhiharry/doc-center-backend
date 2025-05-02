@@ -20,7 +20,14 @@ return new class extends Migration
                 ->nullable(false)
                 ->constrained('activity_categories')
                 ->onDelete('cascade');
-            $table->foreignId('project_id')->nullable(false)->constrained('projects')->onDelete('cascade');
+            $table->foreignId('project_id')
+                ->nullable(false)
+                ->constrained('projects')
+                ->onDelete('cascade');
+            $table->foreignId('author_id')
+                ->nullable(false)
+                ->constrained('users')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -38,6 +38,10 @@ class ActivityCreateRequest extends FormRequest
                 'required',
                 Rule::exists('projects', 'id')->whereNull('deleted_at'),
             ],
+            'author_id' => [
+                'required',
+                Rule::exists('users', 'id')->whereNull('deleted_at'),
+            ]
         ];
     }
 
@@ -61,6 +65,9 @@ class ActivityCreateRequest extends FormRequest
 
             'project_id.required' => 'Proyek wajib dipilih.',
             'project_id.exists' => 'Proyek tidak ditemukan.',
+
+            'author_id.required' => 'Author wajib dipilih.',
+            'author_id.exists' => 'Author tidak ditemukan.',
         ];
     }
 

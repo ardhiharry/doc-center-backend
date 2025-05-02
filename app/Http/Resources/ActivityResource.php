@@ -23,6 +23,8 @@ class ActivityResource extends JsonResource
             'activity_category_name' => optional($this->activityCategory)->name,
             'project_id' => optional($this->project)->id,
             'project_name' => optional($this->project)->name,
+            'author_id' => optional($this->author)->id,
+            'author_name' => optional($this->author)->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

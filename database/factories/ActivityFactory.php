@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ActivityCategory;
 use App\Models\Project;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,6 +26,7 @@ class ActivityFactory extends Factory
             'end_date' => Carbon::parse($startDate)->addDays(rand(0, 10))->format('Y-m-d'),
             'activity_category_id' => ActivityCategory::factory(),
             'project_id' => Project::factory(),
+            'author_id' => User::factory(),
         ];
     }
 }
