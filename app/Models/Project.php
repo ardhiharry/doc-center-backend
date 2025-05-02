@@ -46,6 +46,11 @@ class Project extends Model
         return $this->hasMany(AdminDoc::class, 'project_id', 'id');
     }
 
+    public function activityCategories(): HasMany
+    {
+        return $this->hasMany(ActivityCategory::class, 'project_id', 'id');
+    }
+
     public function activities(): HasMany
     {
         return $this->hasMany(Activity::class, 'project_id', 'id');

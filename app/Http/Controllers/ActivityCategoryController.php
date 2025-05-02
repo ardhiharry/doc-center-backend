@@ -177,6 +177,7 @@ class ActivityCategoryController extends Controller
 
             $activityCategory->update($request->only([
                 'name',
+                'project_id',
             ]));
 
             return Response::handler(

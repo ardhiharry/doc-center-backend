@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ActivityCategoryUpdateRequest extends FormRequest
@@ -26,7 +27,11 @@ class ActivityCategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'sometimes|required|string|max:255',
+            'project_id' => [
+                'sometimes', 'required',
+                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+            ]
         ];
     }
 
@@ -36,14 +41,25 @@ class ActivityCategoryUpdateRequest extends FormRequest
             'name.required' => 'Nama kategori wajib diisi.',
             'name.string' => 'Nama kategori harus berupa teks.',
             'name.max' => 'Panjang nama kategori maksimal 255 karakter.',
+
+            'project_id.required' => 'Proyek wajib dipilih.',
+            'project_id.exists' => 'Proyek tidak ditemukan atau sudah dihapus.',
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge([
-            'name' => strip_tags($this->name),
-        ]);
+        $data = [];
+
+        if ($this->has('name')) {
+            $data['name'] = strip_tags($this->name);
+        }
+
+        if ($this->has('project_id')) {
+            $data['project_id'] = strip_tags($this->project_id);
+        }
+
+        $this->merge($data);
     }
 
     protected function failedValidation(Validator $validator)

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class ActivityCategoryFactory extends Factory
     {
         return [
             'name' => fake()->unique()->words(2, true),
+            'project_id' => Project::factory(),
         ];
     }
 }

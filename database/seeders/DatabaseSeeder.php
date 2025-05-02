@@ -121,7 +121,9 @@ class DatabaseSeeder extends Seeder
 
     private function createActivityDocForActivity(Activity $activity): void
     {
-        $activityCategory = ActivityCategory::factory()->create();
+        $activityCategory = ActivityCategory::factory()->create([
+            'project_id' => $activity->project_id,
+        ]);
 
         $activity->update([
             'activity_category_id' => $activityCategory->id,

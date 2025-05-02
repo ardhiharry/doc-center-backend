@@ -17,6 +17,8 @@ class ActivityCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'project_id' => optional($this->project)->id,
+            'project_name' => optional($this->project)->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
