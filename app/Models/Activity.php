@@ -13,7 +13,7 @@ class Activity extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'activities';
+    protected $table = 'tp_4_activities';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

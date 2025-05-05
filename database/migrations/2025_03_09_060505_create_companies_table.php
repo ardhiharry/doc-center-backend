@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('tm_companies', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->nullable(false);
             $table->text('address')->nullable(false);

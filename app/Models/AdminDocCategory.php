@@ -11,7 +11,7 @@ class AdminDocCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'admin_doc_categories';
+    protected $table = 'tm_admin_doc_categories';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

@@ -13,7 +13,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'users';
+    protected $table = 'tm_users';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

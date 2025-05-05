@@ -11,7 +11,7 @@ class Company extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'companies';
+    protected $table = 'tm_companies';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

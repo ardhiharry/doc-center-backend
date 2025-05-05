@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_categories', function (Blueprint $table) {
+        Schema::create('tp_3_activity_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->nullable(false);
             $table->foreignId('project_id')
                 ->nullable()
-                ->constrained('projects')
+                ->constrained('tp_1_projects')
                 ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

@@ -13,7 +13,7 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'projects';
+    protected $table = 'tp_1_projects';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

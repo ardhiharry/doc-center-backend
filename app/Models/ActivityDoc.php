@@ -11,7 +11,7 @@ class ActivityDoc extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'activity_docs';
+    protected $table = 'tp_5_activity_docs';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

@@ -9,7 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\TeamController;
+use App\Http\Controllers\ProjectTeamController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,13 +47,13 @@ Route::middleware('auth:api')->group(function () {
     Route::patch('/projects/{id}', [ProjectController::class, 'update']);
     Route::delete('/projects/{id}', [ProjectController::class, 'softDelete']);
 
-    // Teams
-    Route::post('/teams', [TeamController::class, 'create']);
-    Route::get('/teams', [TeamController::class, 'getAll']);
-    Route::get('/teams/search', [TeamController::class, 'search']);
-    Route::get('/teams/{id}', [TeamController::class, 'getById']);
-    Route::patch('/teams/{id}', [TeamController::class, 'update']);
-    Route::delete('/teams/{projectId}', [TeamController::class, 'softDelete']);
+    // Project Teams
+    Route::post('/teams', [ProjectTeamController::class, 'create']);
+    Route::get('/teams', [ProjectTeamController::class, 'getAll']);
+    Route::get('/teams/search', [ProjectTeamController::class, 'search']);
+    Route::get('/teams/{id}', [ProjectTeamController::class, 'getById']);
+    Route::patch('/teams/{id}', [ProjectTeamController::class, 'update']);
+    Route::delete('/teams/{projectId}', [ProjectTeamController::class, 'softDelete']);
 
     // Admin Doc Category
     Route::post('/admin-doc-categories', [AdminDocCategoryController::class, 'create']);

@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activities', function (Blueprint $table) {
+        Schema::create('tp_4_activities', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable(false);
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(false);
             $table->foreignId('activity_category_id')
                 ->nullable(false)
-                ->constrained('activity_categories')
+                ->constrained('tp_3_activity_categories')
                 ->onDelete('cascade');
             $table->foreignId('project_id')
                 ->nullable(false)
-                ->constrained('projects')
+                ->constrained('tp_1_projects')
                 ->onDelete('cascade');
             $table->foreignId('author_id')
                 ->nullable(false)
-                ->constrained('users')
+                ->constrained('tm_users')
                 ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

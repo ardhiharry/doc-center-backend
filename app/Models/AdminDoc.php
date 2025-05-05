@@ -11,7 +11,7 @@ class AdminDoc extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'admin_docs';
+    protected $table = 'tp_2_admin_docs';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;

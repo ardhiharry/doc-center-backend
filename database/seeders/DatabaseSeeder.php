@@ -9,7 +9,7 @@ use App\Models\AdminDoc;
 use App\Models\AdminDocCategory;
 use App\Models\Company;
 use App\Models\Project;
-use App\Models\Team;
+use App\Models\ProjectTeam;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->createAdminUsers();
         $users = $this->createRegularUsers(10);
-        $this->createCompaniesWithProjects(5, $users);
+//        $this->createCompaniesWithProjects(5, $users);
     }
 
     private function createAdminUsers(): void
@@ -89,7 +89,7 @@ class DatabaseSeeder extends Seeder
             ]);
 
             foreach ($teamUsers as $user) {
-                Team::create([
+                ProjectTeam::create([
                     'project_id' => $project->id,
                     'user_id' => $user->id,
                 ]);

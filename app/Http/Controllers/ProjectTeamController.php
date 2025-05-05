@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Response;
-use App\Http\Requests\TeamCreateRequest;
-use App\Http\Requests\TeamUpdateRequest;
-use App\Http\Resources\TeamResource;
-use App\Models\Team;
+use App\Http\Requests\ProjectTeamCreateRequest;
+use App\Http\Requests\ProjectTeamUpdateRequest;
+use App\Http\Resources\ProjectTeamResource;
+use App\Models\ProjectTeam;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TeamController extends Controller
+class ProjectTeamController extends Controller
 {
-    public function create(TeamCreateRequest $request): JsonResponse
+    public function create(ProjectTeamCreateRequest $request): JsonResponse
     {
         try {
-            $team = Team::create($request->all());
+            $team = ProjectTeam::create($request->all());
 
             $team->load('project');
             $team->load('user');
@@ -23,7 +23,7 @@ class TeamController extends Controller
             return Response::handler(
                 201,
                 'Berhasil membuat tim',
-                TeamResource::make($team)
+                ProjectTeamResource::make($team)
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -39,7 +39,7 @@ class TeamController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         try {
-            $teams = Team::with(['project', 'user'])
+            $teams = ProjectTeam::with(['project', 'user'])
                 ->withoutTrashed()
                 ->whereHas('user')
                 ->join('users', 'teams.user_id', '=', 'users.id')
@@ -57,7 +57,7 @@ class TeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data tim',
-                TeamResource::collection($teams),
+                ProjectTeamResource::collection($teams),
                 Response::pagination($teams)
             );
         } catch (\Exception $err) {
@@ -74,7 +74,7 @@ class TeamController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $query = Team::with(['project', 'user']);
+            $query = ProjectTeam::with(['project', 'user']);
 
             $relationList = [
                 'project_name' => ['relation' => 'project', 'column' => 'name'],
@@ -125,7 +125,7 @@ class TeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data tim',
-                TeamResource::collection($teams),
+                ProjectTeamResource::collection($teams),
                 Response::pagination($teams)
             );
         } catch (\Exception $err) {
@@ -142,7 +142,7 @@ class TeamController extends Controller
     public function getById($id): JsonResponse
     {
         try {
-            $team = Team::with(['project', 'user'])->find($id);
+            $team = ProjectTeam::with(['project', 'user'])->find($id);
 
             if (!$team) {
                 return Response::handler(
@@ -157,7 +157,7 @@ class TeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data tim',
-                [TeamResource::make($team)]
+                [ProjectTeamResource::make($team)]
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -170,10 +170,10 @@ class TeamController extends Controller
         }
     }
 
-    public function update(TeamUpdateRequest $request, $id): JsonResponse
+    public function update(ProjectTeamUpdateRequest $request, $id): JsonResponse
     {
         try {
-            $team = Team::find($id);
+            $team = ProjectTeam::find($id);
 
             if (!$team) {
                 return Response::handler(
@@ -196,7 +196,7 @@ class TeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengubah data tim',
-                [TeamResource::make($team)]
+                [ProjectTeamResource::make($team)]
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -212,7 +212,7 @@ class TeamController extends Controller
     public function softDelete($projectId): JsonResponse
     {
         try {
-            $teams = Team::withoutTrashed()->where('project_id', $projectId)->get();
+            $teams = ProjectTeam::withoutTrashed()->where('project_id', $projectId)->get();
 
             if ($teams->isEmpty()) {
                 return Response::handler(
@@ -224,7 +224,7 @@ class TeamController extends Controller
                 );
             }
 
-            Team::where('project_id', $projectId)->delete();
+            ProjectTeam::where('project_id', $projectId)->delete();
 
             return Response::handler(
                 200,

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_docs', function (Blueprint $table) {
+        Schema::create('tp_5_activity_docs', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable(false);
             $table->json('files')->nullable();
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->json('tags')->nullable(false);
             $table->foreignId('activity_id')
                 ->nullable(false)
-                ->constrained('activities')
+                ->constrained('tp_4_activities')
                 ->onDelete('cascade');
             $table->timestamp('created_at')->useCurrent();
             $table->softDeletes();

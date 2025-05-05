@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin_doc_categories', function (Blueprint $table) {
+        Schema::create('tm_admin_doc_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->nullable(false);
             $table->timestamps();

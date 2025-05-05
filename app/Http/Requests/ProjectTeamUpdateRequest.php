@@ -2,12 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class TeamCreateRequest extends FormRequest
+class ProjectTeamUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +27,11 @@ class TeamCreateRequest extends FormRequest
     {
         return [
             'project_id' => [
-                'required',
+                'sometimes', 'required',
                 Rule::exists('projects', 'id')->whereNull('deleted_at'),
             ],
             'user_id' => [
-                'required',
+                'sometimes', 'required',
                 Rule::exists('users', 'id')->whereNull('deleted_at'),
             ],
         ];
@@ -49,17 +50,24 @@ class TeamCreateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->merge([
-            'project_id' => strip_tags($this->project_id),
-            'user_id' => strip_tags($this->user_id),
-        ]);
+        $data = [];
+
+        if ($this->has('project_id')) {
+            $data['project_id'] = strip_tags($this->project_id);
+        }
+
+        if ($this->has('user_id')) {
+            $data['user_id'] = strip_tags($this->user_id);
+        }
+
+        $this->merge($data);
     }
 
     protected function failedValidation(Validator $validator)
     {
         throw new ValidationException($validator, Response::handler(
             400,
-            'Gagal membuat tim',
+            'Gagal memperbarui tim',
             [],
             [],
             $validator->errors()

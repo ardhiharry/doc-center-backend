@@ -11,12 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin_docs', function (Blueprint $table) {
+        Schema::create('tp_2_admin_docs', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable(false);
             $table->string('file', 100)->nullable();
-            $table->foreignId('project_id')->nullable(false)->constrained('projects')->onDelete('cascade');
-            $table->foreignId('admin_doc_category_id')->nullable(false)->constrained('admin_doc_categories')->onDelete('cascade');
+            $table->foreignId('project_id')
+                ->nullable(false)
+                ->constrained('tp_1_projects')
+                ->onDelete('cascade');
+            $table->foreignId('admin_doc_category_id')
+                ->nullable(false)
+                ->constrained('tm_admin_doc_categories')
+                ->onDelete('cascade');
             $table->timestamp('created_at')->useCurrent();
             $table->softDeletes();
         });

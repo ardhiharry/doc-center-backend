@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Team extends Model
+class ProjectTeam extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'teams';
+    protected $table = 'tr_teams';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
