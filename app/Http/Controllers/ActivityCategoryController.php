@@ -9,13 +9,24 @@ use App\Http\Resources\ActivityCategoryResource;
 use App\Models\ActivityCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isNull;
 
 class ActivityCategoryController extends Controller
 {
     public function create(ActivityCategoryCreateRequest $request): JsonResponse
     {
         try {
-            $activityCategory = ActivityCategory::where('name', $request->name)->exists();
+            $projectId = $request->project_id;
+
+            $activityCategory = ActivityCategory::where('name', $request->name)
+                ->where(function ($query) use ($projectId) {
+                    if (!isNull($projectId)) {
+                        $query->where('project_id', $projectId);
+                    } else {
+                        $query->whereNull('project_id');
+                    }
+                })
+                ->exists();
 
             if ($activityCategory) {
                 return Response::handler(
@@ -82,8 +93,29 @@ class ActivityCategoryController extends Controller
             $query = ActivityCategory::withoutTrashed();
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['name'])) {
+                if ($key === 'name') {
                     $query->where($key, 'LIKE', "%{$value}%");
+                }
+
+                if ($key === 'project_id') {
+                    $projectIds = is_array($value) ? $value : explode(',', $value);
+                    $projectIds = array_map('trim', $projectIds);
+
+                    $query->where(function ($q) use ($projectIds) {
+                        $hasZero = in_array('0', $projectIds, true) || in_array(0, $projectIds, true) || in_array(null, $projectIds, true);
+
+                        $filteredProjectIds = array_filter($projectIds, fn($id) => $id !== '0' && $id !== 0);
+
+                        $q->where(function ($sub) use ($filteredProjectIds, $hasZero) {
+                            if (!empty($filteredProjectIds)) {
+                                $sub->whereIn('project_id', $filteredProjectIds);
+                            }
+
+                            if ($hasZero) {
+                                $sub->orWhereNull('project_id');
+                            }
+                        });
+                    });
                 }
             }
 

@@ -29,7 +29,7 @@ class ActivityCategoryCreateRequest extends FormRequest
         return [
             'name' => 'required|string|max:100',
             'project_id' => [
-                'required',
+                'nullable',
                 Rule::exists('projects', 'id')->whereNull('deleted_at'),
             ],
         ];
@@ -42,7 +42,6 @@ class ActivityCategoryCreateRequest extends FormRequest
             'name.string' => 'Nama kategori harus berupa teks.',
             'name.max' => 'Panjang nama kategori maksimal 100 karakter.',
 
-            'project_id.required' => 'Proyek wajib dipilih.',
             'project_id.exists' => 'Proyek tidak ditemukan atau sudah dihapus.',
         ];
     }
@@ -51,7 +50,7 @@ class ActivityCategoryCreateRequest extends FormRequest
     {
         $this->merge([
             'name' => strip_tags($this->name),
-            'project_id' => strip_tags($this->project_id),
+            'project_id' => in_array($this->project_id, [null, '', '0', 0], true) ? null : strip_tags($this->project_id),
         ]);
     }
 
