@@ -38,6 +38,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, 'tr_activity_teams', 'user_id', 'activity_id');
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'tr_project_teams', 'user_id', 'project_id');
@@ -48,7 +53,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Project::class, 'project_leader_id', 'id');
     }
 
-    public function activities(): HasMany
+    public function authorActivities(): HasMany
     {
         return $this->hasMany(Activity::class, 'author_id', 'id');
     }
