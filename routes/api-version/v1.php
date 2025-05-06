@@ -48,12 +48,12 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/projects/{id}', [ProjectController::class, 'softDelete']);
 
     // Project Teams
-    Route::post('/teams', [ProjectTeamController::class, 'create']);
-    Route::get('/teams', [ProjectTeamController::class, 'getAll']);
-    Route::get('/teams/search', [ProjectTeamController::class, 'search']);
-    Route::get('/teams/{id}', [ProjectTeamController::class, 'getById']);
-    Route::patch('/teams/{id}', [ProjectTeamController::class, 'update']);
-    Route::delete('/teams/{projectId}', [ProjectTeamController::class, 'softDelete']);
+    Route::post('/project-teams', [ProjectTeamController::class, 'create']);
+    Route::get('/project-teams', [ProjectTeamController::class, 'getAll']);
+    Route::get('/project-teams/search', [ProjectTeamController::class, 'search']);
+    Route::get('/project-teams/{id}', [ProjectTeamController::class, 'getById']);
+    Route::patch('/project-teams/{id}', [ProjectTeamController::class, 'update']);
+    Route::delete('/project-teams/{projectId}', [ProjectTeamController::class, 'softDelete']);
 
     // Admin Doc Category
     Route::post('/admin-doc-categories', [AdminDocCategoryController::class, 'create']);

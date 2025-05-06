@@ -42,9 +42,9 @@ class ProjectTeamController extends Controller
             $teams = ProjectTeam::with(['project', 'user'])
                 ->withoutTrashed()
                 ->whereHas('user')
-                ->join('users', 'teams.user_id', '=', 'users.id')
-                ->orderBy('users.name', 'asc')
-                ->select('teams.*')
+                ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
+                ->orderBy('tm_users.name', 'asc')
+                ->select('tr_project_teams.*')
                 ->paginate($request->query('limit', 10));
 
             if ($teams->isEmpty()) {
@@ -110,9 +110,9 @@ class ProjectTeamController extends Controller
 
             $teams = $query->withoutTrashed()
                 ->whereHas('user')
-                ->join('users', 'teams.user_id', '=', 'users.id')
-                ->orderBy('users.name', 'asc')
-                ->select('teams.*')
+                ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
+                ->orderBy('tm_users.name', 'asc')
+                ->select('tr_project_teams.*')
                 ->paginate($request->query('limit', 10));
 
             if ($teams->isEmpty()) {

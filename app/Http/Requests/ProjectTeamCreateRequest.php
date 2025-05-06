@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,11 +28,11 @@ class ProjectTeamCreateRequest extends FormRequest
         return [
             'project_id' => [
                 'required',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
             'user_id' => [
                 'required',
-                Rule::exists('users', 'id')->whereNull('deleted_at'),
+                Rule::exists('tm_users', 'id')->whereNull('deleted_at'),
             ],
         ];
     }

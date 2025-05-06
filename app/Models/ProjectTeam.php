@@ -11,7 +11,7 @@ class ProjectTeam extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'tr_teams';
+    protected $table = 'tr_project_teams';
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
