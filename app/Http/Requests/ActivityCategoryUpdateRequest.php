@@ -30,7 +30,7 @@ class ActivityCategoryUpdateRequest extends FormRequest
             'name' => 'sometimes|required|string|max:255',
             'project_id' => [
                 'sometimes', 'required',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ]
         ];
     }

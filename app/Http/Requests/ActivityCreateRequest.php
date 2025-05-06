@@ -32,15 +32,15 @@ class ActivityCreateRequest extends FormRequest
             'end_date' => 'required|date|after_or_equal:start_date',
             'activity_category_id' => [
                 'required',
-                Rule::exists('activity_categories', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_3_activity_categories', 'id')->whereNull('deleted_at'),
             ],
             'project_id' => [
                 'required',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
             'author_id' => [
                 'required',
-                Rule::exists('users', 'id')->whereNull('deleted_at'),
+                Rule::exists('tm_users', 'id')->whereNull('deleted_at'),
             ]
         ];
     }

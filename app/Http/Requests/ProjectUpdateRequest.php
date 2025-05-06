@@ -30,7 +30,7 @@ class ProjectUpdateRequest extends FormRequest
             'name' => 'sometimes|required|string|max:100',
             'company_id' => [
                 'sometimes', 'required',
-                Rule::exists('companies', 'id')->whereNull('deleted_at'),
+                Rule::exists('tm_companies', 'id')->whereNull('deleted_at'),
             ],
             'start_date' => 'sometimes|required|date|before_or_equal:end_date',
             'end_date' => 'sometimes|required|date|after_or_equal:start_date',

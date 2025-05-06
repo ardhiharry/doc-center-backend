@@ -31,11 +31,11 @@ class AdminDocRequest extends FormRequest
             'file' => 'sometimes|file|mimes:pdf|max:2048',
             'project_id' => [
                 'required',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
             'admin_doc_category_id' => [
                 'required',
-                Rule::exists('admin_doc_categories', 'id')->whereNull('deleted_at'),
+                Rule::exists('tm_admin_doc_categories', 'id')->whereNull('deleted_at'),
             ],
         ];
     }

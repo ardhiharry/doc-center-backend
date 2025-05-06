@@ -33,11 +33,11 @@ class ActivityUpdateRequest extends FormRequest
             'end_date' => 'sometimes|required|date|after_or_equal:start_date',
             'project_id' => [
                 'sometimes', 'required',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
             'author_id' => [
                 'sometimes', 'required',
-                Rule::exists('users', 'id')->whereNull('deleted_at'),
+                Rule::exists('tm_users', 'id')->whereNull('deleted_at'),
             ]
         ];
     }

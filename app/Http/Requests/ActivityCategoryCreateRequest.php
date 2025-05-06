@@ -30,7 +30,7 @@ class ActivityCategoryCreateRequest extends FormRequest
             'name' => 'required|string|max:100',
             'project_id' => [
                 'nullable',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
         ];
     }

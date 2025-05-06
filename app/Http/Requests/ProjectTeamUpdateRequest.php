@@ -28,11 +28,11 @@ class ProjectTeamUpdateRequest extends FormRequest
         return [
             'project_id' => [
                 'sometimes', 'required',
-                Rule::exists('projects', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
             'user_id' => [
                 'sometimes', 'required',
-                Rule::exists('users', 'id')->whereNull('deleted_at'),
+                Rule::exists('tm_users', 'id')->whereNull('deleted_at'),
             ],
         ];
     }
