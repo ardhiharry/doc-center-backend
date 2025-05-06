@@ -15,15 +15,15 @@ class ProjectTeamController extends Controller
     public function create(ProjectTeamCreateRequest $request): JsonResponse
     {
         try {
-            $team = ProjectTeam::create($request->all());
+            $projectTeam = ProjectTeam::create($request->all());
 
-            $team->load('project');
-            $team->load('user');
+            $projectTeam->load('project');
+            $projectTeam->load('user');
 
             return Response::handler(
                 201,
                 'Berhasil membuat tim',
-                ProjectTeamResource::make($team)
+                ProjectTeamResource::make($projectTeam)
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -39,7 +39,7 @@ class ProjectTeamController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         try {
-            $teams = ProjectTeam::with(['project', 'user'])
+            $projectTeams = ProjectTeam::with(['project', 'user'])
                 ->withoutTrashed()
                 ->whereHas('user')
                 ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
@@ -47,7 +47,7 @@ class ProjectTeamController extends Controller
                 ->select('tr_project_teams.*')
                 ->paginate($request->query('limit', 10));
 
-            if ($teams->isEmpty()) {
+            if ($projectTeams->isEmpty()) {
                 return Response::handler(
                     200,
                     'Berhasil mengambil data tim'
@@ -57,8 +57,8 @@ class ProjectTeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data tim',
-                ProjectTeamResource::collection($teams),
-                Response::pagination($teams)
+                ProjectTeamResource::collection($projectTeams),
+                Response::pagination($projectTeams)
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -103,19 +103,24 @@ class ProjectTeamController extends Controller
                     });
                 }
 
-                if (in_array($key, ['user_id'])) {
-                    $query->where($key, $value);
+                if ($key === 'user_id') {
+                    $userIds = is_array($value) ? $value : explode(',', $value);
+                    $userIds = array_map('trim', $userIds);
+
+                    $query->whereHas('user', function ($q) use ($userIds) {
+                        $q->whereIn('id', $userIds);
+                    });
                 }
             }
 
-            $teams = $query->withoutTrashed()
+            $projectTeams = $query->withoutTrashed()
                 ->whereHas('user')
                 ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
                 ->orderBy('tm_users.name', 'asc')
                 ->select('tr_project_teams.*')
                 ->paginate($request->query('limit', 10));
 
-            if ($teams->isEmpty()) {
+            if ($projectTeams->isEmpty()) {
                 return Response::handler(
                     200,
                     'Berhasil mengambil data tim'
@@ -125,8 +130,8 @@ class ProjectTeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data tim',
-                ProjectTeamResource::collection($teams),
-                Response::pagination($teams)
+                ProjectTeamResource::collection($projectTeams),
+                Response::pagination($projectTeams)
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -142,9 +147,9 @@ class ProjectTeamController extends Controller
     public function getById($id): JsonResponse
     {
         try {
-            $team = ProjectTeam::with(['project', 'user'])->find($id);
+            $projectTeam = ProjectTeam::with(['project', 'user'])->find($id);
 
-            if (!$team) {
+            if (!$projectTeam) {
                 return Response::handler(
                     400,
                     'Gagal mengambil data tim',
@@ -157,7 +162,7 @@ class ProjectTeamController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data tim',
-                [ProjectTeamResource::make($team)]
+                [ProjectTeamResource::make($projectTeam)]
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -173,9 +178,9 @@ class ProjectTeamController extends Controller
     public function update(ProjectTeamUpdateRequest $request, $id): JsonResponse
     {
         try {
-            $team = ProjectTeam::find($id);
+            $projectTeam = ProjectTeam::find($id);
 
-            if (!$team) {
+            if (!$projectTeam) {
                 return Response::handler(
                     400,
                     'Gagal mengubah data tim',
@@ -185,18 +190,18 @@ class ProjectTeamController extends Controller
                 );
             }
 
-            $team->update($request->only([
+            $projectTeam->update($request->only([
                 'project_id',
                 'user_id',
             ]));
 
-            $team->load('project');
-            $team->load('user');
+            $projectTeam->load('project');
+            $projectTeam->load('user');
 
             return Response::handler(
                 200,
                 'Berhasil mengubah data tim',
-                [ProjectTeamResource::make($team)]
+                [ProjectTeamResource::make($projectTeam)]
             );
         } catch (\Exception $err) {
             return Response::handler(
@@ -212,9 +217,9 @@ class ProjectTeamController extends Controller
     public function softDelete($projectId): JsonResponse
     {
         try {
-            $teams = ProjectTeam::withoutTrashed()->where('project_id', $projectId)->get();
+            $projectTeams = ProjectTeam::withoutTrashed()->where('project_id', $projectId)->get();
 
-            if ($teams->isEmpty()) {
+            if ($projectTeams->isEmpty()) {
                 return Response::handler(
                     400,
                     'Gagal menghapus data tim',
