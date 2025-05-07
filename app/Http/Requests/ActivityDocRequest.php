@@ -36,7 +36,7 @@ class ActivityDocRequest extends FormRequest
             'tags.*' => 'string',
             'activity_id' => [
                 'required',
-                Rule::exists('tp_4_sactivities', 'id')->whereNull('deleted_at'),
+                Rule::exists('tp_4_activities', 'id')->whereNull('deleted_at'),
             ],
         ];
     }
