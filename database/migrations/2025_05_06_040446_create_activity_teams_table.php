@@ -22,7 +22,6 @@ return new class extends Migration
                 ->constrained('tm_users')
                 ->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

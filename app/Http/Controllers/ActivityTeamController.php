@@ -206,12 +206,12 @@ class ActivityTeamController extends Controller
         }
     }
 
-    public function softDelete($id): JsonResponse
+    public function delete($activityId): JsonResponse
     {
         try {
-            $activityTeam = ActivityTeam::find($id);
+            $activityTeam = ActivityTeam::where('activity_id', $activityId)->get();
 
-            if (!$activityTeam) {
+            if ($activityTeam->isEmpty()) {
                 return Response::handler(
                     400,
                     'Gagal menghapus data aktivitas tim',
@@ -221,7 +221,7 @@ class ActivityTeamController extends Controller
                 );
             }
 
-            $activityTeam->delete();
+            ActivityTeam::where('activity_id', $activityId)->delete();
 
             return Response::handler(
                 200,

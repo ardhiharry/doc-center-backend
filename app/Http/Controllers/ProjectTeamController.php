@@ -214,10 +214,10 @@ class ProjectTeamController extends Controller
         }
     }
 
-    public function softDelete($projectId): JsonResponse
+    public function delete($projectId): JsonResponse
     {
         try {
-            $projectTeams = ProjectTeam::withoutTrashed()->where('project_id', $projectId)->get();
+            $projectTeams = ProjectTeam::where('project_id', $projectId)->get();
 
             if ($projectTeams->isEmpty()) {
                 return Response::handler(

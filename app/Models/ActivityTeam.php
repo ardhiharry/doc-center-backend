@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActivityTeam extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'tr_activity_teams';
     protected $primaryKey = 'id';
@@ -20,10 +20,6 @@ class ActivityTeam extends Model
     protected $fillable = [
         'activity_id',
         'user_id',
-    ];
-
-    protected $hidden = [
-        'deleted_at',
     ];
 
     public function activity(): BelongsTo

@@ -54,7 +54,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/project-teams/search', [ProjectTeamController::class, 'search']);
     Route::get('/project-teams/{id}', [ProjectTeamController::class, 'getById']);
     Route::patch('/project-teams/{id}', [ProjectTeamController::class, 'update']);
-    Route::delete('/project-teams/{projectId}', [ProjectTeamController::class, 'softDelete']);
+    Route::delete('/project-teams/{projectId}', [ProjectTeamController::class, 'delete']);
 
     // Activity Teams
     Route::post('/activity-teams', [ActivityTeamController::class, 'create']);
@@ -62,7 +62,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/activity-teams/search', [ActivityTeamController::class, 'search']);
     Route::get('/activity-teams/{id}', [ActivityTeamController::class, 'getById']);
     Route::patch('/activity-teams/{id}', [ActivityTeamController::class, 'update']);
-    Route::delete('/activity-teams/{id}', [ActivityTeamController::class, 'softDelete']);
+    Route::delete('/activity-teams/{id}', [ActivityTeamController::class, 'delete']);
 
     // Admin Doc Category
     Route::post('/admin-doc-categories', [AdminDocCategoryController::class, 'create']);
