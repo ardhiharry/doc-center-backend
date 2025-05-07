@@ -40,7 +40,6 @@ class ProjectTeamController extends Controller
     {
         try {
             $projectTeams = ProjectTeam::with(['project', 'user'])
-                ->withoutTrashed()
                 ->whereHas('user')
                 ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
                 ->orderBy('tm_users.name', 'asc')
@@ -113,8 +112,7 @@ class ProjectTeamController extends Controller
                 }
             }
 
-            $projectTeams = $query->withoutTrashed()
-                ->whereHas('user')
+            $projectTeams = $query->whereHas('user')
                 ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
                 ->orderBy('tm_users.name', 'asc')
                 ->select('tr_project_teams.*')

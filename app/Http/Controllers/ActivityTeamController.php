@@ -37,7 +37,6 @@ class ActivityTeamController extends Controller
     {
         try {
             $activityTeams = ActivityTeam::with(['activity', 'user'])
-                ->withoutTrashed()
                 ->whereHas('user')
                 ->join('tm_users', 'tr_activity_teams.user_id', '=', 'tm_users.id')
                 ->orderBy('tm_users.name', 'asc')
@@ -109,8 +108,7 @@ class ActivityTeamController extends Controller
                 }
             }
 
-            $activityTeams = $query->withoutTrashed()
-                ->whereHas('user')
+            $activityTeams = $query->whereHas('user')
                 ->join('tm_users', 'tr_activity_teams.user_id', '=', 'tm_users.id')
                 ->orderBy('tm_users.name', 'asc')
                 ->paginate($request->query('limit', 10));
