@@ -49,7 +49,7 @@ class CompanyController extends Controller
             ]);
 
             return Response::handler(
-                200,
+                201,
                 'Perusahaan berhasil dibuat',
                 CompanyResource::make($company)
             );

@@ -65,7 +65,7 @@ class ActivityDocController extends Controller
             ])->refresh()->load('activity.project.company');
 
             return Response::handler(
-                200,
+                201,
                 'Berhasil membuat dokumen aktivitas',
                 ActivityDocResource::make($activityDoc)
             );
