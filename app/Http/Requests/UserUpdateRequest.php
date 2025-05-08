@@ -26,7 +26,7 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'              => 'sometimes|required|string|max:100|unique:users,username,' . $this->route('id'),
+            'username'              => 'sometimes|required|string|max:100|unique:tm_users,username,' . $this->route('id'),
             'name'                  => 'sometimes|required|string|max:255',
             'is_process'            => [
                 'sometimes', 'required',
