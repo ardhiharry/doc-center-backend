@@ -49,7 +49,7 @@ class AdminDocController extends Controller
             $adminDoc->load('project.company', 'adminDocCategory');
 
             return Response::handler(
-                200,
+                201,
                 'Berhasil membuat dokumen administrasi',
                 AdminDocResource::make($adminDoc)
             );

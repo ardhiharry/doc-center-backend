@@ -31,7 +31,7 @@ class ActivityController extends Controller
                 ->refresh()->load('activityCategory', 'project.company');
 
             return Response::handler(
-                200,
+                201,
                 'Berhasil membuat aktivitas',
                 ActivityResource::make($activity)
             );
