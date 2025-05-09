@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')
                 ->nullable(false)
-                ->constrained('tp_1_projects')
-                ->onDelete('cascade');
+                ->constrained('tp_1_projects');
             $table->foreignId('user_id')
                 ->nullable(false)
-                ->constrained('tm_users')
-                ->onDelete('cascade');
+                ->constrained('tm_users');
             $table->timestamps();
         });
     }

@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('activity_id')
                 ->nullable(false)
-                ->constrained('tp_4_activities')
-                ->onDelete('cascade');
+                ->constrained('tp_4_activities');
             $table->foreignId('user_id')
                 ->nullable(false)
-                ->constrained('tm_users')
-                ->onDelete('cascade');
+                ->constrained('tm_users');
             $table->timestamps();
         });
     }
