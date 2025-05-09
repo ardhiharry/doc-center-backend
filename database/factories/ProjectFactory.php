@@ -35,6 +35,7 @@ class ProjectFactory extends Factory
             'project_leader_id' => User::factory(),
             'start_date' => $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
             'end_date' => Carbon::parse($startDate)->addDays(rand(0, 10))->format('Y-m-d'),
+            'maintenance_date' => Carbon::parse($startDate)->addYears(rand(1, 5))->format('Y-m-d'),
         ];
     }
 }
