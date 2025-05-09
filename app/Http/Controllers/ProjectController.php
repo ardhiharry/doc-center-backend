@@ -29,8 +29,6 @@ class ProjectController extends Controller
 
             $project = Project::create($request->all());
 
-            $project->refresh()->load('company');
-
             return Response::handler(
                 201,
                 'Berhasil membuat proyek',

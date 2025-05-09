@@ -33,7 +33,8 @@ class Project extends Model
         'company_id',
         'project_leader_id',
         'start_date',
-        'end_date'
+        'end_date',
+        'maintenance_date',
     ];
 
     protected $casts = [

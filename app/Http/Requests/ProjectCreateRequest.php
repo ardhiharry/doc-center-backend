@@ -43,6 +43,7 @@ class ProjectCreateRequest extends FormRequest
             ],
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'maintenance_date' => 'required|date',
         ];
     }
 
@@ -85,6 +86,9 @@ class ProjectCreateRequest extends FormRequest
             'end_date.required' => 'Tanggal selesai wajib diisi.',
             'end_date.date' => 'Tanggal selesai harus berupa tanggal yang valid.',
             'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.',
+
+            'maintenance_date.required' => 'Tanggal pemeliharaan wajib diisi.',
+            'maintenance_date.date' => 'Tanggal pemeliharaan harus berupa tanggal yang valid.',
         ];
     }
 
@@ -101,6 +105,7 @@ class ProjectCreateRequest extends FormRequest
             'project_leader_id' => strip_tags($this->project_leader_id),
             'start_date' => strip_tags($this->start_date),
             'end_date' => strip_tags($this->end_date),
+            'maintenance_date' => strip_tags($this->maintenance_date),
         ]);
     }
 

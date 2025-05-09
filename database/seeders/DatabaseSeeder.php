@@ -90,6 +90,7 @@ class DatabaseSeeder extends Seeder
 
             $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d');
             $endDate = Carbon::parse($startDate)->addDays(rand(1, 10))->format('Y-m-d');
+            $maintenanceDate = Carbon::parse($startDate)->addYears(rand(1, 5))->format('Y-m-d');
 
             $project = Project::create([
                 'name' => fake()->unique()->words(2, true),
@@ -105,6 +106,7 @@ class DatabaseSeeder extends Seeder
                 'project_leader_id' => $projectLeader->id,
                 'start_date' => $startDate,
                 'end_date' => $endDate,
+                'maintenance_date' => $maintenanceDate,
             ]);
 
             foreach ($teamUsers as $user) {

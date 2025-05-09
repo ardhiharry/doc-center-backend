@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('project_leader_id')->nullable(false)->constrained('tm_users')->onDelete('cascade');
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(false);
+            $table->date('maintenance_date')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
         });
