@@ -25,10 +25,20 @@ class Project extends Model
 
     protected $fillable = [
         'name',
+        'code',
+        'client',
+        'ppk',
+        'support_teams',
+        'value',
         'company_id',
         'project_leader_id',
         'start_date',
         'end_date'
+    ];
+
+    protected $casts = [
+        'support_teams' => 'array',
+        'value' => 'integer'
     ];
 
     protected static function boot()
