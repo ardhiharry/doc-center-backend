@@ -221,12 +221,16 @@ class ProjectController extends Controller
 
             $project->update($request->only([
                 'name',
+                'code',
+                'client',
+                'ppk',
+                'support_teams',
+                'value',
                 'company_id',
+                'project_leader_id',
                 'start_date',
                 'end_date'
             ]));
-
-            $project->load('company');
 
             return Response::handler(
                 200,

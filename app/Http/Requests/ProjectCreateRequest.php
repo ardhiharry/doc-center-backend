@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -28,6 +27,12 @@ class ProjectCreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100',
+            'code' => 'required|string|max:10',
+            'client' => 'required|string|max:100',
+            'ppk' => 'required|string|max:100',
+            'support_teams' => 'required|array',
+            'support_teams.*' => 'string',
+            'value' => 'required|numeric',
             'company_id' => [
                 'required',
                 Rule::exists('tm_companies', 'id')->whereNull('deleted_at'),
@@ -47,6 +52,25 @@ class ProjectCreateRequest extends FormRequest
             'name.required' => 'Nama wajib diisi.',
             'name.string' => 'Nama harus berupa teks.',
             'name.max' => 'Nama maksimal 100 karakter.',
+
+            'code.required' => 'Kode wajib diisi.',
+            'code.string' => 'Kode harus berupa teks.',
+            'code.max' => 'Kode maksimal 10 karakter.',
+
+            'client.required' => 'Klien wajib diisi.',
+            'client.string' => 'Klien harus berupa teks.',
+            'client.max' => 'Klien maksimal 100 karakter.',
+
+            'ppk.required' => 'PPK wajib diisi.',
+            'ppk.string' => 'PPK harus berupa teks.',
+            'ppk.max' => 'PPK maksimal 100 karakter.',
+
+            'support_teams.required' => 'Tim support wajib diisi.',
+            'support_teams.array' => 'Tim support harus berupa array.',
+            'support_teams.*.string' => 'Tim support harus berupa teks.',
+
+            'value.required' => 'Nilai wajib diisi.',
+            'value.numeric' => 'Nilai harus berupa angka.',
 
             'company_id.required' => 'Perusahaan wajib dipilih.',
             'company_id.exists' => 'Perusahaan tidak ditemukan atau sudah dihapus.',
@@ -68,6 +92,11 @@ class ProjectCreateRequest extends FormRequest
     {
         $this->merge([
             'name' => strip_tags($this->name),
+            'code' => strip_tags($this->code),
+            'client' => strip_tags($this->client),
+            'ppk' => strip_tags($this->ppk),
+            'support_teams' => is_string($this->support_teams) ? json_decode($this->support_teams, true) : $this->support_teams,
+            'value' => strip_tags($this->value),
             'company_id' => strip_tags($this->company_id),
             'project_leader_id' => strip_tags($this->project_leader_id),
             'start_date' => strip_tags($this->start_date),

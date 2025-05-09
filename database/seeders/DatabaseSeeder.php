@@ -76,12 +76,31 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < rand(2, 3); $i++) {
             $teamUsers = $users->random(rand(2, 4));
             $projectLeader = $teamUsers->random();
+            $counter = 1;
+            $amounts = [
+                50000000,
+                100000000,
+                250000000,
+                500000000,
+                1000000000,
+                2000000000,
+                5000000000,
+                10000000000,
+            ];
 
             $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d');
             $endDate = Carbon::parse($startDate)->addDays(rand(1, 10))->format('Y-m-d');
 
             $project = Project::create([
                 'name' => fake()->unique()->words(2, true),
+                'code' => 'A' . $counter++,
+                'client' => fake()->name(),
+                'ppk' => fake()->name(),
+                'support_teams' => [
+                    fake()->name(),
+                    fake()->name(),
+                ],
+                'value' => fake()->randomElement($amounts),
                 'company_id' => $company->id,
                 'project_leader_id' => $projectLeader->id,
                 'start_date' => $startDate,
