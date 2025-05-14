@@ -82,32 +82,32 @@ class ProjectController extends Controller
         try {
             $query = Project::with('company');
 
-            foreach ($request->all() as $key => $value) {
-                if ($key === 'name') {
-                    $query->where($key, 'LIKE', "%{$value}%");
-                }
+            $filters = $request->only([
+                'name', 'id', 'company_id', 'project_leader_id'
+            ]);
 
-                if ($key === 'id') {
-                    $ids = is_array($value) ? $value : explode(',', $value);
-                    $ids = array_map('trim', $ids);
+            foreach ($filters as $key => $value) {
+                switch ($key) {
+                    case 'name':
+                        $query->where('name', 'LIKE', "%{$value}%");
+                        break;
 
-                    $query->whereIn('id', $ids);
-                }
+                    case 'id':
+                        $ids = is_array($value) ? $value : explode(',', $value);
+                        $query->whereIn('id', array_map('trim', $ids));
+                        break;
 
-                if ($key === 'company_id') {
-                    $companyIds = is_array($value) ? $value : explode(',', $value);
-                    $companyIds = array_map('trim', $companyIds);
+                    case 'company_id':
+                        $companyIds = is_array($value) ? $value : explode(',', $value);
+                        $query->whereHas('company', function ($q) use ($companyIds) {
+                            $q->whereIn('id', array_map('trim', $companyIds));
+                        });
+                        break;
 
-                    $query->whereHas('company', function ($q) use ($companyIds) {
-                        $q->whereIn('id', $companyIds);
-                    });
-                }
-
-                if ($key === 'project_leader_id') {
-                    $projectLeaderIds = is_array($value) ? $value : explode(',', $value);
-                    $projectLeaderIds = array_map('trim', $projectLeaderIds);
-
-                    $query->whereIn('project_leader_id', $projectLeaderIds);
+                    case 'project_leader_id':
+                        $leaderIds = is_array($value) ? $value : explode(',', $value);
+                        $query->whereIn('project_leader_id', array_map('trim', $leaderIds));
+                        break;
                 }
             }
 
@@ -115,12 +115,16 @@ class ProjectController extends Controller
             $endDate = $request->query('end_date');
 
             if ($startDate && $endDate) {
-              $query->whereDate('start_date', '>=', $startDate)
-                ->whereDate('end_date', '<=', $endDate);
-            } else if ($startDate) {
+                $query->whereDate('start_date', '>=', $startDate)
+                    ->whereDate('end_date', '<=', $endDate);
+            } elseif ($startDate) {
                 $query->whereDate('start_date', '>=', $startDate);
-            } else if ($endDate) {
+            } elseif ($endDate) {
                 $query->whereDate('end_date', '<=', $endDate);
+            }
+
+            if ($request->filled('year')) {
+                $query->whereYear('start_date', $request->query('year'));
             }
 
             if ($startDate || $endDate) {
@@ -133,10 +137,7 @@ class ProjectController extends Controller
                 ->paginate($request->query('limit', 10));
 
             if ($projects->isEmpty()) {
-                return Response::handler(
-                    200,
-                    'Berhasil mengambil data proyek'
-                );
+                return Response::handler(200, 'Berhasil mengambil data proyek');
             }
 
             return Response::handler(
@@ -227,7 +228,8 @@ class ProjectController extends Controller
                 'company_id',
                 'project_leader_id',
                 'start_date',
-                'end_date'
+                'end_date',
+                'maintenance_date',
             ]));
 
             return Response::handler(
