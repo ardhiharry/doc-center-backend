@@ -25,6 +25,7 @@ class ActivityResource extends JsonResource
             'project_name' => optional($this->project)->name,
             'author_id' => optional($this->author)->id,
             'author_name' => optional($this->author)->name,
+            'activity_doc' => !is_null($this->activityDoc) ? true : false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
