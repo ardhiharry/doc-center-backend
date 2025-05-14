@@ -187,7 +187,7 @@ class UserController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengubah data pengguna',
-                UserResource::make($user)
+                UserResource::make($user->refresh())
             );
         } catch (\Exception $err) {
             return Response::handler(
