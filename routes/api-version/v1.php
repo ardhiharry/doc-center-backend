@@ -84,7 +84,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/activity-categories', [ActivityCategoryController::class, 'getAll']);
     Route::get('/activity-categories/search', [ActivityCategoryController::class, 'search']);
     Route::get('/activity-categories/{id}', [ActivityCategoryController::class, 'getById']);
-    Route::patch('/activity-categories/{id}', [ActivityCategoryController::class, 'update']);
+    Route::post('/activity-categories/{id}', [ActivityCategoryController::class, 'update']);
     Route::delete('/activity-categories/{id}', [ActivityCategoryController::class, 'softDelete']);
 
     // Activity

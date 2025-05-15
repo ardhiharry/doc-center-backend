@@ -20,7 +20,14 @@ class ActivityCategory extends Model
 
     protected $fillable = [
         'name',
+        'value',
+        'note',
+        'images',
         'project_id'
+    ];
+
+    protected $casts = [
+        'images' => 'array'
     ];
 
     protected $hidden = [
