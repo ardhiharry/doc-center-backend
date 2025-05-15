@@ -7,6 +7,7 @@ use App\Http\Requests\ActivityCategoryCreateRequest;
 use App\Http\Requests\ActivityCategoryUpdateRequest;
 use App\Http\Resources\ActivityCategoryResource;
 use App\Models\ActivityCategory;
+use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -271,9 +272,31 @@ class ActivityCategoryController extends Controller
                 $currentImages[] = $path;
             }
 
-            $data['images'] = array_values($currentImages);
+            $originalImages = $activityCategory->images;
+            $updatedImages = array_values($currentImages);
+
+            if ($originalImages !== $updatedImages) {
+                if (empty($updatedImages) && $originalImages === null) {
+                    $data['images'] = null;
+                } else {
+                    $data['images'] = $updatedImages;
+                }
+            }
 
             $activityCategory->update($data);
+
+            if ($request->has('value')) {
+                $projectId = $activityCategory->project_id;
+                $project = Project::with('activityCategories')->find($projectId);
+
+                if ($project) {
+                    $totalValue = $project->activityCategories()->sum('value');
+                    $countValue = $project->activityCategories()->count();
+                    $progress = $countValue > 0 ? $totalValue / $countValue : 0;
+
+                    $project->update(['progress' => $progress]);
+                }
+            }
 
             return Response::handler(
                 200,

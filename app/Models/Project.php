@@ -30,6 +30,8 @@ class Project extends Model
         'ppk',
         'support_teams',
         'value',
+        'status',
+        'progress',
         'company_id',
         'project_leader_id',
         'start_date',
@@ -38,8 +40,11 @@ class Project extends Model
     ];
 
     protected $casts = [
+        'value' => 'integer',
+        'status' => 'string',
+        'progress' => 'integer',
         'support_teams' => 'array',
-        'value' => 'integer'
+        'value' => 'float',
     ];
 
     protected static function boot()

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('ppk', 100)->nullable(false);
             $table->json('support_teams')->nullable(false);
             $table->bigInteger('value')->nullable(false);
+            $table->enum('status', ['WAITING', 'ON PROGRESS', 'CLOSED'])->default('WAITING');
+            $table->float('progress')->default(0);
             $table->foreignId('company_id')->nullable(false)->constrained('tm_companies')->onDelete('cascade');
             $table->foreignId('project_leader_id')->nullable(false)->constrained('tm_users')->onDelete('cascade');
             $table->date('start_date')->nullable(false);

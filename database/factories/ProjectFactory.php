@@ -31,6 +31,8 @@ class ProjectFactory extends Factory
                 fake()->name(),
             ],
             'value' => fake()->numberBetween(50_000_000, 10_000_000_000),
+            'status' => fake()->randomElement(['WAITING', 'ON PROGRESS', 'CLOSED']),
+            'progress' => fake()->numberBetween(0, 100),
             'company_id' => Company::factory(),
             'project_leader_id' => User::factory(),
             'start_date' => $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),

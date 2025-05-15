@@ -27,7 +27,7 @@ class ProjectController extends Controller
                 );
             }
 
-            $project = Project::create($request->all());
+            $project = Project::create($request->all())->refresh();
 
             return Response::handler(
                 201,
@@ -83,7 +83,7 @@ class ProjectController extends Controller
             $query = Project::with('company');
 
             $filters = $request->only([
-                'name', 'id', 'company_id', 'project_leader_id'
+                'name', 'id', 'status', 'company_id', 'project_leader_id'
             ]);
 
             foreach ($filters as $key => $value) {
@@ -95,6 +95,10 @@ class ProjectController extends Controller
                     case 'id':
                         $ids = is_array($value) ? $value : explode(',', $value);
                         $query->whereIn('id', array_map('trim', $ids));
+                        break;
+
+                    case 'status':
+                        $query->where('status', $value);
                         break;
 
                     case 'company_id':
@@ -225,6 +229,8 @@ class ProjectController extends Controller
                 'ppk',
                 'support_teams',
                 'value',
+                'status',
+                'progress',
                 'company_id',
                 'project_leader_id',
                 'start_date',

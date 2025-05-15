@@ -102,6 +102,8 @@ class DatabaseSeeder extends Seeder
                     fake()->name(),
                 ],
                 'value' => fake()->randomElement($amounts),
+                'status' => fake()->randomElement(['WAITING', 'ON PROGRESS', 'CLOSED']),
+                'progress' => fake()->numberBetween(0, 100),
                 'company_id' => $company->id,
                 'project_leader_id' => $projectLeader->id,
                 'start_date' => $startDate,
