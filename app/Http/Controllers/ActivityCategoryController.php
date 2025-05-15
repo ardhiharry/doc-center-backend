@@ -7,8 +7,12 @@ use App\Http\Requests\ActivityCategoryCreateRequest;
 use App\Http\Requests\ActivityCategoryUpdateRequest;
 use App\Http\Resources\ActivityCategoryResource;
 use App\Models\ActivityCategory;
+use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use function PHPUnit\Framework\isNull;
 
 class ActivityCategoryController extends Controller
@@ -207,10 +211,92 @@ class ActivityCategoryController extends Controller
                 }
             }
 
-            $activityCategory->update($request->only([
+            $data = $request->only([
                 'name',
+                'value',
+                'note',
                 'project_id',
-            ]));
+            ]);
+
+            $currentImages = $activityCategory->images ?? [];
+
+            /**
+             * REMOVE IMAGES
+             * query param: remove_images[]
+             */
+            $removeImages = $request->input('remove_images') ?? [];
+
+            foreach ($removeImages as $removePath) {
+                $key = array_search($removePath, $currentImages);
+                if ($key !== false) {
+                    Storage::disk('public')->delete($removePath);
+                    unset($currentImages[$key]);
+                }
+            }
+
+            /**
+             * REPLACE IMAGES
+             * query param: replace_images[index], images[index]
+             */
+            $replaceTargets = $request->input('replace_images') ?? [];
+            $incomingImages = $request->file('images') ?? [];
+
+            foreach ($replaceTargets as $index => $targetPath) {
+                $existingIndex = array_search($targetPath, $currentImages);
+
+                if ($existingIndex !== false && isset($incomingImages[$index])) {
+                    Storage::disk('public')->delete($targetPath);
+
+                    $newFile = $incomingImages[$index];
+                    $date = now()->format('Ymd');
+                    $uuid = Str::uuid()->toString();
+                    $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . "." . $newFile->extension();
+                    $newPath = $newFile->storeAs('activity_categories', $fileName, 'public');
+
+                    $currentImages[$existingIndex] = $newPath;
+
+                    unset($incomingImages[$index]);
+                }
+            }
+
+            /**
+             * ADD NEW IMAGES
+             * query param: images[]
+             */
+            foreach ($incomingImages as $image) {
+                $date = now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . "." . $image->extension();
+                $path = $image->storeAs('activity_categories', $fileName, 'public');
+
+                $currentImages[] = $path;
+            }
+
+            $originalImages = $activityCategory->images;
+            $updatedImages = array_values($currentImages);
+
+            if ($originalImages !== $updatedImages) {
+                if (empty($updatedImages) && $originalImages === null) {
+                    $data['images'] = null;
+                } else {
+                    $data['images'] = $updatedImages;
+                }
+            }
+
+            $activityCategory->update($data);
+
+            if ($request->has('value')) {
+                $projectId = $activityCategory->project_id;
+                $project = Project::with('activityCategories')->find($projectId);
+
+                if ($project) {
+                    $totalValue = $project->activityCategories()->sum('value');
+                    $countValue = $project->activityCategories()->count();
+                    $progress = $countValue > 0 ? $totalValue / $countValue : 0;
+
+                    $project->update(['progress' => $progress]);
+                }
+            }
 
             return Response::handler(
                 200,

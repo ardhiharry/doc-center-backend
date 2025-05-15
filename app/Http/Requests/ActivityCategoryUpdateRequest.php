@@ -28,6 +28,14 @@ class ActivityCategoryUpdateRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
+            'value' => 'sometimes|required|numeric',
+            'note' => 'sometimes|required|string',
+            'images' => 'sometimes|array',
+            'images.*' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'replace_images' => 'sometimes|array',
+            'replace_images.*' => 'required|string',
+            'remove_images' => 'sometimes|array',
+            'remove_images.*' => 'required|string',
             'project_id' => [
                 'sometimes', 'required',
                 Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
@@ -42,6 +50,25 @@ class ActivityCategoryUpdateRequest extends FormRequest
             'name.string' => 'Nama kategori harus berupa teks.',
             'name.max' => 'Panjang nama kategori maksimal 255 karakter.',
 
+            'value.required' => 'Nilai wajib diisi.',
+            'value.numeric' => 'Nilai harus berupa angka.',
+
+            'note.required' => 'Catatan wajib diisi.',
+            'note.string' => 'Catatan harus berupa teks.',
+
+            'images.array' => 'Gambar harus berupa array.',
+            'images.*.file' => 'Setiap item harus berupa file.',
+            'images.*.mimes' => 'Setiap file harus berupa gambar.',
+            'images.*.max' => 'Ukuran file maksimal 2MB.',
+
+            'replace_images.array' => 'Gambar harus berupa array.',
+            'replace_images.*.required' => 'Setiap item harus diisi.',
+            'replace_images.*.string' => 'Setiap item harus berupa string.',
+
+            'remove_images.array' => 'Gambar harus berupa array.',
+            'remove_images.*.required' => 'Setiap item harus diisi.',
+            'remove_images.*.string' => 'Setiap item harus berupa string.',
+
             'project_id.required' => 'Proyek wajib dipilih.',
             'project_id.exists' => 'Proyek tidak ditemukan atau sudah dihapus.',
         ];
@@ -53,6 +80,14 @@ class ActivityCategoryUpdateRequest extends FormRequest
 
         if ($this->has('name')) {
             $data['name'] = strip_tags($this->name);
+        }
+
+        if ($this->has('value')) {
+            $data['value'] = strip_tags($this->value);
+        }
+
+        if ($this->has('note')) {
+            $data['note'] = strip_tags($this->note);
         }
 
         if ($this->has('project_id')) {

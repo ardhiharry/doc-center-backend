@@ -22,6 +22,8 @@ class ProjectResource extends JsonResource
             'ppk' => $this->ppk,
             'support_teams' => $this->support_teams,
             'value' => $this->value,
+            'status' => $this->status,
+            'progress' => $this->progress,
             'company_id' => optional($this->company)->id,
             'company_name' => optional($this->company)->name,
             'company_address' => optional($this->company)->address,

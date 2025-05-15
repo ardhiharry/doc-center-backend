@@ -34,7 +34,32 @@ class ProjectUpdateRequest extends FormRequest
             'ppk' => 'sometimes|required|string|max:100',
             'support_teams' => 'sometimes|required|array',
             'support_teams.*' => 'string',
-            'value' => 'sometimes|required|numeric',
+            'value' => [
+                'sometimes', 'required',
+                function ($attribute, $value, $fail) {
+                    if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+                        $fail('Nilai harus berupa angka.');
+                    }
+
+                    if ($value <= 0) {
+                        $fail('Nilai tidak boleh negatif atau nol.');
+                    }
+                }
+            ],
+            'status' => 'sometimes|required|in:WAITING,ON PROGRESS,CLOSED',
+            'progress' => [
+                'sometimes', 'required',
+                function ($attribute, $value, $fail) {
+                    if (!is_int($value)) {
+                        $fail('Progress harus berupa angka.');
+                    }
+
+                    if ($value < 0 || $value > 100) {
+                        $fail('Progress harus berada di rentang 0-100.');
+                    }
+                },
+                'between:0,100'
+            ],
             'company_id' => [
                 'sometimes', 'required',
                 Rule::exists('tm_companies', 'id')->whereNull('deleted_at'),
@@ -73,7 +98,12 @@ class ProjectUpdateRequest extends FormRequest
             'support_teams.*.string' => 'Tim dukungan harus berupa teks.',
 
             'value.required' => 'Nilai wajib diisi.',
-            'value.numeric' => 'Nilai harus berupa angka.',
+
+            'status.required' => 'Status wajib diisi.',
+            'status.in' => 'Status tidak valid. Status yang valid: WAITING, ON PROGRESS, CLOSED.',
+
+            'progress.required' => 'Progres wajib diisi.',
+            'progress.between' => 'Progres harus antara 0 dan 100.',
 
             'company_id.required' => 'Perusahaan wajib dipilih.',
             'company_id.exists' => 'Perusahaan tidak ditemukan.',
@@ -122,6 +152,10 @@ class ProjectUpdateRequest extends FormRequest
 
         if ($this->has('value')) {
             $data['value'] = strip_tags($this->value);
+        }
+
+        if ($this->has('status')) {
+            $data['status'] = strip_tags($this->status);
         }
 
         if ($this->has('company_id')) {

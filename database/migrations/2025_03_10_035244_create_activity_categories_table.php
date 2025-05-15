@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('tp_3_activity_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->nullable(false);
+            $table->integer('value')->nullable();
+            $table->text('note')->nullable();
+            $table->json('images')->nullable();
             $table->foreignId('project_id')
                 ->nullable()
                 ->constrained('tp_1_projects')
