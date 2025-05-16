@@ -21,13 +21,17 @@ class ActivityDocResource extends JsonResource
             'files' => is_array($this->files)
                 ? array_map(function ($file) {
                     $path = $file;
-                    $size = Storage::exists($path) ? Storage::size($path) : 0;
-                    $sizeKB = round($size / 1000, 2);
-                    $sizeMB = round($size / 1000000, 2);
+                    $sizeBytes = Storage::disk('public')->exists($path) ? Storage::disk('public')->size($path) : 0;
+
+                    if ($sizeBytes >= 1000000) {
+                        $size = round($sizeBytes / 1_000_000, 2) . ' MB';
+                    } else {
+                        $size = round($sizeBytes / 1_000, 2) . ' KB';
+                    }
 
                     return [
                         'url' => '/storage/' . $file,
-                        'size' => $size < 1000000 ? $sizeKB . ' KB' : $sizeMB . ' MB',
+                        'size' => $size,
                     ];
                 }, $this->files)
                 : [],
