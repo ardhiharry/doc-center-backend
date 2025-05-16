@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class ActivityDocResource extends JsonResource
 {
@@ -18,7 +19,17 @@ class ActivityDocResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'files' => is_array($this->files)
-                ? array_map(fn($file) => '/storage/' . $file, $this->files)
+                ? array_map(function ($file) {
+                    $path = $file;
+                    $size = Storage::exists($path) ? Storage::size($path) : 0;
+                    $sizeKB = round($size / 1000, 2);
+                    $sizeMB = round($size / 1000000, 2);
+
+                    return [
+                        'url' => '/storage/' . $file,
+                        'size' => $size < 1000000 ? $sizeKB . ' KB' : $sizeMB . ' MB',
+                    ];
+                }, $this->files)
                 : [],
             'description' => $this->description,
             'tags' => $this->tags,

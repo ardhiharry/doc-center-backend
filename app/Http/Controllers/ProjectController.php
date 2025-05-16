@@ -48,7 +48,7 @@ class ProjectController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         try {
-            $projects = Project::with('company')
+            $projects = Project::with(['company', 'projectLeader'])
                 ->withoutTrashed()
                 ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
@@ -80,7 +80,7 @@ class ProjectController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $query = Project::with('company');
+            $query = Project::with(['company', 'projectLeader']);
 
             $filters = $request->only([
                 'name', 'id', 'status', 'company_id', 'project_leader_id'
@@ -164,7 +164,7 @@ class ProjectController extends Controller
     public function getById($id): JsonResponse
     {
         try {
-            $project = Project::with('company')->find($id);
+            $project = Project::with(['company', 'projectLeader'])->find($id);
 
             if (!$project) {
                 return Response::handler(
@@ -195,7 +195,7 @@ class ProjectController extends Controller
     public function update(ProjectUpdateRequest $request, $id): JsonResponse
     {
         try {
-            $project = Project::find($id);
+            $project = Project::with('company', 'projectLeader')->find($id);
 
             if (!$project) {
                 return Response::handler(
