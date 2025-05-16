@@ -208,7 +208,7 @@ class ActivityDocController extends Controller
     public function getById($id): JsonResponse
     {
         try {
-            $activityDoc = ActivityDoc::with(['activityDocCategory', 'activity.project.company'])->find($id);
+            $activityDoc = ActivityDoc::with(['activity.project.company'])->find($id);
 
             if (!$activityDoc) {
                 return Response::handler(
