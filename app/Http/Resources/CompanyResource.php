@@ -19,8 +19,8 @@ class CompanyResource extends JsonResource
             'name' => $this->name,
             'address' => $this->address,
             'director_name' => $this->director_name,
-            'director_phone' => $this->director_phone,
             'director_signature' => $this->director_signature ? '/storage/'.$this->director_signature : '',
+            'established_date' => $this->established_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

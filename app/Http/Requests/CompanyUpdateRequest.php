@@ -29,8 +29,8 @@ class CompanyUpdateRequest extends FormRequest
             'name' => 'sometimes|required|string|max:100',
             'address' => 'sometimes|required|string',
             'director_name' => 'sometimes|required|string|max:100',
-            'director_phone' => 'sometimes|required|string|max:20',
             'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+            'established_date' => 'sometimes|required|date',
         ];
     }
 
@@ -48,13 +48,12 @@ class CompanyUpdateRequest extends FormRequest
             'director_name.string' => 'Nama direktur harus berupa teks.',
             'director_name.max' => 'Nama direktur maksimal 100 karakter.',
 
-            'director_phone.required' => 'Nomor telepon direktur wajib diisi.',
-            'director_phone.string' => 'Nomor telepon direktur harus berupa teks.',
-            'director_phone.max' => 'Nomor telepon direktur maksimal 20 karakter.',
-
             'director_signature.image' => 'Tanda tangan harus berupa gambar.',
             'director_signature.mimes' => 'Tanda tangan harus berformat jpeg, png, atau jpg.',
             'director_signature.max' => 'Ukuran tanda tangan maksimal 2MB.',
+
+            'established_date.required' => 'Tanggal berdiri wajib diisi.',
+            'established_date.date' => 'Tanggal berdiri harus berupa tanggal.',
         ];
     }
 
@@ -74,8 +73,8 @@ class CompanyUpdateRequest extends FormRequest
             $data['director_name'] = strip_tags($this->director_name);
         }
 
-        if ($this->has('director_phone')) {
-            $data['director_phone'] = strip_tags($this->director_phone);
+        if ($this->has('established_date')) {
+            $data['established_date'] = strip_tags($this->established_date);
         }
 
         $this->merge($data);

@@ -25,8 +25,8 @@ class Company extends Model
         'name',
         'address',
         'director_name',
-        'director_phone',
-        'director_signature'
+        'director_signature',
+        'established_date'
     ];
 
     protected static function boot()
