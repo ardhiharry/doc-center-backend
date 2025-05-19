@@ -26,6 +26,8 @@ class Project extends Model
     protected $fillable = [
         'name',
         'code',
+        'contract_number',
+        'contract_date',
         'client',
         'ppk',
         'support_teams',
@@ -40,7 +42,6 @@ class Project extends Model
     ];
 
     protected $casts = [
-        'value' => 'integer',
         'status' => 'string',
         'progress' => 'integer',
         'support_teams' => 'array',

@@ -30,6 +30,8 @@ class ProjectUpdateRequest extends FormRequest
         return [
             'name' => 'sometimes|required|string|max:100',
             'code' => 'sometimes|required|string|max:10',
+            'contract_number' => 'sometimes|required|string|max:100',
+            'contract_date' => 'sometimes|required|date',
             'client' => 'sometimes|required|string|max:100',
             'ppk' => 'sometimes|required|string|max:100',
             'support_teams' => 'sometimes|required|array',
@@ -85,6 +87,13 @@ class ProjectUpdateRequest extends FormRequest
             'code.string' => 'Kode harus berupa teks.',
             'code.max' => 'Kode maksimal 10 karakter.',
 
+            'contract_number.required' => 'Nomor kontrak wajib diisi.',
+            'contract_number.string' => 'Nomor kontrak harus berupa teks.',
+            'contract_number.max' => 'Nomor kontrak maksimal 100 karakter.',
+
+            'contract_date.required' => 'Tanggal kontrak wajib diisi.',
+            'contract_date.date' => 'Tanggal kontrak harus berupa tanggal.',
+
             'client.required' => 'Klien wajib diisi.',
             'client.string' => 'Klien harus berupa teks.',
             'client.max' => 'Klien maksimal 100 karakter.',
@@ -134,6 +143,14 @@ class ProjectUpdateRequest extends FormRequest
 
         if ($this->has('code')) {
             $data['code'] = strip_tags($this->code);
+        }
+
+        if ($this->has('contract_number')) {
+            $data['contract_number'] = strip_tags($this->contract_number);
+        }
+
+        if ($this->has('contract_date')) {
+            $data['contract_date'] = strip_tags($this->contract_date);
         }
 
         if ($this->has('client')) {
