@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100)->nullable(false);
             $table->string('code', 10)->nullable(false);
+            $table->string('contract_number', 100)->nullable(false);
+            $table->date('contract_date')->nullable(false);
             $table->string('client', 100)->nullable(false);
             $table->string('ppk', 100)->nullable(false);
             $table->json('support_teams')->nullable(false);

@@ -18,6 +18,8 @@ class ProjectResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
+            'contract_number' => $this->contract_number,
+            'contract_date' => $this->contract_date,
             'client' => $this->client,
             'ppk' => $this->ppk,
             'support_teams' => $this->support_teams,

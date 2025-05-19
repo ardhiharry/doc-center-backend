@@ -225,6 +225,8 @@ class ProjectController extends Controller
             $project->update($request->only([
                 'name',
                 'code',
+                'contract_number',
+                'contract_date',
                 'client',
                 'ppk',
                 'support_teams',

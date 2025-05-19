@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ProjectFactory extends Factory
 {
     protected static $counter = 1;
+    protected static $contractCounter = 1;
 
     /**
      * Define the model's default state.
@@ -24,6 +25,18 @@ class ProjectFactory extends Factory
         return [
             'name' => fake()->unique()->words(2, true),
             'code' => 'A' . self::$counter++,
+            'contract_number' => (function () {
+                static $counter = 1;
+                $prefix = 'B-' . self::$contractCounter++;
+                $middle = 'C.6/Cpl.2';
+
+                $date = fake()->dateTimeBetween('-3 month', '+4 month');
+                $month = $date->format('m');
+                $year = $date->format('Y');
+
+                return "{$prefix}/{$middle}/{$month}/{$year}";
+            })(),
+            'contract_date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
             'client' => fake()->name(),
             'ppk' => fake()->name(),
             'support_teams' => [

@@ -29,12 +29,7 @@ class CompanyCreateRequest extends FormRequest
             'name' => 'required|string|max:100',
             'address' => 'required|string',
             'director_name' => 'required|string|max:100',
-            'director_phone' => [
-                'required',
-                'string',
-                'max:20',
-                'regex:/^(?:\+62|62|0)8[1-9][0-9]{6,9}$/',
-            ],
+            'established_date' => 'required|date',
             'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
@@ -53,14 +48,12 @@ class CompanyCreateRequest extends FormRequest
             'director_name.string' => 'Nama direktur harus berupa teks.',
             'director_name.max' => 'Nama direktur maksimal 100 karakter.',
 
-            'director_phone.required' => 'Nomor telepon direktur wajib diisi.',
-            'director_phone.string' => 'Nomor telepon harus berupa teks.',
-            'director_phone.max' => 'Nomor telepon maksimal 20 karakter.',
-            'director_phone.regex' => 'Nomor telepon harus memiliki format yang benar. Contoh: 081xxx, +6281xxx, 6281xxx.',
-
             'director_signature.image' => 'Tanda tangan harus berupa gambar.',
             'director_signature.mimes' => 'Tanda tangan harus berformat jpeg, png, atau jpg.',
             'director_signature.max' => 'Ukuran tanda tangan maksimal 2MB.',
+
+            'established_date.required' => 'Tanggal berdiri wajib diisi.',
+            'established_date.date' => 'Tanggal berdiri harus berupa tanggal.',
         ];
     }
 
@@ -69,8 +62,8 @@ class CompanyCreateRequest extends FormRequest
         $this->merge([
             'name' => strip_tags($this->name),
             'address' => strip_tags($this->address),
-            'director_name' => strip_tags($this->director_name),
             'director_phone' => strip_tags($this->director_phone),
+            'established_date' => strip_tags($this->established_date),
         ]);
     }
 

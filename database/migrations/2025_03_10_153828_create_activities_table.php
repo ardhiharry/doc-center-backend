@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tp_4_activities', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100)->nullable(false);
+            $table->enum('status', ['ON PROGRESS', 'DONE'])->default('ON PROGRESS');
             $table->date('start_date')->nullable(false);
             $table->date('end_date')->nullable(false);
             $table->foreignId('activity_category_id')

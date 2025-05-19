@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
+    private int $contractCounter = 1;
+
     /**
      * Seed the application's database.
      */
@@ -95,6 +97,18 @@ class DatabaseSeeder extends Seeder
             $project = Project::create([
                 'name' => fake()->unique()->words(2, true),
                 'code' => 'A' . $counter++,
+                'contract_number' => (function () {
+                    static $counter = 1;
+                    $prefix = 'B-' . $this->contractCounter++;
+                    $middle = 'C.6/Cpl.2';
+
+                    $date = fake()->dateTimeBetween('-1 month', '+1 month');
+                    $month = $date->format('m');
+                    $year = $date->format('Y');
+
+                    return "{$prefix}/{$middle}/{$month}/{$year}";
+                })(),
+                'contract_date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
                 'client' => fake()->name(),
                 'ppk' => fake()->name(),
                 'support_teams' => [

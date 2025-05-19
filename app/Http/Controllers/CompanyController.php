@@ -29,7 +29,7 @@ class CompanyController extends Controller
                 );
             }
 
-            $filePath = '/companies/default.png';
+            $filePath = 'companies/default.png';
 
             if ($request->hasFile('director_signature')) {
                 $date = Carbon::now()->format('Ymd');
@@ -44,8 +44,8 @@ class CompanyController extends Controller
                 'name' => $request->name,
                 'address' => $request->address,
                 'director_name' => $request->director_name,
-                'director_phone' => $request->director_phone,
-                'director_signature' => $filePath
+                'director_signature' => $filePath,
+                'established_date' => $request->established_date
             ]);
 
             return Response::handler(
@@ -210,7 +210,7 @@ class CompanyController extends Controller
                 'name',
                 'address',
                 'director_name',
-                'director_phone',
+                'established_date'
             ]))->save();
 
             return Response::handler(

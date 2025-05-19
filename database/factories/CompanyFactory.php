@@ -16,16 +16,12 @@ class CompanyFactory extends Factory
      */
     public function definition(): array
     {
-        $prefixes = ['08', '+628', '628'];
-        $prefix = fake()->randomElement($prefixes);
-        $number = fake()->numberBetween(1, 9) . fake()->numerify('#######');
-
         return [
             'name' => fake()->unique()->company(),
             'address' => fake()->address(),
             'director_name' => fake()->name(),
-            'director_phone' => $prefix . $number,
-            'director_signature' => null
+            'director_signature' => null,
+            'established_date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
         ];
     }
 }

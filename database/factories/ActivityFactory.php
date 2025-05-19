@@ -22,6 +22,7 @@ class ActivityFactory extends Factory
     {
         return [
             'title' => fake()->unique()->words(2, true),
+            'status' => fake()->randomElement(['ON PROGRESS', 'DONE']),
             'start_date' => $startDate = fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
             'end_date' => Carbon::parse($startDate)->addDays(rand(0, 10))->format('Y-m-d'),
             'activity_category_id' => ActivityCategory::factory(),

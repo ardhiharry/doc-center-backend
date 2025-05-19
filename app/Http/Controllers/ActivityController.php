@@ -210,6 +210,7 @@ class ActivityController extends Controller
 
             $activity->update($request->only([
                 'title',
+                'status',
                 'start_date',
                 'end_date',
                 'activity_category_id',

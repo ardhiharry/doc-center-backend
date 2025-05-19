@@ -28,6 +28,8 @@ class ProjectCreateRequest extends FormRequest
         return [
             'name' => 'required|string|max:100',
             'code' => 'required|string|max:10',
+            'contract_number' => 'required|string|max:100',
+            'contract_date' => 'required|date',
             'client' => 'required|string|max:100',
             'ppk' => 'required|string|max:100',
             'support_teams' => 'required|array',
@@ -57,6 +59,13 @@ class ProjectCreateRequest extends FormRequest
             'code.required' => 'Kode wajib diisi.',
             'code.string' => 'Kode harus berupa teks.',
             'code.max' => 'Kode maksimal 10 karakter.',
+
+            'contract_number.required' => 'Nomor kontrak wajib diisi.',
+            'contract_number.string' => 'Nomor kontrak harus berupa teks.',
+            'contract_number.max' => 'Nomor kontrak maksimal 100 karakter.',
+
+            'contract_date.required' => 'Tanggal kontrak wajib diisi.',
+            'contract_date.date' => 'Tanggal kontrak harus berupa tanggal.',
 
             'client.required' => 'Klien wajib diisi.',
             'client.string' => 'Klien harus berupa teks.',
@@ -97,6 +106,8 @@ class ProjectCreateRequest extends FormRequest
         $this->merge([
             'name' => strip_tags($this->name),
             'code' => strip_tags($this->code),
+            'contract_number' => strip_tags($this->contract_number),
+            'contract_date' => strip_tags($this->contract_date),
             'client' => strip_tags($this->client),
             'ppk' => strip_tags($this->ppk),
             'support_teams' => is_string($this->support_teams) ? json_decode($this->support_teams, true) : $this->support_teams,
