@@ -29,6 +29,7 @@ class ActivityUpdateRequest extends FormRequest
     {
         return [
             'title' => 'sometimes|required|string|max:100',
+            'status' => 'sometimes|required|in:ON PROGRESS,DONE',
             'start_date' => 'sometimes|required|date|before_or_equal:end_date',
             'end_date' => 'sometimes|required|date|after_or_equal:start_date',
             'project_id' => [
@@ -48,6 +49,9 @@ class ActivityUpdateRequest extends FormRequest
             'title.required' => 'Judul wajib diisi.',
             'title.string' => 'Judul harus berupa teks.',
             'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
+
+            'status.required' => 'Status wajib dipilih.',
+            'status.in' => 'Status tidak valid. Status yang valid adalah ON PROGRESS, DONE.',
 
             'start_date.required' => 'Tanggal mulai wajib diisi.',
             'start_date.date' => 'Tanggal mulai harus berupa tanggal.',
@@ -71,6 +75,10 @@ class ActivityUpdateRequest extends FormRequest
 
         if ($this->has('title')) {
             $data['title'] = strip_tags($this->title);
+        }
+
+        if ($this->has('status')) {
+            $data['status'] = strip_tags($this->status);
         }
 
         if ($this->has('start_date')) {

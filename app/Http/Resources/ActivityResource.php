@@ -17,6 +17,7 @@ class ActivityResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'status' => $this->status,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'activity_category_id' => optional($this->activityCategory)->id,

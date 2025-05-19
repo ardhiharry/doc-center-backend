@@ -22,6 +22,7 @@ class Activity extends Model
 
     protected $fillable = [
         'title',
+        'status',
         'start_date',
         'end_date',
         'activity_category_id',
