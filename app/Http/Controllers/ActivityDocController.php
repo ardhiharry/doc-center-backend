@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Response;
-use App\Http\Requests\ActivityDocRequest;
+use App\Http\Requests\ActivityDocCreateRequest;
+use App\Http\Requests\ActivityDocUpdateRequest;
 use App\Http\Resources\ActivityDocResource;
 use App\Models\ActivityDoc;
 use Carbon\Carbon;
 use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ActivityDocController extends Controller
 {
-    public function create(ActivityDocRequest $request): JsonResponse
+    public function create(ActivityDocCreateRequest $request): JsonResponse
     {
         try {
             $activityDoc = ActivityDoc::where('title', $request->title)->exists();
@@ -229,6 +231,111 @@ class ActivityDocController extends Controller
             return Response::handler(
                 500,
                 'Gagal mengambil data dokumen aktivitas',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
+
+    public function update(ActivityDocUpdateRequest $request, $id): JsonResponse
+    {
+        try {
+            $activityDoc = ActivityDoc::find($id);
+
+            if (!$activityDoc) {
+                return Response::handler(
+                    400,
+                    'Gagal mengubah dokumen aktivitas',
+                    [],
+                    [],
+                    'Data dokumen aktivitas tidak ditemukan.'
+                );
+            }
+
+            $data = $request->only([
+                'title',
+                'description',
+                'tags',
+                'activity_id',
+            ]);
+
+            $currentFiles = $activityDoc->files ?? [];
+
+            /**
+             * REMOVE FILES
+             * query params: remove_files[]
+             */
+            $removeFiles = $request->input('remove_files') ?? [];
+
+            foreach ($removeFiles as $removePath) {
+                $key = array_search($removePath, $currentFiles);
+                if ($key !== false) {
+                    Storage::disk('public')->delete($removePath);
+                    unset($currentFiles[$key]);
+                }
+            }
+
+            /**
+             * REPLACE FILES
+             * query params: replace_files[index], files[index]
+             */
+            $replaceTargets = $request->input('replace_files') ?? [];
+            $insertFiles = $request->file('files') ?? [];
+
+            foreach ($replaceTargets as $index => $targetPath) {
+                $existingIndex = array_search($targetPath, $currentFiles);
+
+                if ($existingIndex !== false && isset($insertFiles[$index])) {
+                    Storage::disk('public')->delete($targetPath);
+
+                    $newFile = $insertFiles[$index];
+                    $date = now()->format('Ymd');
+                    $uuid = Str::uuid()->toString();
+                    $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . '.' . $newFile->extension();
+                    $newPath = $newFile->storeAs('activity_docs', $fileName, 'public');
+
+                    $currentFiles[$existingIndex] = $newPath;
+
+                    unset($insertFiles[$index]);
+                }
+            }
+
+            /**
+             * INSERT FILES
+             * query params: files[]
+             */
+            foreach ($insertFiles as $file) {
+                $date = now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . '.' . $file->extension();
+                $path = $file->storeAs('activity_docs', $fileName, 'public');
+
+                $currentFiles[] = $path;
+            }
+
+            $originalFiles = $activityDoc->files;
+            $updatedFiles = array_values($currentFiles);
+
+            if ($originalFiles !== $updatedFiles) {
+                if (empty($updatedFiles) && $originalFiles === null) {
+                    $data['files'] = null;
+                } else {
+                    $data['files'] = $updatedFiles;
+                }
+            }
+
+            $activityDoc->update($data);
+
+            return Response::handler(
+                200,
+                'Berhasil mengubah dokumen aktivitas',
+                [ActivityDocResource::make($activityDoc)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Gagal mengubah dokumen aktivitas',
                 [],
                 [],
                 $err->getMessage()

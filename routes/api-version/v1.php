@@ -101,5 +101,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/activity-docs/search', [ActivityDocController::class, 'search']);
     Route::get('/activity-docs/tags', [ActivityDocController::class, 'getAllTags']);
     Route::get('/activity-docs/{id}', [ActivityDocController::class, 'getById']);
+    Route::post('/activity-docs/{id}', [ActivityDocController::class, 'update']);
     Route::delete('/activity-docs/{id}', [ActivityDocController::class, 'softDelete']);
 });

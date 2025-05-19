@@ -21,7 +21,7 @@ return new class extends Migration
                 ->nullable(false)
                 ->constrained('tp_4_activities')
                 ->onDelete('cascade');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
             $table->softDeletes();
         });
     }
