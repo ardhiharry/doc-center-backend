@@ -30,7 +30,7 @@ class ActivityDocResource extends JsonResource
                     }
 
                     return [
-                        'url' => '/storage/' . $file,
+                        'url' => $file,
                         'size' => $size,
                     ];
                 }, $this->files)
