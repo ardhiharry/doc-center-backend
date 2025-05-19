@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Mews\Purifier\Facades\Purifier;
 
-class ActivityDocRequest extends FormRequest
+class ActivityDocCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,7 @@ class ActivityDocRequest extends FormRequest
         return [
             'title' => 'required|string|max:100',
             'files' => 'sometimes|array',
-            'files.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'files.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png|max:2048',
             'description' => 'nullable|string',
             'tags' => 'required|array',
             'tags.*' => 'string',
@@ -50,7 +50,7 @@ class ActivityDocRequest extends FormRequest
 
             'files.array' => 'Files harus berupa array.',
             'files.*.file' => 'Setiap item harus berupa file.',
-            'files.*.mimes' => 'Setiap file harus berupa PDF atau gambar.',
+            'files.*.mimes' => 'Setiap file harus berupa dokumen (pdf, doc, docx, xls, xlsx, ppt, pptx) atau gambar (jpg, jpeg, png).',
             'files.*.max' => 'Ukuran file maksimal 2MB.',
 
             'description.string' => 'Deskripsi harus berupa teks.',
@@ -59,8 +59,8 @@ class ActivityDocRequest extends FormRequest
             'tags.array' => 'Tag harus berupa array.',
             'tags.*.string' => 'Tag harus berupa teks.',
 
-            'activity_id.required' => 'Proyek wajib dipilih.',
-            'activity_id.exists' => 'Proyek tidak ditemukan.',
+            'activity_id.required' => 'Aktivitas wajib dipilih.',
+            'activity_id.exists' => 'Aktivitas tidak ditemukan.',
         ];
     }
 

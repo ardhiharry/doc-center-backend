@@ -41,7 +41,8 @@ class ActivityDocResource extends JsonResource
             'activity_title' => optional($this->activity)->title,
             'project_id' => optional(optional($this->activity)->project)->id,
             'project_name' => optional(optional($this->activity)->project)->name,
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }
