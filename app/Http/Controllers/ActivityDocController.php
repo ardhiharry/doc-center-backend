@@ -51,8 +51,9 @@ class ActivityDocController extends Controller
                 foreach ($request->file('files') as $file) {
                     $date = Carbon::now()->format('Ymd');
                     $uuid = Str::uuid()->toString();
-                    $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-                    $fileName = "{$date}-{$randomStr}.{$file->extension()}";
+                    $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                    $originalName = ucwords(strtolower(str_replace('_', ' ', $file->getClientOriginalName())));
+                    $fileName = "{$date}-{$randomStr}-{$originalName}";
 
                     $filePaths[] = $file->storeAs('activity_docs', $fileName, 'public');
                 }
@@ -292,7 +293,9 @@ class ActivityDocController extends Controller
                     $newFile = $insertFiles[$index];
                     $date = now()->format('Ymd');
                     $uuid = Str::uuid()->toString();
-                    $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . '.' . $newFile->extension();
+                    $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                    $originalFiles = ucwords(strtolower(str_replace('_', ' ', $newFile->getClientOriginalName())));
+                    $fileName = "{$date}-{$randomStr}-{$originalFiles}";
                     $newPath = $newFile->storeAs('activity_docs', $fileName, 'public');
 
                     $currentFiles[$existingIndex] = $newPath;
@@ -308,7 +311,9 @@ class ActivityDocController extends Controller
             foreach ($insertFiles as $file) {
                 $date = now()->format('Ymd');
                 $uuid = Str::uuid()->toString();
-                $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . '.' . $file->extension();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                $originalFiles = ucwords(strtolower(str_replace('_', ' ', $file->getClientOriginalName())));
+                $fileName = "{$date}-{$randomStr}-{$originalFiles}";
                 $path = $file->storeAs('activity_docs', $fileName, 'public');
 
                 $currentFiles[] = $path;

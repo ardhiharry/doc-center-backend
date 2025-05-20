@@ -250,7 +250,9 @@ class ActivityCategoryController extends Controller
                     $newFile = $incomingImages[$index];
                     $date = now()->format('Ymd');
                     $uuid = Str::uuid()->toString();
-                    $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . "." . $newFile->extension();
+                    $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                    $originalImages = ucwords(strtolower(str_replace('_', ' ', $newFile->getClientOriginalName())));
+                    $fileName = "{$date}-{$randomStr}-{$originalImages}";
                     $newPath = $newFile->storeAs('activity_categories', $fileName, 'public');
 
                     $currentImages[$existingIndex] = $newPath;
@@ -266,7 +268,9 @@ class ActivityCategoryController extends Controller
             foreach ($incomingImages as $image) {
                 $date = now()->format('Ymd');
                 $uuid = Str::uuid()->toString();
-                $fileName = "{$date}-" . substr(str_replace('-', '', $uuid), 0, 27) . "." . $image->extension();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                $originalImages = ucwords(strtolower(str_replace('_', ' ', $image->getClientOriginalName())));
+                $fileName = "{$date}-{$randomStr}-{$originalImages}";
                 $path = $image->storeAs('activity_categories', $fileName, 'public');
 
                 $currentImages[] = $path;

@@ -10,6 +10,7 @@ use App\Models\Company;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CompanyController extends Controller
@@ -34,8 +35,9 @@ class CompanyController extends Controller
             if ($request->hasFile('director_signature')) {
                 $date = Carbon::now()->format('Ymd');
                 $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-                $fileName = "{$date}-{$randomStr}.{$request->file('director_signature')->extension()}";
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                $originalName = ucwords(strtolower(str_replace('_', ' ', $request->file('director_signature')->getClientOriginalName())));
+                $fileName = "{$date}-{$randomStr}-{$originalName}";
 
                 $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
             }
@@ -195,23 +197,39 @@ class CompanyController extends Controller
                 }
             }
 
-            if ($request->hasFile('director_signature')) {
-                $date = Carbon::now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-                $fileName = "{$date}-{$randomStr}.{$request->file('director_signature')->extension()}";
-
-                $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
-
-                $company->director_signature = $filePath;
-            }
-
-            $company->fill($request->only([
+            $data = $request->only([
                 'name',
                 'address',
                 'director_name',
                 'established_date'
-            ]))->save();
+            ]);
+
+            $currentImage = $company->director_signature ?? null;
+            $defaultImage = 'companies/default.png';
+
+            if ($request->hasFile('director_signature')) {
+                $insertImage = $request->file('director_signature') ?? null;
+
+                if ($currentImage && $currentImage !== $defaultImage) {
+                    Storage::disk('public')->delete($currentImage);
+                }
+
+                $date = Carbon::now()->format('Ymd');
+                $uuid = Str::uuid()->toString();
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                $originalName = ucwords(strtolower(str_replace('_', ' ', $insertImage->getClientOriginalName())));
+                $fileName = "{$date}-{$randomStr}-{$originalName}";
+
+                $filePath = $insertImage->storeAs('companies', $fileName, 'public');
+                $company->director_signature = $filePath;
+            } elseif ($request->remove_image && $currentImage && $currentImage !== $defaultImage) {
+                Storage::disk('public')->delete($currentImage);
+                $company->director_signature = $defaultImage;
+            }
+
+            $data['director_signature'] = $company->director_signature;
+
+            $company->update($data);
 
             return Response::handler(
                 200,

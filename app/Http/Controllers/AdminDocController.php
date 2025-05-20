@@ -33,8 +33,9 @@ class AdminDocController extends Controller
             if ($request->hasFile('file')) {
                 $date = Carbon::now()->format('Ymd');
                 $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 27);
-                $fileName = "{$date}-{$randomStr}.{$request->file('file')->extension()}";
+                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
+                $originalName = ucwords(strtolower(str_replace('_', ' ', $request->file('file')->getClientOriginalName())));
+                $fileName = "{$date}-{$randomStr}-{$originalName}";
 
                 $filePath = $request->file('file')->storeAs('admin_docs', $fileName, 'public');
             }
