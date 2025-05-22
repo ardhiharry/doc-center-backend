@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\File;
 use App\Helpers\Response;
 use App\Http\Requests\AdminDocRequest;
 use App\Http\Resources\AdminDocResource;
 use App\Models\AdminDoc;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class AdminDocController extends Controller
 {
@@ -31,13 +30,9 @@ class AdminDocController extends Controller
             $filePath = null;
 
             if ($request->hasFile('file')) {
-                $date = Carbon::now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                $originalName = ucwords(strtolower(str_replace('_', ' ', $request->file('file')->getClientOriginalName())));
-                $fileName = "{$date}-{$randomStr}-{$originalName}";
+                $fileData = File::generate($request->file('file'), 'admin_docs');
 
-                $filePath = $request->file('file')->storeAs('admin_docs', $fileName, 'public');
+                $filePath = $request->file('file')->storeAs($fileData['path'], $fileData['fileName'], 'public');
             }
 
             $adminDoc = AdminDoc::create([
@@ -47,7 +42,7 @@ class AdminDocController extends Controller
                 'admin_doc_category_id' => $request->admin_doc_category_id
             ]);
 
-            $adminDoc->load('project.company', 'adminDocCategory');
+            $adminDoc->load('project.company', 'adminDocCategory')->refresh();
 
             return Response::handler(
                 201,

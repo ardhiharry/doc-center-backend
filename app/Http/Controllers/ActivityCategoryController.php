@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\File;
 use App\Helpers\Response;
 use App\Http\Requests\ActivityCategoryCreateRequest;
 use App\Http\Requests\ActivityCategoryUpdateRequest;
 use App\Http\Resources\ActivityCategoryResource;
 use App\Models\ActivityCategory;
 use App\Models\Project;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -248,12 +248,8 @@ class ActivityCategoryController extends Controller
                     Storage::disk('public')->delete($targetPath);
 
                     $newFile = $incomingImages[$index];
-                    $date = now()->format('Ymd');
-                    $uuid = Str::uuid()->toString();
-                    $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                    $originalImages = ucwords(strtolower(str_replace('_', ' ', $newFile->getClientOriginalName())));
-                    $fileName = "{$date}-{$randomStr}-{$originalImages}";
-                    $newPath = $newFile->storeAs('activity_categories', $fileName, 'public');
+                    $fileData = File::generate($newFile, 'activity_categories');
+                    $newPath = $newFile->storeAs($fileData['path'], $fileData['fileName'], 'public');
 
                     $currentImages[$existingIndex] = $newPath;
 
@@ -266,12 +262,8 @@ class ActivityCategoryController extends Controller
              * query param: images[]
              */
             foreach ($incomingImages as $image) {
-                $date = now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                $originalImages = ucwords(strtolower(str_replace('_', ' ', $image->getClientOriginalName())));
-                $fileName = "{$date}-{$randomStr}-{$originalImages}";
-                $path = $image->storeAs('activity_categories', $fileName, 'public');
+                $fileData = File::generate($image, 'activity_categories');
+                $path = $image->storeAs($fileData['path'], $fileData['fileName'], 'public');
 
                 $currentImages[] = $path;
             }

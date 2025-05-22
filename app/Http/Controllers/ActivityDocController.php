@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\File;
 use App\Helpers\Response;
 use App\Http\Requests\ActivityDocCreateRequest;
 use App\Http\Requests\ActivityDocUpdateRequest;
 use App\Http\Resources\ActivityDocResource;
 use App\Models\ActivityDoc;
-use Carbon\Carbon;
-use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ActivityDocController extends Controller
 {
@@ -49,13 +47,9 @@ class ActivityDocController extends Controller
 
             if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
-                    $date = Carbon::now()->format('Ymd');
-                    $uuid = Str::uuid()->toString();
-                    $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                    $originalName = ucwords(strtolower(str_replace('_', ' ', $file->getClientOriginalName())));
-                    $fileName = "{$date}-{$randomStr}-{$originalName}";
+                    $fileData = File::generate($file, 'activity_docs');
 
-                    $filePaths[] = $file->storeAs('activity_docs', $fileName, 'public');
+                    $filePaths[] = $file->storeAs($fileData['path'], $fileData['fileName'], 'public');
                 }
             }
 
@@ -291,12 +285,8 @@ class ActivityDocController extends Controller
                     Storage::disk('public')->delete($targetPath);
 
                     $newFile = $insertFiles[$index];
-                    $date = now()->format('Ymd');
-                    $uuid = Str::uuid()->toString();
-                    $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                    $originalFiles = ucwords(strtolower(str_replace('_', ' ', $newFile->getClientOriginalName())));
-                    $fileName = "{$date}-{$randomStr}-{$originalFiles}";
-                    $newPath = $newFile->storeAs('activity_docs', $fileName, 'public');
+                    $fileData = File::generate($newFile, 'activity_docs');
+                    $newPath = $newFile->storeAs($fileData['path'], $fileData['fileName'], 'public');
 
                     $currentFiles[$existingIndex] = $newPath;
 
@@ -309,12 +299,8 @@ class ActivityDocController extends Controller
              * query params: files[]
              */
             foreach ($insertFiles as $file) {
-                $date = now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                $originalFiles = ucwords(strtolower(str_replace('_', ' ', $file->getClientOriginalName())));
-                $fileName = "{$date}-{$randomStr}-{$originalFiles}";
-                $path = $file->storeAs('activity_docs', $fileName, 'public');
+                $fileData = File::generate($file, 'activity_docs');
+                $path = $file->storeAs($fileData['path'], $fileData['fileName'], 'public');
 
                 $currentFiles[] = $path;
             }
