@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\File;
 use App\Helpers\Response;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
@@ -33,13 +34,9 @@ class CompanyController extends Controller
             $filePath = 'companies/default.png';
 
             if ($request->hasFile('director_signature')) {
-                $date = Carbon::now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                $originalName = ucwords(strtolower(str_replace('_', ' ', $request->file('director_signature')->getClientOriginalName())));
-                $fileName = "{$date}-{$randomStr}-{$originalName}";
+                $fileData = File::generate($request->file('director_signature'), 'companies');
 
-                $filePath = $request->file('director_signature')->storeAs('companies', $fileName, 'public');
+                $filePath = $request->file('director_signature')->storeAs($fileData['path'], $fileData['fileName'], 'public');
             }
 
             $company = Company::create([
@@ -214,13 +211,9 @@ class CompanyController extends Controller
                     Storage::disk('public')->delete($currentImage);
                 }
 
-                $date = Carbon::now()->format('Ymd');
-                $uuid = Str::uuid()->toString();
-                $randomStr = substr(str_replace('-', '', $uuid), 0, 7);
-                $originalName = ucwords(strtolower(str_replace('_', ' ', $insertImage->getClientOriginalName())));
-                $fileName = "{$date}-{$randomStr}-{$originalName}";
+                $fileData = File::generate($request->file('director_signature'), 'companies');
 
-                $filePath = $insertImage->storeAs('companies', $fileName, 'public');
+                $filePath = $insertImage->storeAs($fileData['path'], $fileData['fileName'], 'public');
                 $company->director_signature = $filePath;
             } elseif ($request->remove_image && $currentImage && $currentImage !== $defaultImage) {
                 Storage::disk('public')->delete($currentImage);
