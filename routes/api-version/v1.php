@@ -11,6 +11,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTeamController;
+use App\Http\Controllers\UploadChunkController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -103,4 +104,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/activity-docs/{id}', [ActivityDocController::class, 'getById']);
     Route::post('/activity-docs/{id}', [ActivityDocController::class, 'update']);
     Route::delete('/activity-docs/{id}', [ActivityDocController::class, 'softDelete']);
+
+    // Upload Chunk
+    Route::post('/upload-chunks', [UploadChunkController::class, 'create']);
+    Route::delete('/upload-chunks', [UploadChunkController::class, 'delete']);
 });

@@ -27,17 +27,9 @@ class AdminDocController extends Controller
                 );
             }
 
-            $filePath = null;
-
-            if ($request->hasFile('file')) {
-                $fileData = File::generate($request->file('file'), 'admin_docs');
-
-                $filePath = $request->file('file')->storeAs($fileData['path'], $fileData['fileName'], 'public');
-            }
-
             $adminDoc = AdminDoc::create([
                 'title' => $request->title,
-                'file' => $filePath,
+                'file' => $request->file,
                 'project_id' => $request->project_id,
                 'admin_doc_category_id' => $request->admin_doc_category_id
             ]);

@@ -28,7 +28,7 @@ class AdminDocRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:100',
-            'file' => 'sometimes|file|mimes:pdf|max:2048',
+            'file' => 'sometimes|string',
             'project_id' => [
                 'required',
                 Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
@@ -47,9 +47,7 @@ class AdminDocRequest extends FormRequest
             'title.string' => 'Judul harus berupa teks.',
             'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
 
-            'file.file' => 'File harus berupa file.',
-            'file.mimes' => 'File harus berupa PDF.',
-            'file.max' => 'Ukuran file maksimal 2MB.',
+            'file.string' => 'File harus berupa teks.',
 
             'project_id.required' => 'Project wajib dipilih.',
             'project_id.exists' => 'Project tidak ditemukan.',
