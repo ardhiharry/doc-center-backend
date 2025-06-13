@@ -76,7 +76,10 @@ class AuthController extends Controller
                 ->setTTL((int) config('jwt.refresh_ttl'))
                 ->fromUser($user);
 
-            $user->update(['token' => $refreshToken]);
+            $user->update([
+                'token' => $refreshToken,
+                'last_login' => now(),
+            ]);
 
             return Response::handler(
                 200,
@@ -87,6 +90,7 @@ class AuthController extends Controller
                     'name' => $user->name,
                     'role' => $user->role,
                     'is_process' => $user->is_process,
+                    'last_login' => $user->last_login,
                     'refresh_token' => $user->token,
                     'access_token' => $accessToken
                 ]

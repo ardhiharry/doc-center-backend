@@ -20,7 +20,8 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'role' => $this->role,
             'token' => $this->whenNotNull($this->token),
-            'is_process' => $this->is_process === 0 ? false : true
+            'is_process' => $this->is_process === 0 ? false : true,
+            'last_login' => $this->last_login ?? '-'
         ];
     }
 }

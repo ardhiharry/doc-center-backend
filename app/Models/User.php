@@ -19,10 +19,19 @@ class User extends Authenticatable implements JWTSubject
     public $incrementing = true;
     public $timestamps = true;
 
-    protected $fillable = ['username', 'password', 'name', 'role', 'token', 'is_process'];
+    protected $fillable = [
+        'username',
+        'password',
+        'name',
+        'role',
+        'token',
+        'is_process',
+        'last_login',
+    ];
 
     protected $casts = [
-        'role' => 'string'
+        'role' => 'string',
+        'last_login' => 'datetime',
     ];
 
     protected $hidden = ['password', 'token', 'deleted_at'];
