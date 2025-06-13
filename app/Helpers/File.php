@@ -76,7 +76,7 @@ class File
 
         fclose($finalFile);
 
-        Filesystem::deleteDirectory($chunkPath);
+        $filesystem->deleteDirectory($chunkPath);
 
         return str_replace("public/", "", "{$path}/{$fileName}");
     }
