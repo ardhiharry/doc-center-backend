@@ -87,4 +87,9 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'project_leader_id', 'id');
     }
+
+    public function charteredAccountants(): HasMany
+    {
+        return $this->hasMany(CharteredAccountant::class, 'project_id', 'id');
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\ActivityTeamController;
 use App\Http\Controllers\AdminDocCategoryController;
 use App\Http\Controllers\AdminDocController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CharteredAccountantController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
@@ -108,4 +109,12 @@ Route::middleware('auth:api')->group(function () {
     // Upload Chunk
     Route::post('/upload-chunks', [UploadChunkController::class, 'create']);
     Route::delete('/upload-chunks', [UploadChunkController::class, 'delete']);
+
+    // Chartered Accountant
+    Route::post('/chartered-accountants', [CharteredAccountantController::class, 'create']);
+    Route::get('/chartered-accountants', [CharteredAccountantController::class, 'getAll']);
+    Route::get('/chartered-accountants/search', [CharteredAccountantController::class, 'search']);
+    Route::get('/chartered-accountants/{id}', [CharteredAccountantController::class, 'getById']);
+    Route::post('/chartered-accountants/{id}', [CharteredAccountantController::class, 'update']);
+    Route::delete('/chartered-accountants/{id}', [CharteredAccountantController::class, 'softDelete']);
 });
