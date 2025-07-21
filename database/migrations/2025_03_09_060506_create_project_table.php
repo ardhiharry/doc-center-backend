@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tp_1_projects', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->nullable(false);
+            $table->string('name')->nullable(false);
             $table->string('code', 10)->nullable(false);
             $table->string('contract_number', 100)->nullable(false);
             $table->date('contract_date')->nullable(false);
