@@ -28,7 +28,7 @@ class ProjectUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:100',
+            'name' => 'sometimes|required|string',
             'code' => 'sometimes|required|string|max:10',
             'contract_number' => 'sometimes|required|string|max:100',
             'contract_date' => 'sometimes|required|date',
@@ -81,7 +81,6 @@ class ProjectUpdateRequest extends FormRequest
         return [
             'name.required' => 'Nama wajib diisi.',
             'name.string' => 'Nama harus berupa teks.',
-            'name.max' => 'Nama maksimal 100 karakter.',
 
             'code.required' => 'Kode wajib diisi.',
             'code.string' => 'Kode harus berupa teks.',
