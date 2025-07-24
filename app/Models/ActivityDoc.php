@@ -19,8 +19,12 @@ class ActivityDoc extends Model
 
     protected $fillable = [
         'title',
+        'date',
+        'location',
+        'meet_of_person',
+        'agenda',
+        'activity',
         'files',
-        'description',
         'tags',
         'activity_id'
     ];
@@ -31,7 +35,10 @@ class ActivityDoc extends Model
 
     protected $casts = [
         'tags' => 'array',
-        'files' => 'array'
+        'files' => 'array',
+        'meet_of_person' => 'array',
+        'agenda' => 'array',
+        'activity' => 'array'
     ];
 
     public function activity(): BelongsTo

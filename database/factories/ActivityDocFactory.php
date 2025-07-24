@@ -20,8 +20,24 @@ class ActivityDocFactory extends Factory
     {
         return [
             'title' => fake()->unique()->words(3, true),
+            'date' => fake()->dateTimeBetween('-1 month', '+1 month'),
+            'location' => fake()->city(),
+            'meet_of_person' => [
+                fake()->name(),
+                fake()->name(),
+                fake()->name(),
+            ],
+            'agenda' => [
+                fake()->sentence(),
+                fake()->sentence(),
+                fake()->sentence(),
+            ],
+            'activity' => [
+                fake()->sentence(),
+                fake()->sentence(),
+                fake()->sentence(),
+            ],
             'files' => null,
-            'description' => fake()->paragraph(),
             'tags' => [
                 fake()->word(),
                 fake()->word(),
