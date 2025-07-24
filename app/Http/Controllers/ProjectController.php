@@ -127,8 +127,11 @@ class ProjectController extends Controller
                 $query->whereDate('end_date', '<=', $endDate);
             }
 
+            $sort = $request->query('sort') ?? 'desc';
+
             if ($request->filled('year')) {
-                $query->whereYear('start_date', $request->query('year'));
+                $query->whereYear('start_date', $request->query('year'))
+                ->orderBy('start_date', $sort);
             }
 
             if ($startDate || $endDate) {
