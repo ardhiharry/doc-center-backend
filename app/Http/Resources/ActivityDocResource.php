@@ -18,6 +18,12 @@ class ActivityDocResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'date' => $this->date,
+            'location' => $this->location,
+            'meet_of_person' => $this->meet_of_person,
+            'agenda' => $this->agenda,
+            'activity' => $this->activity,
+            'description' => $this->description,
             'files' => is_array($this->files)
                 ? array_map(function ($file) {
                     $path = $file;
@@ -35,7 +41,6 @@ class ActivityDocResource extends JsonResource
                     ];
                 }, $this->files)
                 : [],
-            'description' => $this->description,
             'tags' => $this->tags,
             'activity_id' => optional($this->activity)->id,
             'activity_title' => optional($this->activity)->title,

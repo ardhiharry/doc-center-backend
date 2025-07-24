@@ -55,8 +55,12 @@ class ActivityDocController extends Controller
 
             $activityDoc = ActivityDoc::create([
                 'title' => $request->title,
+                'date' => $request->date,
+                'location' => $request->location,
+                'meet_of_person' => $request->meet_of_person,
+                'agenda' => $request->agenda,
+                'activity' => $request->activity,
                 'files' => $filePaths,
-                'description' => $request->description,
                 'tags' => $request->tags,
                 'activity_id' => $request->activity_id
             ])->refresh()->load('activity.project.company');
@@ -250,7 +254,11 @@ class ActivityDocController extends Controller
 
             $data = $request->only([
                 'title',
-                'description',
+                'date',
+                'location',
+                'meet_of_person',
+                'agenda',
+                'activity',
                 'tags',
                 'activity_id',
             ]);

@@ -28,13 +28,20 @@ class ActivityDocUpdateRequest extends FormRequest
     {
         return [
             'title' => 'sometimes|required|string|max:100',
+            'date' => 'sometimes|required|date',
+            'location' => 'sometimes|required|string|max:255',
+            'meet_of_person' => 'sometimes|required|array',
+            'meet_of_person.*' => 'required|string|max:255',
+            'agenda' => 'sometimes|required|array',
+            'agenda.*' => 'required|string|max:255',
+            'activity' => 'sometimes|required|array',
+            'activity.*' => 'required|string|max:255',
             'files' => 'sometimes|array',
             'files.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png|max:2048',
             'replace_files' => 'sometimes|array',
             'replace_files.*' => 'required|string',
             'remove_files' => 'sometimes|array',
             'remove_files.*' => 'required|string',
-            'description' => 'nullable|string',
             'tags' => 'sometimes|required|array',
             'tags.*' => 'string',
             'activity_id' => [
@@ -51,6 +58,28 @@ class ActivityDocUpdateRequest extends FormRequest
             'title.string' => 'Judul harus berupa teks.',
             'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
 
+            'date.required' => 'Tanggal wajib diisi.',
+            'date.date' => 'Tanggal harus berupa tanggal.',
+
+            'location.required' => 'Lokasi wajib diisi.',
+            'location.string' => 'Lokasi harus berupa teks.',
+            'location.max' => 'Lokasi tidak boleh lebih dari 255 karakter.',
+
+            'meet_of_person.required' => 'Pertemuan wajib diisi.',
+            'meet_of_person.array' => 'Pertemuan harus berupa array.',
+            'meet_of_person.*.string' => 'Setiap item harus berupa teks.',
+            'meet_of_person.*.max' => 'Setiap teks tidak boleh lebih dari 255 karakter.',
+
+            'agenda.required' => 'Agenda wajib diisi.',
+            'agenda.array' => 'Agenda harus berupa array.',
+            'agenda.*.string' => 'Setiap item harus berupa teks.',
+            'agenda.*.max' => 'Setiap teks tidak boleh lebih dari 255 karakter.',
+
+            'activity.required' => 'Aktivitas wajib diisi.',
+            'activity.array' => 'Aktivitas harus berupa array.',
+            'activity.*.string' => 'Setiap item harus berupa teks.',
+            'activity.*.max' => 'Setiap teks tidak boleh lebih dari 255 karakter.',
+
             'files.array' => 'Files harus berupa array.',
             'files.*.file' => 'Setiap item harus berupa file.',
             'files.*.mimes' => 'Setiap file harus berupa dokumen (pdf, doc, docx, xls, xlsx, ppt, pptx) atau gambar (jpg, jpeg, png).',
@@ -63,8 +92,6 @@ class ActivityDocUpdateRequest extends FormRequest
             'remove_files.array' => 'Files harus berupa array.',
             'remove_files.*.required' => 'Setiap item harus diisi.',
             'remove_files.*.string' => 'Setiap item harus berupa string.',
-
-            'description.string' => 'Deskripsi harus berupa teks.',
 
             'tags.required' => 'Tag wajib diisi.',
             'tags.array' => 'Tag harus berupa array.',
