@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('tp_5_activity_docs', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 100)->nullable(false);
-            $table->datetime('date')->nullable(false);
-            $table->string('location')->nullable(false);
-            $table->json('meet_of_person')->nullable(false);
-            $table->json('agenda')->nullable(false);
-            $table->json('activity')->nullable(false);
+            $table->string('title', 100);
+            $table->datetime('date');
+            $table->string('location');
+            $table->json('meet_of_person')->nullable();
+            $table->json('agenda')->nullable();
+            $table->json('activity')->nullable();
             $table->json('files')->nullable();
-            $table->json('tags')->nullable(false);
+            $table->json('tags');
             $table->foreignId('activity_id')
                 ->nullable(false)
                 ->constrained('tp_4_activities')
