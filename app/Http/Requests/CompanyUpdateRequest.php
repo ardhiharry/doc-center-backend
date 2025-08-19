@@ -29,8 +29,9 @@ class CompanyUpdateRequest extends FormRequest
             'name' => 'sometimes|required|string|max:100',
             'address' => 'sometimes|required|string',
             'director_name' => 'sometimes|required|string|max:100',
-            'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+            'director_signature' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
             'established_date' => 'sometimes|required|date',
+            'letter_head' => 'sometimes|nullable|file|mimes:doc,docx|max:2048',
         ];
     }
 
@@ -54,6 +55,10 @@ class CompanyUpdateRequest extends FormRequest
 
             'established_date.required' => 'Tanggal berdiri wajib diisi.',
             'established_date.date' => 'Tanggal berdiri harus berupa tanggal.',
+
+            'letter_head.file' => 'Surat kepala harus berupa file.',
+            'letter_head.mimes' => 'KOP Surat harus berupa dokumen doc atau docx.',
+            'letter_head.max' => 'Ukuran KOP Surat maksimal 2MB.',
         ];
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('director_name', 100)->nullable(false);
             $table->string('director_signature', 100)->nullable();
             $table->date('established_date')->nullable(false);
+            $table->string('letter_head', 100)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

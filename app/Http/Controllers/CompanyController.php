@@ -39,12 +39,19 @@ class CompanyController extends Controller
                 $filePath = $request->file('director_signature')->storeAs($fileData['path'], $fileData['fileName'], 'public');
             }
 
+            if ($request->hasFile('letter_head')) {
+                $fileData = File::generate($request->file('letter_head'), 'letter-head');
+
+                $letterHead = $request->file('letter_head')->storeAs($fileData['path'], $fileData['fileName'], 'public');
+            }
+
             $company = Company::create([
                 'name' => $request->name,
                 'address' => $request->address,
                 'director_name' => $request->director_name,
                 'director_signature' => $filePath,
-                'established_date' => $request->established_date
+                'established_date' => $request->established_date,
+                'letter_head' => $letterHead ?? null
             ]);
 
             return Response::handler(
@@ -221,6 +228,26 @@ class CompanyController extends Controller
             }
 
             $data['director_signature'] = $company->director_signature;
+
+            $currentLetterHead = $company->letter_head ?? null;
+
+            if ($request->hasFile('letter_head')) {
+                $insertLetterHead = $request->file('letter_head') ?? null;
+
+                if ($currentLetterHead) {
+                    Storage::disk('public')->delete($currentLetterHead);
+                }
+
+                $fileData = File::generate($request->file('letter_head'), 'letter-head');
+
+                $letterHead = $insertLetterHead->storeAs($fileData['path'], $fileData['fileName'], 'public');
+                $company->letter_head = $letterHead;
+            } elseif ($request->remove_letter_head && $currentLetterHead) {
+                Storage::disk('public')->delete($currentLetterHead);
+                $company->letter_head = null;
+            }
+
+            $data['letter_head'] = $company->letter_head;
 
             $company->update($data);
 
