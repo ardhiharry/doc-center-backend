@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharteredAccountantController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExampleDocController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTeamController;
 use App\Http\Controllers\UploadChunkController;
@@ -117,4 +118,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/chartered-accountants/{id}', [CharteredAccountantController::class, 'getById']);
     Route::post('/chartered-accountants/{id}', [CharteredAccountantController::class, 'update']);
     Route::delete('/chartered-accountants/{id}', [CharteredAccountantController::class, 'softDelete']);
+
+    // Example Document
+    Route::post('/example-docs', [ExampleDocController::class, 'store']);
+    Route::get('/example-docs', [ExampleDocController::class, 'index']);
+    Route::get('/example-docs/{exampleDoc}', [ExampleDocController::class, 'show']);
+    Route::post('/example-docs/{exampleDoc}', [ExampleDocController::class, 'update']);
+    Route::delete('/example-docs/{exampleDoc}', [ExampleDocController::class, 'destroy']);
 });
