@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use App\Helpers\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as HTTP;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -48,6 +50,18 @@ class Handler extends ExceptionHandler
                 [],
                 [],
                 $e->validator->errors()
+            );
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            $model = Str::after($e->getModel(), 'App\\Models\\');
+
+            return Response::handler(
+                HTTP::HTTP_NOT_FOUND,
+                'Gagal mengakses model',
+                [],
+                [],
+                "{$model} tidak ditemukan"
             );
         }
 
