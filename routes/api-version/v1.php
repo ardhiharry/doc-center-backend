@@ -109,7 +109,9 @@ Route::middleware('auth:api')->group(function () {
 
     // Upload Chunk
     Route::post('/upload-chunks', [UploadChunkController::class, 'create']);
+    Route::post('/upload-chunks-example-doc', [UploadChunkController::class, 'createExampleDoc']);
     Route::delete('/upload-chunks', [UploadChunkController::class, 'delete']);
+    Route::delete('/upload-chunks-example-doc', [UploadChunkController::class, 'deleteExampleDoc']);
 
     // Chartered Accountant
     Route::post('/chartered-accountants', [CharteredAccountantController::class, 'create']);
