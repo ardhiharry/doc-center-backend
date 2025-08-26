@@ -23,7 +23,7 @@ class CreateExampleDocument extends FormRequest
     {
         return [
             "title" => ["required", "string", "max:255"],
-            "files" => ["required", "string"],
+            "file" => ["required", "string"],
         ];
     }
 
@@ -34,8 +34,8 @@ class CreateExampleDocument extends FormRequest
             "title.string" => "Judul harus berupa teks.",
             "title.max" => "Judul tidak boleh lebih dari 255 karakter.",
 
-            "files.required" => "File wajib diisi.",
-            "files.string" => "File harus berupa teks.",
+            "file.required" => "File wajib diisi.",
+            "file.string" => "File harus berupa teks.",
         ];
     }
 }
