@@ -17,11 +17,9 @@ class ExampleDocumentResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'files' => is_array($this->files)
-                ? array_map(function ($file) {
-                    return '/storage/'.$file;
-                }, $this->files)
-                : [],
+            'files' => $this->files,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
