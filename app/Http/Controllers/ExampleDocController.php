@@ -18,19 +18,9 @@ class ExampleDocController extends Controller
     public function store(CreateExampleDocument $request): JsonResponse
     {
         try {
-            $filePaths = [];
-
-            if ($request->hasFile('files')) {
-                foreach ($request->file('files') as $file) {
-                    $fileData = File::generate($file, 'example_documents');
-
-                    $filePaths[] = $file->storeAs($fileData['path'], $fileData['fileName'], 'public');
-                }
-            }
-
             $exampleDoc = ExampleDoc::create([
                 'title' => $request->title,
-                'files' => $filePaths,
+                'files' => $request->files,
             ]);
 
             return Response::handler(
@@ -106,52 +96,6 @@ class ExampleDocController extends Controller
                 'title' => $request->title,
                 'files' => $request->files
             ]);
-
-            $currentFiles = $exampleDoc->files;
-
-            /**
-             * REMOVE FILES
-             * query params: remove_files[]
-             */
-            $removeFiles = $request->remove_files ?? [];
-
-            foreach ($removeFiles as $removePath) {
-                $key = array_search($removePath, $currentFiles);
-                if ($key !== false) {
-                    Storage::disk('public')->delete($removePath);
-                    unset($currentFiles[$key]);
-                }
-            }
-
-            /**
-             * REPLACE FILES
-             * query params: replace_files[index], files[index]
-             */
-            $replaceFiles = $request->replace_files ?? [];
-            $files = $request->file('files') ?? [];
-
-            foreach ($replaceFiles as $index => $replacePath) {
-                $key = array_search($replacePath, $currentFiles);
-                if ($key !== false) {
-                    Storage::disk('public')->delete($replacePath);
-
-                    $fileData = File::generate($files[$index], 'example_documents');
-                    $currentFiles[$key] = $files[$index]->storeAs($fileData['path'], $fileData['fileName'], 'public');
-
-                    unset($files[$index]);
-                }
-            }
-
-            /**
-             * INSERT FILES
-             * query params: files[]
-             */
-            foreach ($files as $file) {
-                $fileData = File::generate($file, 'example_documents');
-                $currentFiles[] = $file->storeAs($fileData['path'], $fileData['fileName'], 'public');
-            }
-
-            $data['files'] = $currentFiles;
 
             $exampleDoc->update($data);
 

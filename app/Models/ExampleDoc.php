@@ -15,10 +15,6 @@ class ExampleDoc extends Model
         'files',
     ];
 
-    protected $casts = [
-        'files' => 'array',
-    ];
-
     // Query scope
     #[Scope]
     public function search(Builder $query, array $filters): void

@@ -23,8 +23,7 @@ class CreateExampleDocument extends FormRequest
     {
         return [
             "title" => ["required", "string", "max:255"],
-            "files" => ["required", "array"],
-            "files.*" => ["required", "file", "mimes:pdf,doc,docx,ppt,pptx,xls,xlsx"],
+            "files" => ["required", "string"],
         ];
     }
 
@@ -36,10 +35,7 @@ class CreateExampleDocument extends FormRequest
             "title.max" => "Judul tidak boleh lebih dari 255 karakter.",
 
             "files.required" => "File wajib diisi.",
-            "files.array" => "File harus berupa array.",
-            "files.*.required" => "File wajib diisi.",
-            "files.*.file" => "File harus berupa file.",
-            "files.*.mimes" => "File harus berupa PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX.",
+            "files.string" => "File harus berupa teks.",
         ];
     }
 }
