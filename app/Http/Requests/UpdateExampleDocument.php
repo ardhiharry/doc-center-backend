@@ -23,8 +23,7 @@ class UpdateExampleDocument extends FormRequest
     {
         return [
             "title" => ["sometimes", "string", "max:255"],
-            "files" => ["sometimes", "array"],
-            "files.*" => ["required", "file", "mimes:pdf,doc,docx,ppt,pptx,xls,xlsx"],
+            "files" => ["sometimes", "string"],
         ];
     }
 
@@ -34,9 +33,7 @@ class UpdateExampleDocument extends FormRequest
             "title.string" => "Judul harus berupa teks.",
             "title.max" => "Judul tidak boleh lebih dari 255 karakter.",
 
-            "files.array" => "File harus berupa array.",
-            "files.*.file" => "File harus berupa file.",
-            "files.*.mimes" => "File harus berupa PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX.",
+            "files.string" => "File harus berupa teks.",
         ];
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tm_example_docs', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable(false);
-            $table->json('files')->nullable(false);
+            $table->string('files')->nullable(false);
             $table->timestamps();
         });
     }
