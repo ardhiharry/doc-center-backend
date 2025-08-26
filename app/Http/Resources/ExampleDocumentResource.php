@@ -17,7 +17,7 @@ class ExampleDocumentResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'files' => $this->files,
+            'file' => $this->file,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

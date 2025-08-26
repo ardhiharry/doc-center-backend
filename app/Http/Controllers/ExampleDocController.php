@@ -20,7 +20,7 @@ class ExampleDocController extends Controller
         try {
             $exampleDoc = ExampleDoc::create([
                 'title' => $request->title,
-                'files' => $request->files,
+                'file' => $request->file,
             ]);
 
             return Response::handler(

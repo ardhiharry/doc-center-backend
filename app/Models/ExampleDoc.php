@@ -12,7 +12,7 @@ class ExampleDoc extends Model
 
     protected $fillable = [
         'title',
-        'files',
+        'file',
     ];
 
     // Query scope
