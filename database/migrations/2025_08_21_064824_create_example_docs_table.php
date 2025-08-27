@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tm_example_docs', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable(false);
+            $table->string('title')->unique()->nullable(false);
             $table->string('file')->nullable(false);
             $table->timestamps();
         });
