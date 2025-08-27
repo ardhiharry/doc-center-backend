@@ -44,6 +44,7 @@ class ExampleDocController extends Controller
         try {
             $limit = request('limit', 10);
             $search = [
+                'id' => request('id'),
                 'title' => request('title'),
             ];
 
