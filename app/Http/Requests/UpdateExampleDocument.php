@@ -22,7 +22,7 @@ class UpdateExampleDocument extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => ["sometimes", "string", "max:255"],
+            "title" => ["sometimes", "string", "unique:tm_example_docs,title", "max:255"],
             "files" => ["sometimes", "string"],
         ];
     }
@@ -31,6 +31,7 @@ class UpdateExampleDocument extends FormRequest
     {
         return [
             "title.string" => "Judul harus berupa teks.",
+            "title.unique" => "Judul dokumen sudah ada.",
             "title.max" => "Judul tidak boleh lebih dari 255 karakter.",
 
             "files.string" => "File harus berupa teks.",

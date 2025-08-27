@@ -22,7 +22,7 @@ class CreateExampleDocument extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => ["required", "string", "max:255"],
+            "title" => ["required", "string", "unique:tm_example_docs,title", "max:255"],
             "file" => ["required", "string"],
         ];
     }
@@ -30,9 +30,10 @@ class CreateExampleDocument extends FormRequest
     public function messages()
     {
         return [
-            "title.required" => "Judul wajib diisi.",
-            "title.string" => "Judul harus berupa teks.",
-            "title.max" => "Judul tidak boleh lebih dari 255 karakter.",
+            "title.required" => "Judul dokumen wajib diisi.",
+            "title.string" => "Judul dokumen harus berupa teks.",
+            "title.unique" => "Judul dokumen sudah ada.",
+            "title.max" => "Judul dokumen tidak boleh lebih dari 255 karakter.",
 
             "file.required" => "File wajib diisi.",
             "file.string" => "File harus berupa teks.",
