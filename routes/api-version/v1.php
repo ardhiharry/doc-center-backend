@@ -125,6 +125,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/example-docs', [ExampleDocController::class, 'store']);
     Route::get('/example-docs', [ExampleDocController::class, 'index']);
     Route::get('/example-docs/{exampleDoc}', [ExampleDocController::class, 'show']);
-    Route::post('/example-docs/{exampleDoc}', [ExampleDocController::class, 'update']);
+    Route::patch('/example-docs/{exampleDoc}', [ExampleDocController::class, 'update']);
     Route::delete('/example-docs/{exampleDoc}', [ExampleDocController::class, 'destroy']);
 });

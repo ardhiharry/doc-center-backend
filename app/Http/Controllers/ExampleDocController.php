@@ -95,7 +95,7 @@ class ExampleDocController extends Controller
         try {
             $data = array_filter([
                 'title' => $request->title,
-                'files' => $request->files
+                'file' => $request->file
             ]);
 
             $exampleDoc->update($data);
